@@ -9,7 +9,7 @@ project(":rti-admin-console") {
 	rpmRelease = "20"
 }
 
-project(":rti-connext-dds-runtime-x64linux2.6gcc4.4.5") {
+project(":rti-connext-dds-runtime-pro-x64linux2.6gcc4.4.5") {
 	version = "5.1.0.17"
 	rpmRelease = "20"
 }

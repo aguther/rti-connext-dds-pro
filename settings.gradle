@@ -1,7 +1,7 @@
 rootProject.name = 'rti-connext-dds'
 
 include 'rti-admin-console'
-include 'rti-connext-dds-runtime-x64linux2.6gcc4.4.5'
+include 'rti-connext-dds-runtime-pro-x64linux2.6gcc4.4.5'
 include 'rti-connext-dds-sdk-license'
 include 'rti-connext-dds-sdk-pro'
 include 'rti-connext-dds-sdk-pro-sources'
