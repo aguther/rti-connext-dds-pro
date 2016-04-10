@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/usr/bin/rtimonitor
+Icon=/opt/rti/connext-dds/monitor/scripts/monitor.ico
+Name=RTI Monitor
+Type=Application
+Categories=Development

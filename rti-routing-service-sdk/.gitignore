@@ -10,5 +10,12 @@ gradle-app.setting
 # Cache of project
 .gradletasknamecache
 
-# Ignore packages directory
-packages/
+# # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
+# gradle/wrapper/gradle-wrapper.properties
+
+# Maven
+target/
+*.versionsBackup
+
+# Backups
+*~

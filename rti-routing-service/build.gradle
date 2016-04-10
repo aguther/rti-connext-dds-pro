@@ -1,0 +1,107 @@
+// --------------------------------------------------------------------------------------------------------------------
+plugins {
+    id 'nebula.ospackage' version '3.4.0'
+    id 'net.researchgate.release' version '2.3.5'
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+def extractionDirectory = "$buildDir/extracted"
+
+task extractPackages {
+
+    outputs.dir extractionDirectory
+
+    doLast {
+        copy {
+            from tarTree(resources.gzip('../packages/RTI_Routing_Service-5.1.0.17-x64Linux2.6gcc4.4.5.tar.gz'))
+            into "$extractionDirectory"
+        }
+        copy {
+            from tarTree(resources.gzip('../packages/RTI_Routing_Service_AdapterSDK-5.1.0.tar.gz'))
+            into "$extractionDirectory"
+        }
+    }
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+def parsedVersion = VersionNumber.parse(project.version)
+def targetDirectory = "/opt/rti/connext-dds/routing-service"
+
+ospackage {
+    vendor = "Real-Time Innovations (RTI)"
+    url = "http://www.rti.com"
+    license = "http://www.rti.com/downloads/license-agreement.html"
+
+    summary = "RTI Routing Service"
+    description = "Welcome to RTI Routing Service, an out- of-the-box solution for integrating disparate and geo-graphically dispersed systems. It scales RTI Connext® DDS applications across domains, LANs and WANs, including firewall and NAT traversal."
+
+    packageGroup = "Applications/Communications"
+
+    version = "${project.version}"
+    release = "$rpmRelease"
+    arch = X86_64
+    os = LINUX
+
+    user = "root"
+
+    into "$targetDirectory"
+
+    // add routing service
+    from("$extractionDirectory/RTI_Routing_Service_5.1.0.17") {
+        into ""
+    }
+    // add routing service adapter for Java
+    from("$extractionDirectory/RTI_Routing_Service_5.1.0") {
+        include "**/rtirsadapter.jar"
+        into ""
+    }
+    // add scripts
+    from("src/main/resources/scripts") {
+        into ""
+    }
+}
+
+buildRpm {
+    dependsOn extractPackages
+
+    // install application links
+    link("/usr/bin/rtiroutingservice",    "$targetDirectory/launcher")
+    link("/usr/bin/rtirssh",              "$targetDirectory/launcher")
+
+    // define local installation path for links
+    def javaLinkPath          = "/usr/lib/java"
+    def javaInstallPath       = "$targetDirectory/class"
+    def libraryLinkPath       = "/usr/lib64"
+    def libraryInstallPath    = "$targetDirectory/bin/x64Linux2.6gcc4.4.5"
+    def alternativesPriority  = 10
+
+    // this will be called after installation phase
+    postInstall """
+        # libraries
+        alternatives --install '$javaLinkPath/rtirsadapter.jar'             'rtirsadapter.jar'          '$javaInstallPath/rtirsadapter.jar'             $alternativesPriority \\
+                     --slave   '$libraryLinkPath/librtirsjniadapter.so'     'librtirsjniadapter.so'     '$libraryInstallPath/librtirsjniadapter.so'                           \\
+                     --slave   '$libraryLinkPath/librtirsinfrastructure.so' 'librtirsinfrastructure.so' '$libraryInstallPath/librtirsinfrastructure.so'                       \\
+                     --slave   '$libraryLinkPath/librtirsassigntransf.so'   'librtirsassigntransf.so'   '$libraryInstallPath/librtirsassigntransf.so'                         \\
+                     --slave   '$libraryLinkPath/librtidlc.so'              'librtidlc.so'              '$libraryInstallPath/librtidlc.so'
+
+        # update ld configuration
+        ldconfig
+    """
+
+    postUninstall """
+        # check if uninstall is due to an upgrade
+        if [ '\$1' = '1' ]; then
+            # we are in an upgrade process >> nothing to do
+            exit 0
+        fi
+
+        # libraries
+        alternatives --remove 'rtirsadapter.jar' '$javaInstallPath/rtirsadapter.jar'
+
+        # update ld configuration
+        ldconfig
+    """
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+defaultTasks 'clean', 'buildRpm'

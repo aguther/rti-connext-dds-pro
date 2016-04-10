@@ -1,0 +1,12 @@
+rootProject.name = 'rti-connext-dds'
+
+include 'rti-admin-console'
+include 'rti-connext-dds-runtime-x64linux2.6gcc4.4.5'
+include 'rti-connext-dds-sdk-license'
+include 'rti-connext-dds-sdk-pro'
+include 'rti-connext-dds-sdk-pro-sources'
+include 'rti-connext-dds-sdk-pro-target-x64linux2.6gcc4.4.5'
+include 'rti-monitor'
+include 'rti-persistence-service'
+include 'rti-routing-service'
+include 'rti-routing-service-sdk'

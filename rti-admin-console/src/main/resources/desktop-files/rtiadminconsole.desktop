@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/usr/bin/rtiadminconsole
+Icon=/opt/rti/connext-dds/admin-console/apps/icon.xpm
+Name=RTI Admin Console
+Type=Application
+Categories=Development
