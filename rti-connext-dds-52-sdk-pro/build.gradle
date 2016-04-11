@@ -91,6 +91,17 @@ buildRpm {
     // define local installation path for links
     def applicationLinkPath        = "/usr/bin"
     def applicationLauncherPath    = "$targetDirectory/launcher"
+    def applicationDesktopLinkPath = "/usr/share/applications"
+    def applicationIconLinkPath    = "/usr/share/icons/hicolor/96x96/apps"
+    def javaLinkPath               = "/usr/lib/java"
+    def javaInstallPath            = "$targetDirectory/lib/java"
+    def alternativesPriority       = 1
+
+    // create link to license file
+    link("$targetDirectory/rti_license.dat", "/opt/rti/connext-dds/license/rti_license.dat")
+
+    // create desktop link to RTI launcher
+    link("$applicationDesktopLinkPath/rtilauncher.desktop", "$targetDirectory/rtilauncher.desktop")
 
     // links for applications without any alternative
     link("$applicationLinkPath/jms2dds",                "$applicationLauncherPath")
@@ -114,6 +125,39 @@ buildRpm {
     link("$applicationLinkPath/rtiroutingservice",      "$applicationLauncherPath")
     link("$applicationLinkPath/rtirssh",                "$applicationLauncherPath")
     link("$applicationLinkPath/rtishapesdemo",          "$applicationLauncherPath")
+
+    // this will be called after installation phase
+    postInstall """
+        # applications
+        alternatives --install '$applicationLinkPath/rtiadminconsole'                'rtiadminconsole'         '$applicationLauncherPath'                                                      $alternativesPriority \\
+                     --slave   '$applicationDesktopLinkPath/rtiadminconsole.desktop' 'rtiadminconsole.desktop' '$targetDirectory/rtiadminconsole.desktop'                                                            \\
+                     --slave   '$applicationIconLinkPath/rtiadminconsole.png'        'rtiadminconsole.png'     '$targetDirectory/resource/app/app_support/launcher/icons/AdminConsole2_90.png'
+
+        alternatives --install '$applicationLinkPath/rtimonitor'                     'rtimonitor'              '$applicationLauncherPath'                                                      $alternativesPriority \\
+                     --slave   '$applicationDesktopLinkPath/rtimonitor.desktop'      'rtimonitor.desktop'      '$targetDirectory/rtimonitor.desktop'                                                                 \\
+                     --slave   '$applicationIconLinkPath/rtimonitor.png'             'rtimonitor.png'          '$targetDirectory/resource/app/app_support/launcher/icons/Monitor3_90.png'
+
+        alternatives --install '$applicationLinkPath/rtipersistenceservice'          'rtipersistenceservice'   '$applicationLauncherPath'                                                      $alternativesPriority \\
+                     --slave   '$applicationLinkPath/rtipssh'                        'rtipssh'                 '$applicationLauncherPath'
+
+        alternatives --install '$applicationLinkPath/rtiroutingservice'              'rtiroutingservice'       '$applicationLauncherPath'                                                      $alternativesPriority \\
+                     --slave   '$applicationLinkPath/rtirssh'                        'rtirssh'                 '$applicationLauncherPath'
+    """
+
+    // this will be called after uninstallation phase
+    postUninstall """
+        # check if uninstall is due to an upgrade
+        if [ '\$1' = '1' ]; then
+            # we are in an upgrade process >> nothing to do
+            exit 0
+        fi
+
+        # applications
+        alternatives --remove 'rtiadminconsole'       '$applicationLauncherPath'
+        alternatives --remove 'rtimonitor'            '$applicationLauncherPath'
+        alternatives --remove 'rtipersistenceservice' '$applicationLauncherPath'
+        alternatives --remove 'rtiroutingservice'     '$applicationLauncherPath'
+    """
 }
 
 // --------------------------------------------------------------------------------------------------------------------

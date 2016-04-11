@@ -12,14 +12,17 @@ task extractPackages {
     outputs.dir extractionDirectory
 
     doLast {
-        copy {
-            from tarTree(resources.gzip('../packages/RTI_Routing_Service-5.1.0.17-x64Linux2.6gcc4.4.5.tar.gz'))
-            into "$extractionDirectory"
-        }
-        copy {
-            from tarTree(resources.gzip('../packages/RTI_Routing_Service_AdapterSDK-5.1.0.tar.gz'))
-            into "$extractionDirectory"
-        }
+        // variables
+        def commandLine
+        def processObject
+
+        // install SDK into extraction directory (with prefix)
+        commandLine = "$projectDir/../packages/rti_connext_dds-5.2.0-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
+        processObject = commandLine.execute()
+        processObject.in.eachLine { line -> logger.info(line) }
+        processObject.err.eachLine { line -> logger.error(line) }
+        processObject.waitFor()
+        assert !processObject.exitValue()
     }
 }
 
@@ -47,11 +50,7 @@ ospackage {
     into "$targetDirectory"
 
     // add routing service
-    from("$extractionDirectory/RTI_Routing_Service_5.1.0.17") {
-        into ""
-    }
-    // add routing service adapter for Java
-    from("$extractionDirectory/RTI_Routing_Service_5.1.0") {
+    from("$extractionDirectory/rti_connext_dds-5.2.0") {
         include "**/rtirsadapter.jar"
         into ""
     }
