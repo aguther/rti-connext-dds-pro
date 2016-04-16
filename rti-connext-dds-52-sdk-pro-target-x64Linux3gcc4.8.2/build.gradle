@@ -68,7 +68,7 @@ buildRpm {
 
     // define local installation path for links
     def javaLinkPath          = "/usr/lib/java"
-    def javaInstallPath       = "$targetDirectory/class"
+    def javaInstallPath       = "$targetDirectory/lib/java"
     def libraryLinkPath       = "/usr/lib64"
     def libraryInstallPath    = "$targetDirectory/lib/x64Linux3gcc4.8.2"
     def alternativesPriority  = 1
