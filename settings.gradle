@@ -1,8 +1,31 @@
-rootProject.name = 'rti-connext-dds-52'
+rootProject.name = 'rti-connext-dds'
 
-include 'rti-connext-dds-52-runtime-pro-x64Linux2.6gcc4.4.5'
-include 'rti-connext-dds-52-runtime-pro-x64Linux3gcc4.8.2'
-include 'rti-connext-dds-52-sdk-pro'
-include 'rti-connext-dds-52-sdk-pro-sources'
-include 'rti-connext-dds-52-sdk-pro-target-x64Linux2.6gcc4.4.5'
-include 'rti-connext-dds-52-sdk-pro-target-x64Linux3gcc4.8.2'
+include 'rti-connext-dds-admin-console'
+project(":rti-connext-dds-admin-console").name = "rti-connext-dds-$versionMajor$versionMinor-admin-console"
+
+include 'rti-connext-dds-license'
+project(":rti-connext-dds-license").name = "rti-connext-dds-$versionMajor$versionMinor-license"
+
+include 'rti-connext-dds-persistence-service'
+project(":rti-connext-dds-persistence-service").name = "rti-connext-dds-$versionMajor$versionMinor-persistence-service"
+
+include 'rti-connext-dds-routing-service'
+project(":rti-connext-dds-routing-service").name = "rti-connext-dds-$versionMajor$versionMinor-routing-service"
+
+include 'rti-connext-dds-runtime-pro-x64Linux2.6gcc4.4.5'
+project(":rti-connext-dds-runtime-pro-x64Linux2.6gcc4.4.5").name = "rti-connext-dds-$versionMajor$versionMinor-runtime-pro-x64Linux2.6gcc4.4.5"
+
+include 'rti-connext-dds-runtime-pro-x64Linux3gcc4.8.2'
+project(":rti-connext-dds-runtime-pro-x64Linux3gcc4.8.2").name = "rti-connext-dds-$versionMajor$versionMinor-runtime-pro-x64Linux3gcc4.8.2"
+
+include 'rti-connext-dds-sdk-pro'
+project(":rti-connext-dds-sdk-pro").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro"
+
+include 'rti-connext-dds-sdk-pro-sources'
+project(":rti-connext-dds-sdk-pro-sources").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro-sources"
+
+include 'rti-connext-dds-sdk-pro-target-x64Linux2.6gcc4.4.5'
+project(":rti-connext-dds-sdk-pro-target-x64Linux2.6gcc4.4.5").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro-target-x64Linux2.6gcc4.4.5"
+
+include 'rti-connext-dds-sdk-pro-target-x64Linux3gcc4.8.2'
+project(":rti-connext-dds-sdk-pro-target-x64Linux3gcc4.8.2").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro-target-x64Linux3gcc4.8.2"

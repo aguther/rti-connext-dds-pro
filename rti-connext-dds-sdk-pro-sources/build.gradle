@@ -1,0 +1,68 @@
+// --------------------------------------------------------------------------------------------------------------------
+plugins {
+    id 'nebula.ospackage' version '3.5.0'
+    id 'net.researchgate.release' version '2.3.5'
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+def extractionDirectory = "$buildDir/extracted"
+
+task extractPackages {
+
+    inputs.file "$projectDir/../packages/rti_connext_dds-5.2.0-basic-src.zip"
+    inputs.file "$projectDir/../packages/rti_routing_service-5.2.0-src.zip"
+    outputs.dir extractionDirectory
+
+    doLast {
+        copy {
+            from zipTree("$projectDir/../packages/rti_connext_dds-5.2.0-basic-src.zip")
+            into "$extractionDirectory"
+        }
+        copy {
+            from zipTree("$projectDir/../packages/rti_routing_service-5.2.0-src.zip")
+            into "$extractionDirectory"
+            // the following files need to be excluded to ensure the zip can be expanded
+            exclude "**/RTI_ConnextDDS_3rdPartySoftware_CoreLibraries.pdf"
+            exclude "**/RTI_License_Agreement.pdf"
+        }
+    }
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+def parsedVersion = VersionNumber.parse(project.version)
+def targetDirectory = "/opt/rti/connext-dds/sdk"
+
+ospackage {
+    vendor = "Real-Time Innovations (RTI)"
+    url = "http://www.rti.com"
+    license = "http://www.rti.com/downloads/license-agreement.html"
+
+    summary = "RTI Connext® DDS Professional SDK - Sources"
+    description = "Source Code of RTI Connext® DDS Professional SDK"
+
+    packageGroup = "Development/Tools"
+
+    version = "${project.version}"
+    release = "$rpmRelease"
+    arch = NOARCH
+    os = LINUX
+
+    user = "root"
+
+    requires("rti-connext-dds-sdk", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | EQUAL)
+    // -- workaround due to bug in reline rpm -- requires("rti-connext-dds-sdk", "${parsedVersion.major}.${parsedVersion.minor+1}", LESS)
+
+    into "$targetDirectory"
+
+    from("$extractionDirectory/ndds520-src") {
+        fileMode 0644
+        into "src"
+    }
+}
+
+buildRpm {
+    dependsOn extractPackages
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+defaultTasks 'buildRpm'

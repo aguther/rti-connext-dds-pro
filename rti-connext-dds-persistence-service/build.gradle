@@ -1,0 +1,106 @@
+// --------------------------------------------------------------------------------------------------------------------
+plugins {
+    id 'nebula.ospackage' version '3.5.0'
+    id 'net.researchgate.release' version '2.3.5'
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+def extractionDirectory = "$buildDir/extracted"
+
+task extractPackages {
+
+    inputs.file "$projectDir/../packages/rti_connext_dds-5.2.0-pro-host-x64Linux.run"
+    outputs.dir extractionDirectory
+
+    doLast {
+        // variables
+        def commandLine
+        def processObject
+
+        // install SDK into extraction directory (with prefix)
+        commandLine = "$projectDir/../packages/rti_connext_dds-5.2.0-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
+        processObject = commandLine.execute()
+        processObject.in.eachLine { line -> logger.info(line) }
+        processObject.err.eachLine { line -> logger.error(line) }
+        processObject.waitFor()
+        assert !processObject.exitValue()
+
+        // remove local launcher file
+        delete file ("${System.properties['user.home']}/.local/share/applications/rtilauncher.desktop")
+    }
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+def parsedVersion = VersionNumber.parse(project.version)
+def targetDirectory = "/opt/rti/connext-dds/persistence-service"
+
+ospackage {
+    vendor = "Real-Time Innovations (RTI)"
+    url = "http://www.rti.com"
+    license = "http://www.rti.com/downloads/license-agreement.html"
+
+    summary = "RTI Persistence Service"
+    description = "Persistence Service saves DDS data samples so they can be delivered to subscribing applications that join the system at a later time—even if the publishing application has already terminated."
+
+    packageGroup = "Applications/Communications"
+
+    version = "${project.version}"
+    release = "$rpmRelease"
+    arch = X86_64
+    os = LINUX
+
+    user = "root"
+
+    into "$targetDirectory"
+
+    from("$extractionDirectory/rti_connext_dds-5.2.0") {
+        include "bin/rtipersistenceservice"
+        include "bin/rtipssh"
+        include "doc/manuals/persistence_service/*"
+        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtipersistenceservice"
+        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtipssh"
+        include "resource/schema/rti_persistence_service.*"
+        include "resource/scripts/*"
+        include "resource/xml/RTI_PERSISTENCE_SERVICE.xml"
+        into ""
+    }
+    from("src/main/resources/scripts") {
+        into ""
+    }
+}
+
+buildRpm {
+    dependsOn extractPackages
+
+    // define local installation path for links
+    def applicationLinkPath        = "/usr/bin"
+    def applicationLauncherPath    = "$targetDirectory/launcher"
+    def alternativesPriority       = 10
+
+    // this will be called after installation phase
+    postInstall """
+        # libraries
+        alternatives --install '$applicationLinkPath/rtipersistenceservice' 'rtipersistenceservice' '$applicationLauncherPath' $alternativesPriority \\
+                     --slave   '$applicationLinkPath/rtipssh'               'rtipssh'               '$applicationLauncherPath'                       \\
+        
+        # update ld configuration
+        ldconfig
+    """
+
+    postUninstall """
+        # check if uninstall is due to an upgrade
+        if [ '\$1' = '1' ]; then
+            # we are in an upgrade process >> nothing to do
+            exit 0
+        fi
+
+        # libraries
+        alternatives --remove 'rtipersistenceservice' '$applicationLinkPath/rtipersistenceservice'
+
+        # update ld configuration
+        ldconfig
+    """
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+defaultTasks 'buildRpm'
