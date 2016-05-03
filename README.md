@@ -6,7 +6,7 @@ This repository contains gradle build jobs to create RPMS for the efficient depl
 
 1. Create a subdirectory `packages`.
 
-2. Add the following packages the directory `packages`:
+2. Add the following packages to the directory `packages`:
   * `rti_license.dat`
   * `rti_connext_dds-<VERSION>-basic-src.zip`
   * `rti_connext_dds-<VERSION>-pro-host-x64Linux.run`
