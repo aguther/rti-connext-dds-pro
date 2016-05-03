@@ -117,6 +117,9 @@ buildRpm {
                      --slave   '$javaLinkPath/rticonnextmsg.jar'              'rticonnextmsg.jar'          '$javaInstallPath/rticonnextmsg.jar'                                   \\
                      --slave   '$javaLinkPath/rtijms.jar'                     'rtijms.jar'                 '$javaInstallPath/rtijms.jar'                                          \\
 
+        # enable auto configuration
+        alternatives --auto 'libnddscore.so'
+
         # update ld configuration
         ldconfig
     """

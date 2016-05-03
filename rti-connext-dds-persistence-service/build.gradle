@@ -79,10 +79,13 @@ buildRpm {
 
     // this will be called after installation phase
     postInstall """
-        # libraries
+        # persistence service
         alternatives --install '$applicationLinkPath/rtipersistenceservice' 'rtipersistenceservice' '$applicationLauncherPath' $alternativesPriority \\
                      --slave   '$applicationLinkPath/rtipssh'               'rtipssh'               '$applicationLauncherPath'                       \\
-        
+
+        # enable auto configuration
+        alternatives --auto 'rtipersistenceservice'
+
         # update ld configuration
         ldconfig
     """
@@ -95,7 +98,7 @@ buildRpm {
         fi
 
         # libraries
-        alternatives --remove 'rtipersistenceservice' '$applicationLinkPath/rtipersistenceservice'
+        alternatives --remove 'rtipersistenceservice' '$applicationLauncherPath'
 
         # update ld configuration
         ldconfig

@@ -68,54 +68,69 @@ buildRpm {
     dependsOn extractPackages
 
     // define local installation path for links
-    def javaLinkPath          = "/usr/lib/java"
-    def javaInstallPath       = "$targetDirectory/lib/java"
-    def libraryLinkPath       = "/usr/lib64"
-    def libraryInstallPath    = "$targetDirectory/lib/x64Linux3gcc4.8.2"
-    def alternativesPriority  = 1
+    def applicationLinkPath     = "/usr/bin"
+    def applicationLauncherPath = "$targetDirectory/launcher"
+    def javaLinkPath            = "/usr/lib/java"
+    def javaInstallPath         = "$targetDirectory/lib/java"
+    def libraryLinkPath         = "/usr/lib64"
+    def libraryInstallPath      = "$targetDirectory/lib/x64Linux3gcc4.8.2"
+    def alternativesPriority    = 1
 
     // this will be called after installation phase
     postInstall """
+        # routing service
+        alternatives --install '$applicationLinkPath/rtiroutingservice'      'rtiroutingservice'          '$applicationLauncherPath'                          $alternativesPriority  \\
+                     --slave   '$applicationLinkPath/rtirssh'                'rtirssh'                    '$applicationLauncherPath'                                                 \\
+                     --slave   '$javaLinkPath/rtirsadapter.jar'              'rtirsadapter.jar'           '$javaInstallPath/rtirsadapter.jar'                                        \\
+                     --slave   '$libraryLinkPath/librtiroutingservice.so'    'librtiroutingservice.so'    '$libraryInstallPath/librtiroutingservice.so'                              \\
+                     --slave   '$libraryLinkPath/librtiroutingserviced.so'   'librtiroutingserviced.so'   '$libraryInstallPath/librtiroutingserviced.so'                             \\
+                     --slave   '$libraryLinkPath/librtirsassigntransf.so'    'librtirsassigntransf.so'    '$libraryInstallPath/librtirsassigntransf.so'                              \\
+                     --slave   '$libraryLinkPath/librtirsinfrastructure.so'  'librtirsinfrastructure.so'  '$libraryInstallPath/librtirsinfrastructure.so'                            \\
+                     --slave   '$libraryLinkPath/librtirsinfrastructured.so' 'librtirsinfrastructured.so' '$libraryInstallPath/librtirsinfrastructured.so'                           \\
+                     --slave   '$libraryLinkPath/librtirsjniadapter.so'      'librtirsjniadapter.so'      '$libraryInstallPath/librtirsjniadapter.so'
+
+        # persistence service
+        alternatives --install '$applicationLinkPath/rtipersistenceservice'  'rtipersistenceservice'      '$applicationLauncherPath'                          $alternativesPriority  \\
+                     --slave   '$applicationLinkPath/rtipssh'                'rtipssh'                    '$applicationLauncherPath'                                                 \\
+
         # libraries
-        alternatives --install '$libraryLinkPath/libnddscore.so'              'libnddscore.so'             '$libraryInstallPath/libnddscore.so'             $alternativesPriority \\
-                     --slave   '$libraryLinkPath/libnddscored.so'             'libnddscored.so'            '$libraryInstallPath/libnddscored.so'                                  \\
-                     --slave   '$libraryLinkPath/libnddsc.so'                 'libnddsc.so'                '$libraryInstallPath/libnddsc.so'                                      \\
-                     --slave   '$libraryLinkPath/libnddscd.so'                'libnddscd.so'               '$libraryInstallPath/libnddscd.so'                                     \\
-                     --slave   '$libraryLinkPath/libnddscpp.so'               'libnddscpp.so'              '$libraryInstallPath/libnddscpp.so'                                    \\
-                     --slave   '$libraryLinkPath/libnddscpp2.so'              'libnddscpp2.so'             '$libraryInstallPath/libnddscpp2.so'                                   \\
-                     --slave   '$libraryLinkPath/libnddscpp2d.so'             'libnddscpp2d.so'            '$libraryInstallPath/libnddscpp2d.so'                                  \\
-                     --slave   '$libraryLinkPath/libnddscppd.so'              'libnddscppd.so'             '$libraryInstallPath/libnddscppd.so'                                   \\
-                     --slave   '$libraryLinkPath/libnddsjava.so'              'libnddsjava.so'             '$libraryInstallPath/libnddsjava.so'                                   \\
-                     --slave   '$libraryLinkPath/libnddsjavad.so'             'libnddsjavad.so'            '$libraryInstallPath/libnddsjavad.so'                                  \\
-                     --slave   '$libraryLinkPath/libnddstransporttcp.so'      'libnddstransporttcp.so'     '$libraryInstallPath/libnddstransporttcp.so'                           \\
-                     --slave   '$libraryLinkPath/libnddstransporttcpd.so'     'libnddstransporttcpd.so'    '$libraryInstallPath/libnddstransporttcpd.so'                          \\
-                     --slave   '$libraryLinkPath/librticonnextmsgc.so'        'librticonnextmsgc.so'       '$libraryInstallPath/librticonnextmsgc.so'                             \\
-                     --slave   '$libraryLinkPath/librticonnextmsgcd.so'       'librticonnextmsgcd.so'      '$libraryInstallPath/librticonnextmsgcd.so'                            \\
-                     --slave   '$libraryLinkPath/librticonnextmsgcpp.so'      'librticonnextmsgcpp.so'     '$libraryInstallPath/librticonnextmsgcpp.so'                           \\
-                     --slave   '$libraryLinkPath/librticonnextmsgcppd.so'     'librticonnextmsgcppd.so'    '$libraryInstallPath/librticonnextmsgcppd.so'                          \\
-                     --slave   '$libraryLinkPath/librtidlc.so'                'librtidlc.so'               '$libraryInstallPath/librtidlc.so'                                     \\
-                     --slave   '$libraryLinkPath/librtidlcd.so'               'librtidlcd.so'              '$libraryInstallPath/librtidlcd.so'                                    \\
-                     --slave   '$libraryLinkPath/librtidlcpp.so'              'librtidlcpp.so'             '$libraryInstallPath/librtidlcpp.so'                                   \\
-                     --slave   '$libraryLinkPath/librtidlcppd.so'             'librtidlcppd.so'            '$libraryInstallPath/librtidlcppd.so'                                  \\
-                     --slave   '$libraryLinkPath/librtimonitoring.so'         'librtimonitoring.so'        '$libraryInstallPath/librtimonitoring.so'                              \\
-                     --slave   '$libraryLinkPath/librtimonitoringd.so'        'librtimonitoringd.so'       '$libraryInstallPath/librtimonitoringd.so'                             \\
-                     --slave   '$libraryLinkPath/librtiroutingservice.so'     'librtiroutingservice.so'    '$libraryInstallPath/librtiroutingservice.so'                          \\
-                     --slave   '$libraryLinkPath/librtiroutingserviced.so'    'librtiroutingserviced.so'   '$libraryInstallPath/librtiroutingserviced.so'                         \\
-                     --slave   '$libraryLinkPath/librtirsassigntransf.so'     'librtirsassigntransf.so'    '$libraryInstallPath/librtirsassigntransf.so'                          \\
-                     --slave   '$libraryLinkPath/librtirsinfrastructure.so'   'librtirsinfrastructure.so'  '$libraryInstallPath/librtirsinfrastructure.so'                        \\
-                     --slave   '$libraryLinkPath/librtirsinfrastructured.so'  'librtirsinfrastructured.so' '$libraryInstallPath/librtirsinfrastructured.so'                       \\
-                     --slave   '$libraryLinkPath/librtirsjniadapter.so'       'librtirsjniadapter.so'      '$libraryInstallPath/librtirsjniadapter.so'                            \\
-                     --slave   '$javaLinkPath/distlog.jar'                    'distlog.jar'                '$javaInstallPath/distlog.jar'                                         \\
-                     --slave   '$javaLinkPath/distlogd.jar'                   'distlogd.jar'               '$javaInstallPath/distlogd.jar'                                        \\
-                     --slave   '$javaLinkPath/distlogdatamodel.jar'           'distlogdatamodel.jar'       '$javaInstallPath/distlogdatamodel.jar'                                \\
-                     --slave   '$javaLinkPath/distlogdatamodeld.jar'          'distlogdatamodeld.jar'      '$javaInstallPath/distlogdatamodeld.jar'                               \\
-                     --slave   '$javaLinkPath/nddsjava.jar'                   'nddsjava.jar'               '$javaInstallPath/nddsjava.jar'                                        \\
-                     --slave   '$javaLinkPath/nddsjavad.jar'                  'nddsjavad.jar'              '$javaInstallPath/nddsjavad.jar'                                       \\
-                     --slave   '$javaLinkPath/rticonnextmsg.jar'              'rticonnextmsg.jar'          '$javaInstallPath/rticonnextmsg.jar'                                   \\
-                     --slave   '$javaLinkPath/rticonnextmsgd.jar'             'rticonnextmsgd.jar'         '$javaInstallPath/rticonnextmsgd.jar'                                  \\
-                     --slave   '$javaLinkPath/rtijms.jar'                     'rtijms.jar'                 '$javaInstallPath/rtijms.jar'                                          \\
-                     --slave   '$javaLinkPath/rtijmsd.jar'                    'rtijmsd.jar'                '$javaInstallPath/rtijmsd.jar'                                         \\
-                     --slave   '$javaLinkPath/rtirsadapter.jar'               'rtirsadapter.jar'           '$javaInstallPath/rtirsadapter.jar'                                    \\
+        alternatives --install '$libraryLinkPath/libnddscore.so'             'libnddscore.so'             '$libraryInstallPath/libnddscore.so'                 $alternativesPriority \\
+                     --slave   '$libraryLinkPath/libnddscored.so'            'libnddscored.so'            '$libraryInstallPath/libnddscored.so'                                      \\
+                     --slave   '$libraryLinkPath/libnddsc.so'                'libnddsc.so'                '$libraryInstallPath/libnddsc.so'                                          \\
+                     --slave   '$libraryLinkPath/libnddscd.so'               'libnddscd.so'               '$libraryInstallPath/libnddscd.so'                                         \\
+                     --slave   '$libraryLinkPath/libnddscpp.so'              'libnddscpp.so'              '$libraryInstallPath/libnddscpp.so'                                        \\
+                     --slave   '$libraryLinkPath/libnddscpp2.so'             'libnddscpp2.so'             '$libraryInstallPath/libnddscpp2.so'                                       \\
+                     --slave   '$libraryLinkPath/libnddscpp2d.so'            'libnddscpp2d.so'            '$libraryInstallPath/libnddscpp2d.so'                                      \\
+                     --slave   '$libraryLinkPath/libnddscppd.so'             'libnddscppd.so'             '$libraryInstallPath/libnddscppd.so'                                       \\
+                     --slave   '$libraryLinkPath/libnddsjava.so'             'libnddsjava.so'             '$libraryInstallPath/libnddsjava.so'                                       \\
+                     --slave   '$libraryLinkPath/libnddsjavad.so'            'libnddsjavad.so'            '$libraryInstallPath/libnddsjavad.so'                                      \\
+                     --slave   '$libraryLinkPath/libnddstransporttcp.so'     'libnddstransporttcp.so'     '$libraryInstallPath/libnddstransporttcp.so'                               \\
+                     --slave   '$libraryLinkPath/libnddstransporttcpd.so'    'libnddstransporttcpd.so'    '$libraryInstallPath/libnddstransporttcpd.so'                              \\
+                     --slave   '$libraryLinkPath/librticonnextmsgc.so'       'librticonnextmsgc.so'       '$libraryInstallPath/librticonnextmsgc.so'                                 \\
+                     --slave   '$libraryLinkPath/librticonnextmsgcd.so'      'librticonnextmsgcd.so'      '$libraryInstallPath/librticonnextmsgcd.so'                                \\
+                     --slave   '$libraryLinkPath/librticonnextmsgcpp.so'     'librticonnextmsgcpp.so'     '$libraryInstallPath/librticonnextmsgcpp.so'                               \\
+                     --slave   '$libraryLinkPath/librticonnextmsgcppd.so'    'librticonnextmsgcppd.so'    '$libraryInstallPath/librticonnextmsgcppd.so'                              \\
+                     --slave   '$libraryLinkPath/librtidlc.so'               'librtidlc.so'               '$libraryInstallPath/librtidlc.so'                                         \\
+                     --slave   '$libraryLinkPath/librtidlcd.so'              'librtidlcd.so'              '$libraryInstallPath/librtidlcd.so'                                        \\
+                     --slave   '$libraryLinkPath/librtidlcpp.so'             'librtidlcpp.so'             '$libraryInstallPath/librtidlcpp.so'                                       \\
+                     --slave   '$libraryLinkPath/librtidlcppd.so'            'librtidlcppd.so'            '$libraryInstallPath/librtidlcppd.so'                                      \\
+                     --slave   '$libraryLinkPath/librtimonitoring.so'        'librtimonitoring.so'        '$libraryInstallPath/librtimonitoring.so'                                  \\
+                     --slave   '$libraryLinkPath/librtimonitoringd.so'       'librtimonitoringd.so'       '$libraryInstallPath/librtimonitoringd.so'                                 \\
+                     --slave   '$javaLinkPath/distlog.jar'                   'distlog.jar'                '$javaInstallPath/distlog.jar'                                             \\
+                     --slave   '$javaLinkPath/distlogd.jar'                  'distlogd.jar'               '$javaInstallPath/distlogd.jar'                                            \\
+                     --slave   '$javaLinkPath/distlogdatamodel.jar'          'distlogdatamodel.jar'       '$javaInstallPath/distlogdatamodel.jar'                                    \\
+                     --slave   '$javaLinkPath/distlogdatamodeld.jar'         'distlogdatamodeld.jar'      '$javaInstallPath/distlogdatamodeld.jar'                                   \\
+                     --slave   '$javaLinkPath/nddsjava.jar'                  'nddsjava.jar'               '$javaInstallPath/nddsjava.jar'                                            \\
+                     --slave   '$javaLinkPath/nddsjavad.jar'                 'nddsjavad.jar'              '$javaInstallPath/nddsjavad.jar'                                           \\
+                     --slave   '$javaLinkPath/rticonnextmsg.jar'             'rticonnextmsg.jar'          '$javaInstallPath/rticonnextmsg.jar'                                       \\
+                     --slave   '$javaLinkPath/rticonnextmsgd.jar'            'rticonnextmsgd.jar'         '$javaInstallPath/rticonnextmsgd.jar'                                      \\
+                     --slave   '$javaLinkPath/rtijms.jar'                    'rtijms.jar'                 '$javaInstallPath/rtijms.jar'                                              \\
+                     --slave   '$javaLinkPath/rtijmsd.jar'                   'rtijmsd.jar'                '$javaInstallPath/rtijmsd.jar'
+
+        # enable auto configuration
+        alternatives --auto 'rtiroutingservice'
+        alternatives --auto 'rtipersistenceservice'
+        alternatives --auto 'libnddscore.so'
 
         # update ld configuration
         ldconfig
@@ -128,8 +143,10 @@ buildRpm {
             exit 0
         fi
 
-        # libraries
-        alternatives --remove 'libnddscore.so' '$libraryInstallPath/libnddscore.so'
+        # alternatives
+        alternatives --remove 'rtiroutingservice'      '$applicationLauncherPath'
+        alternatives --remove 'rtipersistenceservice'  '$applicationLauncherPath'
+        alternatives --remove 'libnddscore.so'         '$libraryInstallPath/libnddscore.so'
 
         # update ld configuration
         ldconfig

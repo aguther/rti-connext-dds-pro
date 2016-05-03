@@ -87,18 +87,30 @@ buildRpm {
     def javaInstallPath            = "$targetDirectory/resource/app/lib/java"
     def libraryLinkPath            = "/usr/lib64"
     def libraryInstallPath         = "$targetDirectory/resource/app/lib/x64Linux2.6gcc4.1.1"
-    def alternativesPriority       = 10
+    def alternativesPriorityApp    = 10
+    def alternativesPriorityLib    = 5
 
     // this will be called after installation phase
     postInstall """
-        # libraries
-        alternatives --install '$applicationLinkPath/rtiroutingservice'     'rtiroutingservice'         '$applicationLauncherPath'                      $alternativesPriority \\
-                     --slave   '$applicationLinkPath/rtirssh'               'rtirssh'                   '$applicationLauncherPath'                                            \\
-                     --slave   '$javaLinkPath/rtirsadapter.jar'             'rtirsadapter.jar'          '$javaInstallPath/rtirsadapter.jar'                                   \\
-                     --slave   '$libraryLinkPath/librtirsjniadapter.so'     'librtirsjniadapter.so'     '$libraryInstallPath/librtirsjniadapter.so'                           \\
-                     --slave   '$libraryLinkPath/librtirsinfrastructure.so' 'librtirsinfrastructure.so' '$libraryInstallPath/librtirsinfrastructure.so'                       \\
-                     --slave   '$libraryLinkPath/librtirsassigntransf.so'   'librtirsassigntransf.so'   '$libraryInstallPath/librtirsassigntransf.so'                         \\
-                     --slave   '$libraryLinkPath/librtidlc.so'              'librtidlc.so'              '$libraryInstallPath/librtidlc.so'
+        # routing service
+        alternatives --install '$applicationLinkPath/rtiroutingservice'     'rtiroutingservice'         '$applicationLauncherPath'                      $alternativesPriorityApp \\
+                     --slave   '$applicationLinkPath/rtirssh'               'rtirssh'                   '$applicationLauncherPath'                                               \\
+                     --slave   '$javaLinkPath/rtirsadapter.jar'             'rtirsadapter.jar'          '$javaInstallPath/rtirsadapter.jar'                                      \\
+                     --slave   '$libraryLinkPath/librtiroutingservice.so'   'librtiroutingservice.so'   '$libraryInstallPath/librtiroutingservice.so'                            \\
+                     --slave   '$libraryLinkPath/librtirsassigntransf.so'   'librtirsassigntransf.so'   '$libraryInstallPath/librtirsassigntransf.so'                            \\
+                     --slave   '$libraryLinkPath/librtirsinfrastructure.so' 'librtirsinfrastructure.so' '$libraryInstallPath/librtirsinfrastructure.so'                          \\
+                     --slave   '$libraryLinkPath/librtirsjniadapter.so'     'librtirsjniadapter.so'     '$libraryInstallPath/librtirsjniadapter.so'
+
+        alternatives --install '$libraryLinkPath/libnddscore.so'             'libnddscore.so'            '$libraryInstallPath/libnddscore.so'           $alternativesPriorityLib \\
+                     --slave   '$libraryLinkPath/libnddsc.so'                'libnddsc.so'               '$libraryInstallPath/libnddsc.so'                                       \\
+                     --slave   '$libraryLinkPath/libnddsjava.so'             'libnddsjava.so'            '$libraryInstallPath/libnddsjava.so'                                    \\
+                     --slave   '$libraryLinkPath/libnddstransporttcp.so'     'libnddstransporttcp.so'    '$libraryInstallPath/libnddstransporttcp.so'                            \\
+                     --slave   '$libraryLinkPath/librticonnextmsgc.so'       'librticonnextmsgc.so'      '$libraryInstallPath/librticonnextmsgc.so'                              \\
+                     --slave   '$libraryLinkPath/librtidlc.so'               'librtidlc.so'              '$libraryInstallPath/librtidlc.so'
+
+        # enable auto configuration
+        alternatives --auto 'rtiroutingservice'
+        alternatives --auto 'libnddscore.so'
 
         # update ld configuration
         ldconfig
@@ -112,7 +124,8 @@ buildRpm {
         fi
 
         # libraries
-        alternatives --remove 'rtiroutingservice' '$applicationLinkPath/rtiroutingservice'
+        alternatives --remove 'rtiroutingservice' '$applicationLauncherPath'
+        alternatives --remove 'libnddscore.so'    '$libraryInstallPath/libnddscore.so'
 
         # update ld configuration
         ldconfig

@@ -142,11 +142,8 @@ buildRpm {
                      --slave   '$applicationDesktopLinkPath/rtiadminconsole.desktop' 'rtiadminconsole.desktop' '$targetDirectory/rtiadminconsole.desktop'                                                            \\
                      --slave   '$applicationIconLinkPath/rtiadminconsole.xpm'        'rtiadminconsole.xpm'     '$targetDirectory/resource/app/app_support/admin_console/x64Linux/icon.xpm'
 
-        alternatives --install '$applicationLinkPath/rtipersistenceservice'          'rtipersistenceservice'   '$applicationLauncherPath'                                                      $alternativesPriority \\
-                     --slave   '$applicationLinkPath/rtipssh'                        'rtipssh'                 '$applicationLauncherPath'
-
-        alternatives --install '$applicationLinkPath/rtiroutingservice'              'rtiroutingservice'       '$applicationLauncherPath'                                                      $alternativesPriority \\
-                     --slave   '$applicationLinkPath/rtirssh'                        'rtirssh'                 '$applicationLauncherPath'
+        # enable auto configuration
+        alternatives --auto 'rtiadminconsole'
     """
 
     // this will be called after uninstallation phase
@@ -158,9 +155,7 @@ buildRpm {
         fi
 
         # applications
-        alternatives --remove 'rtiadminconsole'       '$applicationLauncherPath'
-        alternatives --remove 'rtipersistenceservice' '$applicationLauncherPath'
-        alternatives --remove 'rtiroutingservice'     '$applicationLauncherPath'
+        alternatives --remove 'rtiadminconsole' '$applicationLauncherPath'
     """
 }
 
