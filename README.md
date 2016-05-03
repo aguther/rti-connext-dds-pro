@@ -1,4 +1,4 @@
-# RTI Connext DDS RPMS
+# RTI Connext DDS Professional RPMS
 
 This repository contains gradle build jobs to create RPMS for the efficient deployment of RTI Connext DDS Professional.
 
