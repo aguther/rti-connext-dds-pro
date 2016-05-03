@@ -67,6 +67,13 @@ ospackage {
     provides("rti-connext-dds-runtime-c", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
     provides("rti-connext-dds-runtime-cpp", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
     provides("rti-connext-dds-runtime-java", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    provides("rti-connext-dds-runtime-distlog", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    provides("rti-connext-dds-runtime-messaging", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+
+    // ensure we only install one package of runtime
+    provides("rti-connext-dds-runtime-pro", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    conflicts("rti-connext-dds-runtime-pro", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | LESS)
+    conflicts("rti-connext-dds-runtime-core")
 
     // add java libraries
     from("$extractionDirectory/rti_connext_dds-5.2.0/lib/java") {

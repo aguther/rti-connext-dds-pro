@@ -53,6 +53,10 @@ ospackage {
 
     into "$targetDirectory"
 
+    // we provide the persistence service
+    provides("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    conflicts("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | LESS)
+
     from("$extractionDirectory/rti_connext_dds-5.2.0") {
         include "bin/rtipersistenceservice"
         include "bin/rtipssh"

@@ -46,16 +46,23 @@ ospackage {
     user = "root"
 
     // we require the SDK to be installed
-    requires("rti-connext-dds-sdk", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | EQUAL)
-    // -- workaround due to bug in reline rpm -- requires("rti-connext-dds-sdk", "${parsedVersion.major}.${parsedVersion.minor+1}", LESS)
+    requires("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    conflicts("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | LESS)
 
-    // this provide tells the SDK RPM that we are an target library package
-    provides("rti-connext-dds-sdk-target", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
     // the following provides tell us what abi and languages we can serve
     provides("rti-connext-dds(abi)", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
     provides("rti-connext-dds-runtime-c", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
     provides("rti-connext-dds-runtime-cpp", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
     provides("rti-connext-dds-runtime-java", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    provides("rti-connext-dds-runtime-distlog", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    provides("rti-connext-dds-runtime-messaging", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    provides("rti-connext-dds-routing-service", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    provides("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+
+    // ensure we only install one package of runtime
+    provides("rti-connext-dds-sdk-pro-target", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    conflicts("rti-connext-dds-sdk-pro-target", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | LESS)
+    conflicts("rti-connext-dds-sdk-core-target")
 
     into "$targetDirectory"
 

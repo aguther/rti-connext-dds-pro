@@ -49,8 +49,8 @@ ospackage {
 
     user = "root"
 
-    requires("rti-connext-dds-sdk", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | EQUAL)
-    // -- workaround due to bug in reline rpm -- requires("rti-connext-dds-sdk", "${parsedVersion.major}.${parsedVersion.minor+1}", LESS)
+    requires("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    conflicts("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | LESS)
 
     into "$targetDirectory"
 
