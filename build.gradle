@@ -5,8 +5,8 @@ allprojects {
 }
 
 project(":rti-connext-dds-$versionMajor$versionMinor-admin-console") {
-    version = "$versionMajor.$versionMinor.0.0"
-    rpmRelease = "1"
+    version = "$versionMajor.$versionMinor.$versionMicro.0"
+    rpmRelease = "$rpmRelease"
 }
 
 project("rti-connext-dds-$versionMajor$versionMinor-license") {
@@ -15,41 +15,41 @@ project("rti-connext-dds-$versionMajor$versionMinor-license") {
 }
 
 project("rti-connext-dds-$versionMajor$versionMinor-persistence-service") {
-	version = "$versionMajor.$versionMinor.0.0"
+	version = "$versionMajor.$versionMinor.$versionMicro.0"
 	rpmRelease = "$rpmRelease"
 }
 
 project("rti-connext-dds-$versionMajor$versionMinor-routing-service") {
-	version = "$versionMajor.$versionMinor.0.0"
+	version = "$versionMajor.$versionMinor.$versionMicro.0"
 	rpmRelease = "$rpmRelease"
 }
 
 project("rti-connext-dds-$versionMajor$versionMinor-runtime-pro-x64Linux2.6gcc4.4.5") {
-	version = "$versionMajor.$versionMinor.0.0"
+	version = "$versionMajor.$versionMinor.$versionMicro.0"
 	rpmRelease = "$rpmRelease"
 }
 
 project("rti-connext-dds-$versionMajor$versionMinor-runtime-pro-x64Linux3gcc4.8.2") {
-	version = "$versionMajor.$versionMinor.0.0"
+	version = "$versionMajor.$versionMinor.$versionMicro.0"
 	rpmRelease = "$rpmRelease"
 }
 
 project("rti-connext-dds-$versionMajor$versionMinor-sdk-pro") {
-	version = "$versionMajor.$versionMinor.0.1"
+	version = "$versionMajor.$versionMinor.$versionMicro.0"
 	rpmRelease = "$rpmRelease"
 }
 
 project("rti-connext-dds-$versionMajor$versionMinor-sdk-pro-sources") {
-	version = "$versionMajor.$versionMinor.0.0"
+	version = "$versionMajor.$versionMinor.$versionMicro.0"
 	rpmRelease = "$rpmRelease"
 }
 
 project("rti-connext-dds-$versionMajor$versionMinor-sdk-pro-target-x64Linux2.6gcc4.4.5") {
-	version = "$versionMajor.$versionMinor.0.0"
+	version = "$versionMajor.$versionMinor.$versionMicro.0"
 	rpmRelease = "$rpmRelease"
 }
 
 project("rti-connext-dds-$versionMajor$versionMinor-sdk-pro-target-x64Linux3gcc4.8.2") {
-	version = "$versionMajor.$versionMinor.0.0"
+	version = "$versionMajor.$versionMinor.$versionMicro.0"
 	rpmRelease = "$rpmRelease"
 }

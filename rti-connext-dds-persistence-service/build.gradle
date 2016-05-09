@@ -5,11 +5,12 @@ plugins {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
+def parsedVersion = VersionNumber.parse(project.version)
 def extractionDirectory = "$buildDir/extracted"
 
 task extractPackages {
 
-    inputs.file "$projectDir/../packages/rti_connext_dds-5.2.0-pro-host-x64Linux.run"
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run"
     outputs.dir extractionDirectory
 
     doLast {
@@ -18,7 +19,7 @@ task extractPackages {
         def processObject
 
         // install SDK into extraction directory (with prefix)
-        commandLine = "$projectDir/../packages/rti_connext_dds-5.2.0-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
+        commandLine = "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
         processObject = commandLine.execute()
         processObject.in.eachLine { line -> logger.info(line) }
         processObject.err.eachLine { line -> logger.error(line) }
@@ -31,7 +32,6 @@ task extractPackages {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-def parsedVersion = VersionNumber.parse(project.version)
 def targetDirectory = "/opt/rti/connext-dds/persistence-service"
 
 ospackage {
@@ -54,10 +54,10 @@ ospackage {
     into "$targetDirectory"
 
     // we provide the persistence service
-    provides("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
-    conflicts("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | LESS)
+    provides("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
+    conflicts("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
 
-    from("$extractionDirectory/rti_connext_dds-5.2.0") {
+    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
         include "bin/rtipersistenceservice"
         include "bin/rtipssh"
         include "doc/manuals/persistence_service/*"

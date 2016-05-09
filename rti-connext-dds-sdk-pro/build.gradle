@@ -10,8 +10,7 @@ def extractionDirectory = "$buildDir/extracted"
 
 task extractPackages {
 
-    inputs.file "$projectDir/../packages/rti_connext_dds-5.2.0-pro-host-x64Linux.run"
-    inputs.file "$projectDir/../packages/rti_connext_dds-5.2.0.1-patch-launcher-noarch.rtipkg"
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run"
     outputs.dir extractionDirectory
 
     doLast {
@@ -20,15 +19,7 @@ task extractPackages {
         def processObject
  
         // install SDK into extraction directory (with prefix)
-        commandLine = "$projectDir/../packages/rti_connext_dds-5.2.0-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
-        processObject = commandLine.execute()
-        processObject.in.eachLine { line -> logger.info(line) }
-        processObject.err.eachLine { line -> logger.error(line) }
-        processObject.waitFor()
-        assert !processObject.exitValue()
-
-        // install RTI launcher patch (5.2.0.1)
-        commandLine = "$extractionDirectory/rti_connext_dds-5.2.0/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-5.2.0.1-patch-launcher-noarch.rtipkg"
+        commandLine = "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
         processObject = commandLine.execute()
         processObject.in.eachLine { line -> logger.info(line) }
         processObject.err.eachLine { line -> logger.error(line) }
@@ -65,27 +56,27 @@ ospackage {
     // we need a license to work
     requires("rti-connext-dds-license")
     // we need target libraries to be installed to work
-    requires("rti-connext-dds-sdk-pro-target", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    requires("rti-connext-dds-sdk-pro-target", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
 
     // we provide the admin console
-    provides("rti-connext-dds-admin-console", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    provides("rti-connext-dds-admin-console", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
 
     // ensure we only install one package of SDK
-    provides("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
-    conflicts("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | LESS)
+    provides("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
+    conflicts("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
     conflicts("rti-connext-dds-sdk-core")
 
     // add SDK content
-    from("$extractionDirectory/rti_connext_dds-5.2.0") {
+    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
         exclude "**/rtilauncher.desktop"
         exclude "**/uninstall"
         into ""
     }
     // add desktop file with correct paths
-    from("$extractionDirectory/rti_connext_dds-5.2.0") {
+    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
         include "**/rtilauncher.desktop"
         filter { String line ->
-            line.replace("$extractionDirectory/rti_connext_dds-5.2.0", "$targetDirectory")
+            line.replace("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", "$targetDirectory")
         }
         filter { String line ->
             line.replace("$targetDirectory/bin/rtilauncher", "/usr/bin/rtilauncher")

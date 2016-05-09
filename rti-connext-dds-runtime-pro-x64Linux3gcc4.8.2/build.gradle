@@ -5,12 +5,13 @@ plugins {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
+def parsedVersion = VersionNumber.parse(project.version)
 def extractionDirectory = "$buildDir/extracted"
 
 task extractPackages {
 
-    inputs.file "$projectDir/../packages/rti_connext_dds-5.2.0-pro-host-x64Linux.run"
-    inputs.file "$projectDir/../packages/rti_connext_dds-5.2.0-pro-target-x64Linux3gcc4.8.2.rtipkg"
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run"
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-x64Linux3gcc4.8.2.rtipkg"
     outputs.dir extractionDirectory
 
     doLast {
@@ -19,7 +20,7 @@ task extractPackages {
         def processObject
 
         // install SDK into extraction directory (with prefix)
-        commandLine = "$projectDir/../packages/rti_connext_dds-5.2.0-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
+        commandLine = "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
         processObject = commandLine.execute()
         processObject.in.eachLine { line -> logger.info(line) }
         processObject.err.eachLine { line -> logger.error(line) }
@@ -27,7 +28,7 @@ task extractPackages {
         assert !processObject.exitValue()
 
         // install target libraries with RTI installer
-        commandLine = "$extractionDirectory/rti_connext_dds-5.2.0/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-5.2.0-pro-target-x64Linux3gcc4.8.2.rtipkg"
+        commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-x64Linux3gcc4.8.2.rtipkg"
         processObject = commandLine.execute()
         processObject.in.eachLine { line -> logger.info(line) }
         processObject.err.eachLine { line -> logger.error(line) }
@@ -40,7 +41,6 @@ task extractPackages {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-def parsedVersion = VersionNumber.parse(project.version)
 def targetDirectory = "/opt/rti/connext-dds/runtime/x64Linux3gcc4.8.2"
 
 ospackage {
@@ -63,20 +63,20 @@ ospackage {
     into "$targetDirectory"
 
     // the following provides tell us what abi and languages we can serve
-    provides("rti-connext-dds(abi)", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
-    provides("rti-connext-dds-runtime-c", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
-    provides("rti-connext-dds-runtime-cpp", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
-    provides("rti-connext-dds-runtime-java", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
-    provides("rti-connext-dds-runtime-distlog", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
-    provides("rti-connext-dds-runtime-messaging", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    provides("rti-connext-dds(abi)", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
+    provides("rti-connext-dds-runtime-c", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
+    provides("rti-connext-dds-runtime-cpp", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
+    provides("rti-connext-dds-runtime-java", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
+    provides("rti-connext-dds-runtime-distlog", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
+    provides("rti-connext-dds-runtime-messaging", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
 
     // ensure we only install one package of runtime
-    provides("rti-connext-dds-runtime-pro", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
-    conflicts("rti-connext-dds-runtime-pro", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | LESS)
+    provides("rti-connext-dds-runtime-pro", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
+    conflicts("rti-connext-dds-runtime-pro", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
     conflicts("rti-connext-dds-runtime-core")
 
     // add java libraries
-    from("$extractionDirectory/rti_connext_dds-5.2.0/lib/java") {
+    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/lib/java") {
         include "**/nddsjava.jar"
         include "**/distlog*.jar"
         include "**/rticonnextmsg.jar"
@@ -85,7 +85,7 @@ ospackage {
         into "java"
     }
     // add native runtime libraries
-    from("$extractionDirectory/rti_connext_dds-5.2.0/lib/x64Linux3gcc4.8.2") {
+    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/lib/x64Linux3gcc4.8.2") {
         include "**/*.so"
         exclude "**/librtirs*.so"
         exclude "**/librtiroutingservice.so"

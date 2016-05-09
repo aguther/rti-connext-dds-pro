@@ -5,21 +5,22 @@ plugins {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
+def parsedVersion = VersionNumber.parse(project.version)
 def extractionDirectory = "$buildDir/extracted"
 
 task extractPackages {
 
-    inputs.file "$projectDir/../packages/rti_connext_dds-5.2.0-basic-src.zip"
-    inputs.file "$projectDir/../packages/rti_routing_service-5.2.0-src.zip"
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-basic-src.zip"
+    inputs.file "$projectDir/../packages/rti_routing_service-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-src.zip"
     outputs.dir extractionDirectory
 
     doLast {
         copy {
-            from zipTree("$projectDir/../packages/rti_connext_dds-5.2.0-basic-src.zip")
+            from zipTree("$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-basic-src.zip")
             into "$extractionDirectory"
         }
         copy {
-            from zipTree("$projectDir/../packages/rti_routing_service-5.2.0-src.zip")
+            from zipTree("$projectDir/../packages/rti_routing_service-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-src.zip")
             into "$extractionDirectory"
             // the following files need to be excluded to ensure the zip can be expanded
             exclude "**/RTI_ConnextDDS_3rdPartySoftware_CoreLibraries.pdf"
@@ -29,7 +30,6 @@ task extractPackages {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-def parsedVersion = VersionNumber.parse(project.version)
 def targetDirectory = "/opt/rti/connext-dds/sdk"
 
 ospackage {
@@ -49,12 +49,12 @@ ospackage {
 
     user = "root"
 
-    requires("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
-    conflicts("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}", GREATER | LESS)
+    requires("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
+    conflicts("rti-connext-dds-sdk-pro", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
 
     into "$targetDirectory"
 
-    from("$extractionDirectory/ndds520-src") {
+    from("$extractionDirectory/ndds${parsedVersion.major}${parsedVersion.minor}${parsedVersion.micro}-src") {
         fileMode 0644
         into "src"
     }

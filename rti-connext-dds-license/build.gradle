@@ -25,7 +25,7 @@ ospackage {
 
     user = "root"
 
-    provides("rti-connext-dds-license", "${parsedVersion.major}.${parsedVersion.minor}", EQUAL)
+    provides("rti-connext-dds-license", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
 
     into "$targetDirectory"
 
