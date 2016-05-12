@@ -10,21 +10,13 @@ def extractionDirectory = "$buildDir/extracted"
 
 task extractPackages {
 
-    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-basic-src.zip"
-    inputs.file "$projectDir/../packages/rti_routing_service-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-src.zip"
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-src.zip"
     outputs.dir extractionDirectory
 
     doLast {
         copy {
-            from zipTree("$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-basic-src.zip")
+            from zipTree("$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-src.zip")
             into "$extractionDirectory"
-        }
-        copy {
-            from zipTree("$projectDir/../packages/rti_routing_service-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-src.zip")
-            into "$extractionDirectory"
-            // the following files need to be excluded to ensure the zip can be expanded
-            exclude "**/RTI_ConnextDDS_3rdPartySoftware_CoreLibraries.pdf"
-            exclude "**/RTI_License_Agreement.pdf"
         }
     }
 }
