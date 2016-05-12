@@ -6,50 +6,50 @@ allprojects {
 
 project(":rti-admin-console") {
 	version = "5.1.0.0"
-	rpmRelease = "20"
+	rpmRelease = "30"
 }
 
 project(":rti-connext-dds-runtime-pro-x64linux2.6gcc4.4.5") {
 	version = "5.1.0.17"
-	rpmRelease = "20"
+	rpmRelease = "30"
 }
 
 project(":rti-connext-dds-sdk-license") {
 	version = "5.1.0.0"
-	rpmRelease = "20"
+	rpmRelease = "30"
 }
 
 project(":rti-connext-dds-sdk-pro") {
 	version = "5.1.0.17"
-	rpmRelease = "20"
+	rpmRelease = "30"
 }
 
 project(":rti-connext-dds-sdk-pro-sources") {
 	version = "5.1.0.0"
-	rpmRelease = "20"
+	rpmRelease = "30"
 }
 
 project(":rti-connext-dds-sdk-pro-target-x64linux2.6gcc4.4.5") {
 	version = "5.1.0.17"
-	rpmRelease = "20"
+	rpmRelease = "30"
 }
 
 project(":rti-monitor") {
 	version = "5.1.0.0"
-	rpmRelease = "20"
+	rpmRelease = "30"
 }
 
 project(":rti-persistence-service") {
 	version = "5.1.0.17"
-	rpmRelease = "20"
+	rpmRelease = "30"
 }
 
 project(":rti-routing-service") {
 	version = "5.1.0.17"
-	rpmRelease = "20"
+	rpmRelease = "30"
 }
 
 project(":rti-routing-service-sdk") {
 	version = "5.1.0.0"
-	rpmRelease = "20"
+	rpmRelease = "30"
 }
