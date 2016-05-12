@@ -134,7 +134,7 @@ buildRpm {
     // this will be called after uninstallation phase
     postUninstall """
         # check if uninstall is due to an upgrade
-        if [ '\$1' = '1' ]; then
+        if [ \"\$1\" = \"1\" ]; then
             # we are in an upgrade process >> nothing to do
             exit 0
         fi
