@@ -14,6 +14,11 @@ project("rti-connext-dds-$versionMajor$versionMinor-license") {
     rpmRelease = "$rpmRelease"
 }
 
+project("rti-connext-dds-$versionMajor$versionMinor-monitor") {
+	version = "$versionMajor.$versionMinor.$versionMicro.0"
+	rpmRelease = "$rpmRelease"
+}
+
 project("rti-connext-dds-$versionMajor$versionMinor-persistence-service") {
 	version = "$versionMajor.$versionMinor.$versionMicro.0"
 	rpmRelease = "$rpmRelease"

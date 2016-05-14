@@ -6,6 +6,9 @@ project(":rti-connext-dds-admin-console").name = "rti-connext-dds-$versionMajor$
 include 'rti-connext-dds-license'
 project(":rti-connext-dds-license").name = "rti-connext-dds-$versionMajor$versionMinor-license"
 
+include 'rti-connext-dds-monitor'
+project(":rti-connext-dds-monitor").name = "rti-connext-dds-$versionMajor$versionMinor-monitor"
+
 include 'rti-connext-dds-persistence-service'
 project(":rti-connext-dds-persistence-service").name = "rti-connext-dds-$versionMajor$versionMinor-persistence-service"
 
