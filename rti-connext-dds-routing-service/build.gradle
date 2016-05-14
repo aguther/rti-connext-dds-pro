@@ -72,7 +72,15 @@ ospackage {
         include "resource/app/lib/*/rtirsadapter.jar"
         include "resource/schema/rti_routing_service.*"
         include "resource/scripts/*"
+        exclude "resource/scripts/rticommon_config.sh"
         include "resource/xml/RTI_ROUTING_SERVICE.xml"
+        into ""
+    }
+    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+        include "resource/scripts/rticommon_config.sh"
+        filter { String line ->
+            line.replace("# copy_examples=false", "copy_examples=false\ncopy_workspace=false")
+        }
         into ""
     }
     // add scripts

@@ -44,7 +44,6 @@ ospackage {
 
     packageGroup = "Development/Tools"
 
-
     version = "${project.version}"
     release = "$rpmRelease"
     arch = X86_64
@@ -76,7 +75,15 @@ ospackage {
         include "resource/app/lib/*/libndds*.so"
         include "resource/app/lib/*/lib*monitoring.so"
         include "resource/scripts/*"
+        exclude "resource/scripts/rticommon_config.sh"
         include "resource/xml/admin_console_example_profiles.xml"
+        into ""
+    }
+    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+        include "resource/scripts/rticommon_config.sh"
+        filter { String line ->
+            line.replace("# copy_examples=false", "copy_examples=false\ncopy_workspace=false")
+        }
         into ""
     }
     // add desktop links
