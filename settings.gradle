@@ -21,14 +21,8 @@ project(":rti-connext-dds-runtime-pro-x64Linux2.6gcc4.4.5").name = "rti-connext-
 include 'rti-connext-dds-runtime-pro-x64Linux3gcc4.8.2'
 project(":rti-connext-dds-runtime-pro-x64Linux3gcc4.8.2").name = "rti-connext-dds-$versionMajor$versionMinor-runtime-pro-x64Linux3gcc4.8.2"
 
-include 'rti-connext-dds-sdk-pro'
-project(":rti-connext-dds-sdk-pro").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro"
+include 'rti-connext-dds-sdk-pro-x64Linux2.6gcc4.4.5'
+project(":rti-connext-dds-sdk-pro-x64Linux2.6gcc4.4.5").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro-x64Linux2.6gcc4.4.5"
 
-include 'rti-connext-dds-sdk-pro-sources'
-project(":rti-connext-dds-sdk-pro-sources").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro-sources"
-
-include 'rti-connext-dds-sdk-pro-target-x64Linux2.6gcc4.4.5'
-project(":rti-connext-dds-sdk-pro-target-x64Linux2.6gcc4.4.5").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro-target-x64Linux2.6gcc4.4.5"
-
-include 'rti-connext-dds-sdk-pro-target-x64Linux3gcc4.8.2'
-project(":rti-connext-dds-sdk-pro-target-x64Linux3gcc4.8.2").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro-target-x64Linux3gcc4.8.2"
+include 'rti-connext-dds-sdk-pro-x64Linux3gcc4.8.2'
+project(":rti-connext-dds-sdk-pro-x64Linux3gcc4.8.2").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro-x64Linux3gcc4.8.2"
