@@ -105,6 +105,7 @@ ospackage {
         exclude "**/lib/java/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
         exclude "**/rtilauncher.desktop"
         exclude "**/uninstall"
+        exclude "backup"
         into ""
     }
 
