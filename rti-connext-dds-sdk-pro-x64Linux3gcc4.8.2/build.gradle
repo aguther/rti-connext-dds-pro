@@ -102,6 +102,7 @@ ospackage {
 
     // add SDK content
     from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+        exclude "**/lib/java/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
         exclude "**/rtilauncher.desktop"
         exclude "**/uninstall"
         into ""

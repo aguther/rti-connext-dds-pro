@@ -91,6 +91,7 @@ ospackage {
         include "**/distlog*.jar"
         include "**/rticonnextmsg.jar"
         include "**/rtijms.jar"
+        exclude "**/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
         exclude "**/*d.*"
         into "java"
     }
