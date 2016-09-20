@@ -11,7 +11,12 @@ def extractionDirectory = "$buildDir/extracted"
 task extractPackages {
 
     inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run"
-    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-x64Linux3gcc4.8.2.rtipkg"
+    if (parsedVersion.patch == 0) {
+        inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-${rtiTarget}.rtipkg"
+    }
+    else {
+        inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
+    }
     outputs.dir extractionDirectory
 
     doLast {
@@ -28,7 +33,12 @@ task extractPackages {
         assert !processObject.exitValue()
 
         // install target libraries with RTI installer
-        commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-x64Linux3gcc4.8.2.rtipkg"
+        if (parsedVersion.patch == 0) {
+            commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-${rtiTarget}.rtipkg"
+        }
+        else {
+            commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
+        }
         processObject = commandLine.execute()
         processObject.in.eachLine { line -> logger.info(line) }
         processObject.err.eachLine { line -> logger.error(line) }
@@ -41,15 +51,15 @@ task extractPackages {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-def targetDirectory = "/opt/rti/connext-dds/runtime/x64Linux3gcc4.8.2"
+def targetDirectory = "/opt/rti/connext-dds/runtime/${rtiTarget}"
 
 ospackage {
     vendor = "Real-Time Innovations (RTI)"
     url = "http://www.rti.com"
     license = "http://www.rti.com/downloads/license-agreement.html"
 
-    summary = "RTI Connext® DDS Professional - Runtime x64Linux3gcc4.8.2"
-    description = "Runtime Libraries for x64Linux3gcc4.8.2 of RTI Connext® DDS Professional."
+    summary = "RTI Connext® DDS Professional - Runtime ${rtiTarget}"
+    description = "Runtime Libraries for ${rtiTarget} of RTI Connext® DDS Professional."
 
     packageGroup = "Development/Tools"
 
@@ -85,7 +95,7 @@ ospackage {
         into "java"
     }
     // add native runtime libraries
-    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/lib/x64Linux3gcc4.8.2") {
+    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/lib/${rtiTarget}") {
         include "**/*.so"
         exclude "**/librtirs*.so"
         exclude "**/librtiroutingservice.so"
