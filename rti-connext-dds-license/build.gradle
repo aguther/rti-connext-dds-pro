@@ -5,7 +5,7 @@ plugins {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-def parsedVersion = VersionNumber.parse(project.version)
+def parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
 def targetDirectory = "/opt/rti/connext-dds/license"
 
 ospackage {
