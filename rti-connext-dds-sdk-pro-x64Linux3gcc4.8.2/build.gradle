@@ -11,13 +11,11 @@ def extractionDirectory = "$buildDir/extracted"
 task extractPackages {
 
     inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run"
-    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-src.zip"
-    if (parsedVersion.patch == 0) {
-        inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-${rtiTarget}.rtipkg"
-    }
-    else {
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}-pro-target-${rtiTarget}.rtipkg"
+    if (parsedVersion.patch > 0) {
         inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
     }
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-src.zip"
     outputs.dir extractionDirectory
 
     doLast {
@@ -34,17 +32,22 @@ task extractPackages {
         assert !processObject.exitValue()
 
         // install target libraries with RTI installer
-        if (parsedVersion.patch == 0) {
-            commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-${rtiTarget}.rtipkg"
-        }
-        else {
-            commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
-        }
+        commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-${rtiTarget}.rtipkg"
         processObject = commandLine.execute()
         processObject.in.eachLine { line -> logger.info(line) }
         processObject.err.eachLine { line -> logger.error(line) }
         processObject.waitFor()
         assert !processObject.exitValue()
+
+        // install target libraries of patch with RTI installer (if applicable)
+        if (parsedVersion.patch > 0) {
+            commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
+            processObject = commandLine.execute()
+            processObject.in.eachLine { line -> logger.info(line) }
+            processObject.err.eachLine { line -> logger.error(line) }
+            processObject.waitFor()
+            assert !processObject.exitValue()
+        }
 
         // remove local launcher file
         delete file ("${System.properties['user.home']}/.local/share/applications/rtilauncher.desktop")
@@ -102,7 +105,7 @@ ospackage {
 
     // add SDK content
     from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
-        exclude "**/lib/java/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
+        exclude "**/lib/*/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
         exclude "**/rtilauncher.desktop"
         exclude "**/uninstall"
         exclude "backup"
