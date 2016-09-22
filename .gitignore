@@ -1,3 +1,5 @@
+.eclipse
+.idea
 .gradle
 build/
 
