@@ -7,6 +7,7 @@ plugins {
 // --------------------------------------------------------------------------------------------------------------------
 def parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
 def extractionDirectory = "$buildDir/extracted"
+def extractionDirectoryResult = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
 
 task extractPackages {
 
@@ -61,7 +62,7 @@ ospackage {
     conflicts("rti-connext-dds-monitor", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
 
     // add admin console
-    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+    from("$extractionDirectoryResult") {
         include "bin/rtimonitor"
         include "doc/manuals/monitor/*"
         include "resource/app/app_support/monitor/**"
@@ -86,7 +87,7 @@ ospackage {
         include "resource/xml/RTI_MONITOR_QOS_PROFILES.xml"
         into ""
     }
-    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+    from("$extractionDirectoryResult") {
         include "resource/scripts/rticommon_config.sh"
         filter { String line ->
             line.replace("# copy_examples=false", "copy_examples=false\ncopy_workspace=false")

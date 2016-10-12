@@ -7,6 +7,7 @@ plugins {
 // --------------------------------------------------------------------------------------------------------------------
 def parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
 def extractionDirectory = "$buildDir/extracted"
+def extractionDirectoryResult = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
 
 task extractPackages {
 
@@ -32,7 +33,7 @@ task extractPackages {
         // install patch(es) with RTI installer (if applicable)
         if (parsedVersion.patch > 0) {
             // install host patch
-            commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-core-host-x64Linux.rtipkg"
+            commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-core-host-x64Linux.rtipkg"
             processObject = commandLine.execute()
             processObject.in.eachLine { line -> logger.info(line) }
             processObject.err.eachLine { line -> logger.error(line) }
@@ -71,7 +72,7 @@ ospackage {
     provides("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
     conflicts("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
 
-    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+    from("$extractionDirectoryResult") {
         include "bin/rtipersistenceservice"
         include "bin/rtipssh"
         include "doc/manuals/persistence_service/*"
@@ -83,7 +84,7 @@ ospackage {
         include "resource/xml/RTI_PERSISTENCE_SERVICE.xml"
         into ""
     }
-    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+    from("$extractionDirectoryResult") {
         include "resource/scripts/rticommon_config.sh"
         filter { String line ->
             line.replace("# copy_examples=false", "copy_examples=false\ncopy_workspace=false")

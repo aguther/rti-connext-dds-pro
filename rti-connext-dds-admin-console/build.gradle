@@ -7,6 +7,7 @@ plugins {
 // --------------------------------------------------------------------------------------------------------------------
 def parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
 def extractionDirectory = "$buildDir/extracted"
+def extractionDirectoryResult = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
 
 task extractPackages {
 
@@ -61,7 +62,7 @@ ospackage {
     conflicts("rti-connext-dds-admin-console", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
 
     // add admin console
-    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+    from("$extractionDirectoryResult") {
         include "bin/rtiadminconsole"
         include "doc/manuals/admin_console/*"
         include "resource/app/app_support/admin_console/**"
@@ -79,7 +80,7 @@ ospackage {
         include "resource/xml/admin_console_example_profiles.xml"
         into ""
     }
-    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+    from("$extractionDirectoryResult") {
         include "resource/scripts/rticommon_config.sh"
         filter { String line ->
             line.replace("# copy_examples=false", "copy_examples=false\ncopy_workspace=false")
