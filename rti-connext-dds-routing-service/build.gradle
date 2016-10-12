@@ -11,6 +11,9 @@ def extractionDirectory = "$buildDir/extracted"
 task extractPackages {
 
     inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run"
+    if (parsedVersion.patch > 0) {
+        inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-x64Linux.run"
+    }
     outputs.dir extractionDirectory
 
     doLast {
@@ -25,6 +28,17 @@ task extractPackages {
         processObject.err.eachLine { line -> logger.error(line) }
         processObject.waitFor()
         assert !processObject.exitValue()
+
+        // install patch(es) with RTI installer (if applicable)
+        if (parsedVersion.patch > 0) {
+            // install host patch
+            commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-x64Linux.run"
+            processObject = commandLine.execute()
+            processObject.in.eachLine { line -> logger.info(line) }
+            processObject.err.eachLine { line -> logger.error(line) }
+            processObject.waitFor()
+            assert !processObject.exitValue()
+        }
 
         // remove local launcher file
         delete file ("${System.properties['user.home']}/.local/share/applications/rtilauncher.desktop")
