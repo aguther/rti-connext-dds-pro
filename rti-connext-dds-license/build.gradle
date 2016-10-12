@@ -7,7 +7,6 @@ plugins {
 // --------------------------------------------------------------------------------------------------------------------
 def parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
 def targetDirectory = "/opt/rti/connext-dds/license"
-def extractionDirectoryResult = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
 
 ospackage {
     vendor = "Real-Time Innovations (RTI)"
