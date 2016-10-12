@@ -32,7 +32,7 @@ task extractPackages {
         // install patch(es) with RTI installer (if applicable)
         if (parsedVersion.patch > 0) {
             // install host patch
-            commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-x64Linux.run"
+            commandLine = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-x64Linux.rtipkg"
             processObject = commandLine.execute()
             processObject.in.eachLine { line -> logger.info(line) }
             processObject.err.eachLine { line -> logger.error(line) }
