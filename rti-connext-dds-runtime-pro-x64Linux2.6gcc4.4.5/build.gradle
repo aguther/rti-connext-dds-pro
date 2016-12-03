@@ -14,7 +14,7 @@ task extractPackages {
     inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run"
     inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}-pro-target-${rtiTarget}.rtipkg"
     if (parsedVersion.patch > 0) {
-        inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-core-host-x64Linux.rtipkg"
+        inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-x64Linux.rtipkg"
         inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-core-target-${rtiTarget}.rtipkg"
     }
     outputs.dir extractionDirectory
@@ -43,7 +43,7 @@ task extractPackages {
         // install patch(es) with RTI installer (if applicable)
         if (parsedVersion.patch > 0) {
             // install host patch
-            commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-core-host-x64Linux.rtipkg"
+            commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-x64Linux.rtipkg"
             processObject = commandLine.execute()
             processObject.in.eachLine { line -> logger.info(line) }
             processObject.err.eachLine { line -> logger.error(line) }
