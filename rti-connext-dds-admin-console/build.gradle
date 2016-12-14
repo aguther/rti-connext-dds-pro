@@ -54,6 +54,17 @@ ospackage {
 
     into "$targetDirectory"
 
+    // runtime dependencies
+    requires("libc.so.6")
+    requires("libgcc_s.so.1")
+    requires("libm.so.6")
+    requires("libpthread.so.0")
+    requires("librt.so.1")
+    requires("libstdc++.so.6")
+
+    // requires to base packages
+    requires("chkconfig")
+
     // admin console requires a license to work
     requires("rti-connext-dds-license")
 

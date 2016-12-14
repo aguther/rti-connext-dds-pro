@@ -68,6 +68,17 @@ ospackage {
 
     into "$targetDirectory"
 
+    // runtime dependencies
+    requires("libc.so.6")
+    requires("libdl.so.2")
+    requires("libm.so.6")
+    requires("libnsl.so.1")
+    requires("libpthread.so.0")
+    requires("librt.so.1")
+
+    // requires to base packages
+    requires("chkconfig")
+
     // we provide the persistence service
     provides("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
     conflicts("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)

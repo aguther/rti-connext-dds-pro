@@ -92,6 +92,21 @@ ospackage {
 
     into "$targetDirectory"
 
+    // runtime dependencies
+    requires("libc.so.6")
+    requires("libdl.so.2")
+    requires("libgcc_s.so.1")
+    requires("libjvm.so")
+    requires("libm.so.6")
+    requires("libnsl.so.1")
+    requires("libpthread.so.0")
+    requires("librt.so.1")
+    requires("libstdc++.so.6")
+
+    // requires to base packages
+    requires("chkconfig")
+    requires("jpackage-utils")
+
     // we need a license to work
     requires("rti-connext-dds-license")
 

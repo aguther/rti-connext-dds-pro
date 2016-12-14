@@ -54,14 +54,25 @@ ospackage {
 
     into "$targetDirectory"
 
-    // admin console requires a license to work
+    // runtime dependencies
+    requires("libc.so.6")
+    requires("libgcc_s.so.1")
+    requires("libm.so.6")
+    requires("libpthread.so.0")
+    requires("librt.so.1")
+    requires("libstdc++.so.6")
+
+    // requires to base packages
+    requires("chkconfig")
+
+    // monitor requires a license to work
     requires("rti-connext-dds-license")
 
-    // we provide the admin console
+    // we provide the monitor
     provides("rti-connext-dds-monitor", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
     conflicts("rti-connext-dds-monitor", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
 
-    // add admin console
+    // add monitor
     from("$extractionDirectoryResult") {
         include "bin/rtimonitor"
         include "doc/manuals/monitor/*"
