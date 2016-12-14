@@ -1,28 +1,30 @@
 rootProject.name = 'rti-connext-dds'
 
+def parsedVersion = VersionNumber.withPatchNumber().parse(version)
+
 include 'rti-connext-dds-admin-console'
-project(":rti-connext-dds-admin-console").name = "rti-connext-dds-$versionMajor$versionMinor-admin-console"
+project(":rti-connext-dds-admin-console").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-admin-console"
 
 include 'rti-connext-dds-license'
-project(":rti-connext-dds-license").name = "rti-connext-dds-$versionMajor$versionMinor-license"
+project(":rti-connext-dds-license").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-license"
 
 include 'rti-connext-dds-monitor'
-project(":rti-connext-dds-monitor").name = "rti-connext-dds-$versionMajor$versionMinor-monitor"
+project(":rti-connext-dds-monitor").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-monitor"
 
 include 'rti-connext-dds-persistence-service'
-project(":rti-connext-dds-persistence-service").name = "rti-connext-dds-$versionMajor$versionMinor-persistence-service"
+project(":rti-connext-dds-persistence-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-persistence-service"
 
 include 'rti-connext-dds-routing-service'
-project(":rti-connext-dds-routing-service").name = "rti-connext-dds-$versionMajor$versionMinor-routing-service"
+project(":rti-connext-dds-routing-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-routing-service"
 
 include 'rti-connext-dds-runtime-pro-x64Linux2.6gcc4.4.5'
-project(":rti-connext-dds-runtime-pro-x64Linux2.6gcc4.4.5").name = "rti-connext-dds-$versionMajor$versionMinor-runtime-pro-x64Linux2.6gcc4.4.5"
+project(":rti-connext-dds-runtime-pro-x64Linux2.6gcc4.4.5").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-runtime-pro-x64Linux2.6gcc4.4.5"
 
 include 'rti-connext-dds-runtime-pro-x64Linux3gcc4.8.2'
-project(":rti-connext-dds-runtime-pro-x64Linux3gcc4.8.2").name = "rti-connext-dds-$versionMajor$versionMinor-runtime-pro-x64Linux3gcc4.8.2"
+project(":rti-connext-dds-runtime-pro-x64Linux3gcc4.8.2").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-runtime-pro-x64Linux3gcc4.8.2"
 
 include 'rti-connext-dds-sdk-pro-x64Linux2.6gcc4.4.5'
-project(":rti-connext-dds-sdk-pro-x64Linux2.6gcc4.4.5").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro-x64Linux2.6gcc4.4.5"
+project(":rti-connext-dds-sdk-pro-x64Linux2.6gcc4.4.5").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-sdk-pro-x64Linux2.6gcc4.4.5"
 
 include 'rti-connext-dds-sdk-pro-x64Linux3gcc4.8.2'
-project(":rti-connext-dds-sdk-pro-x64Linux3gcc4.8.2").name = "rti-connext-dds-$versionMajor$versionMinor-sdk-pro-x64Linux3gcc4.8.2"
+project(":rti-connext-dds-sdk-pro-x64Linux3gcc4.8.2").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-sdk-pro-x64Linux3gcc4.8.2"

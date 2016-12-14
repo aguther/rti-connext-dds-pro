@@ -1,50 +1,26 @@
+plugins {
+    id 'nebula.ospackage' version '4.2.0'
+}
+
 defaultTasks "clean", "buildRpm"
 
 allprojects {
+    apply plugin: 'nebula.ospackage'
+
     group = "com.rti"
-}
 
-project(":rti-connext-dds-$versionMajor$versionMinor-admin-console") {
-    version = "$versionMajor.$versionMinor.$versionMicro.$versionPatch"
-    rpmRelease = "$rpmRelease"
-}
+    ospackage {
+        vendor = "Real-Time Innovations (RTI)"
+        url = "http://www.rti.com"
+        license = "http://www.rti.com/downloads/license-agreement.html"
 
-project("rti-connext-dds-$versionMajor$versionMinor-license") {
-    version = "1.0"
-    rpmRelease = "$rpmRelease"
-}
+        packager = "Airbus Defence and Space GmbH"
 
-project("rti-connext-dds-$versionMajor$versionMinor-monitor") {
-	version = "$versionMajor.$versionMinor.$versionMicro.$versionPatch"
-	rpmRelease = "$rpmRelease"
-}
+        arch = X86_64
+        os = LINUX
 
-project("rti-connext-dds-$versionMajor$versionMinor-persistence-service") {
-	version = "$versionMajor.$versionMinor.$versionMicro.$versionPatch"
-	rpmRelease = "$rpmRelease"
-}
+        release = project.ext["release"]
 
-project("rti-connext-dds-$versionMajor$versionMinor-routing-service") {
-	version = "$versionMajor.$versionMinor.$versionMicro.$versionPatch"
-	rpmRelease = "$rpmRelease"
-}
-
-project("rti-connext-dds-$versionMajor$versionMinor-runtime-pro-x64Linux2.6gcc4.4.5") {
-	version = "$versionMajor.$versionMinor.$versionMicro.$versionPatch"
-	rpmRelease = "$rpmRelease"
-}
-
-project("rti-connext-dds-$versionMajor$versionMinor-runtime-pro-x64Linux3gcc4.8.2") {
-	version = "$versionMajor.$versionMinor.$versionMicro.$versionPatch"
-	rpmRelease = "$rpmRelease"
-}
-
-project("rti-connext-dds-$versionMajor$versionMinor-sdk-pro-x64Linux2.6gcc4.4.5") {
-	version = "$versionMajor.$versionMinor.$versionMicro.$versionPatch"
-	rpmRelease = "$rpmRelease"
-}
-
-project("rti-connext-dds-$versionMajor$versionMinor-sdk-pro-x64Linux3gcc4.8.2") {
-	version = "$versionMajor.$versionMinor.$versionMicro.$versionPatch"
-	rpmRelease = "$rpmRelease"
+        user = "root"
+    }
 }
