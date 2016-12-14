@@ -14,7 +14,7 @@ allprojects {
         url = "http://www.rti.com"
         license = "http://www.rti.com/downloads/license-agreement.html"
 
-        packager = "Airbus Defence and Space GmbH"
+        packager = project.ext["packager"]
 
         arch = X86_64
         os = LINUX
