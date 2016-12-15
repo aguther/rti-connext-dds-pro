@@ -1,10 +1,16 @@
-plugins {
-    id 'nebula.ospackage' version '4.2.0'
+buildscript {
+  repositories {
+      mavenCentral()
+  }
+
+  dependencies {
+    classpath 'com.netflix.nebula:gradle-ospackage-plugin:4.2.0'
+  }
 }
 
 defaultTasks "clean", "buildRpm"
 
-allprojects {
+subprojects {
     apply plugin: 'nebula.ospackage'
 
     group = "com.rti"
@@ -14,7 +20,7 @@ allprojects {
         url = "http://www.rti.com"
         license = "http://www.rti.com/downloads/license-agreement.html"
 
-        packager = project.ext["packager"]
+        //packager = "Name"
 
         arch = X86_64
         os = LINUX

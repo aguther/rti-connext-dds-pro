@@ -74,12 +74,13 @@ ospackage {
     into "$targetDirectory"
 
     // runtime dependencies
-    requires("libc.so.6")
-    requires("libgcc_s.so.1")
-    requires("libm.so.6")
-    requires("libpthread.so.0")
-    requires("librt.so.1")
-    requires("libstdc++.so.6")
+    requires("java")
+    requires("libc.so.6()(64bit)")
+    requires("libgcc_s.so.1()(64bit)")
+    requires("libm.so.6()(64bit)")
+    requires("libpthread.so.0()(64bit)")
+    requires("librt.so.1()(64bit)")
+    requires("libstdc++.so.6()(64bit)")
 
     // requires to base packages
     requires("chkconfig")

@@ -46,6 +46,7 @@ ospackage {
     into "$targetDirectory"
 
     // runtime dependencies
+    requires("java")
     requires("libc.so.6()(64bit)")
     requires("libgcc_s.so.1()(64bit)")
     requires("libm.so.6()(64bit)")

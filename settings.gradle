@@ -1,5 +1,3 @@
-rootProject.name = 'rti-connext-dds'
-
 def parsedVersion = VersionNumber.withPatchNumber().parse(version)
 
 include 'rti-connext-dds-admin-console'

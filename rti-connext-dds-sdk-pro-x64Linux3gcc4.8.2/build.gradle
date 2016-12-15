@@ -81,10 +81,10 @@ ospackage {
     into "$targetDirectory"
 
     // runtime dependencies
+    requires("java")
     requires("libc.so.6()(64bit)")
     requires("libdl.so.2()(64bit)")
     requires("libgcc_s.so.1()(64bit)")
-    requires("libjvm.so")
     requires("libm.so.6()(64bit)")
     requires("libnsl.so.1()(64bit)")
     requires("libpthread.so.0()(64bit)")
