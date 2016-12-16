@@ -87,16 +87,15 @@ ospackage {
     requires("javapackages-tools")
 
     // the following provides tell us what abi and languages we can serve
-    provides("rti-connext-dds(abi)", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
-    provides("rti-connext-dds-runtime-c", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
-    provides("rti-connext-dds-runtime-cpp", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
-    provides("rti-connext-dds-runtime-java", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
-    provides("rti-connext-dds-runtime-distlog", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
-    provides("rti-connext-dds-runtime-messaging", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
+    provides("rti-connext-dds(abi)", "${project.version}", EQUAL)
+    provides("rti-connext-dds-runtime-c", "${project.version}", EQUAL)
+    provides("rti-connext-dds-runtime-cpp", "${project.version}", EQUAL)
+    provides("rti-connext-dds-runtime-java", "${project.version}", EQUAL)
+    provides("rti-connext-dds-runtime-distlog", "${project.version}", EQUAL)
+    provides("rti-connext-dds-runtime-messaging", "${project.version}", EQUAL)
 
     // ensure we only install one package of runtime
-    provides("rti-connext-dds-runtime-pro", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
-    conflicts("rti-connext-dds-runtime-pro", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
+    provides("rti-connext-dds-runtime-pro", "${project.version}", EQUAL)
     conflicts("rti-connext-dds-runtime-core")
 
     // add java libraries

@@ -57,8 +57,7 @@ ospackage {
     requires("rti-connext-dds-license")
 
     // we provide the monitor
-    provides("rti-connext-dds-monitor", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
-    conflicts("rti-connext-dds-monitor", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
+    provides("rti-connext-dds-monitor", "${project.version}", EQUAL)
 
     // add monitor
     from("$extractionDirectoryResult") {

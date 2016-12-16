@@ -61,8 +61,7 @@ ospackage {
     requires("rti-connext-dds-license")
 
     // we provide the admin console
-    provides("rti-connext-dds-admin-console", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
-    conflicts("rti-connext-dds-admin-console", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
+    provides("rti-connext-dds-admin-console", "${project.version}", EQUAL)
 
     // add admin console
     from("$extractionDirectoryResult") {

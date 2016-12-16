@@ -63,8 +63,7 @@ ospackage {
     requires("jpackage-utils")
 
     // we provide the routing service
-    provides("rti-connext-dds-routing-service", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
-    conflicts("rti-connext-dds-routing-service", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
+    provides("rti-connext-dds-routing-service", "${project.version}", EQUAL)
 
     // add routing service
     from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {

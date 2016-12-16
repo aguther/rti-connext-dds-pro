@@ -67,8 +67,7 @@ ospackage {
     requires("chkconfig")
 
     // we provide the persistence service
-    provides("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", EQUAL)
-    conflicts("rti-connext-dds-persistence-service", "${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", GREATER | LESS)
+    provides("rti-connext-dds-persistence-service", "${project.version}", EQUAL)
 
     from("$extractionDirectoryResult") {
         include "bin/rtipersistenceservice"
