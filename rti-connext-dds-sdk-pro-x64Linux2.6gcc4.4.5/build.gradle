@@ -16,7 +16,7 @@ task extractPackages {
         // variables
         def commandLine
         def processObject
- 
+
         // install SDK into extraction directory (with prefix)
         commandLine = "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
         processObject = commandLine.execute()
@@ -116,7 +116,6 @@ ospackage {
 
     // add SDK content
     from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
-        exclude "**/lib/*/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
         exclude "**/rtilauncher.desktop"
         exclude "**/uninstall"
         exclude "backup"
