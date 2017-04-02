@@ -1,4 +1,4 @@
-apply from: "../extractHost.gradle"
+apply from: "../prepareRtiHost.gradle"
 
 // --------------------------------------------------------------------------------------------------------------------
 def targetDirectory = "/opt/rti/connext-dds/monitor"
@@ -78,7 +78,7 @@ ospackage {
 }
 
 buildRpm {
-    dependsOn extractHostPackages
+    dependsOn prepareRtiPackageHost
 
     // define local installation path for links
     def applicationLinkPath        = "/usr/bin"

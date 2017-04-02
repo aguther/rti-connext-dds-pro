@@ -1,0 +1,53 @@
+apply from: "../prepareRtiHost.gradle"
+
+task prepareRtiPackageTarget {
+  dependsOn prepareRtiPackageHost
+
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}-pro-target-${rtiTarget}.rtipkg"
+  outputs.dir extractionDirectory
+
+  doLast {
+    // variables
+    def commandLine
+    def processObject
+
+    // install target libraries with RTI installer
+    commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-${rtiTarget}.rtipkg"
+    processObject = commandLine.execute()
+    processObject.in.eachLine { line -> logger.info(line) }
+    processObject.err.eachLine { line -> logger.error(line) }
+    processObject.waitFor()
+    assert !processObject.exitValue()
+  }
+}
+
+task prepareRtiPackageTargetPatch {
+  dependsOn prepareRtiPackageTarget
+  dependsOn prepareRtiPackageHostPatch
+
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
+  outputs.dir extractionDirectory
+
+  doLast {
+    // variables
+    def commandLine
+    def processObject
+
+    // install target libraries with RTI installer
+    commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
+    processObject = commandLine.execute()
+    processObject.in.eachLine { line -> logger.info(line) }
+    processObject.err.eachLine { line -> logger.error(line) }
+    processObject.waitFor()
+    assert !processObject.exitValue()
+  }
+}
+
+task prepareRtiHostWithTarget {
+  if (parsedVersion.patch > 0) {
+    dependsOn prepareRtiPackageTargetPatch
+    prepareRtiPackageHostPatch.mustRunAfter prepareRtiPackageTarget
+  } else {
+    dependsOn prepareRtiPackageTarget
+  }
+}
