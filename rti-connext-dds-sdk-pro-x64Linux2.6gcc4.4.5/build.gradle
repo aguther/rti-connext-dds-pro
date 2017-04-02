@@ -52,7 +52,7 @@ ospackage {
     provides("rti-connext-dds-persistence-service", "${project.version}", EQUAL)
 
     // add SDK content
-    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+    from("$extractionDirectoryResult") {
         exclude "**/rtilauncher.desktop"
         exclude "**/uninstall"
         exclude "backup"
@@ -60,10 +60,10 @@ ospackage {
     }
 
     // add desktop file with correct paths
-    from("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}") {
+    from("$extractionDirectoryResult") {
         include "**/rtilauncher.desktop"
         filter { String line ->
-            line.replace("$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}", "$targetDirectory")
+            line.replace("$extractionDirectoryResult", "$targetDirectory")
         }
         filter { String line ->
             line.replace("$targetDirectory/bin/rtilauncher", "/usr/bin/rtilauncher")
