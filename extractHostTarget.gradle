@@ -1,0 +1,67 @@
+ext.parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
+ext.extractionDirectory = "$buildDir/extracted"
+ext.extractionDirectoryResult = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
+
+task extractHostTargetPackages {
+
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run"
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}-pro-target-${rtiTarget}.rtipkg"
+    if (parsedVersion.patch > 0) {
+        inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch - 1}-pro-host-x64Linux.rtipkg"
+        inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-x64Linux.rtipkg"
+        inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
+    }
+    outputs.dir extractionDirectory
+
+    doLast {
+        // variables
+        def commandLine
+        def processObject
+
+        // install SDK into extraction directory (with prefix)
+        commandLine = "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
+        processObject = commandLine.execute()
+        processObject.in.eachLine { line -> logger.info(line) }
+        processObject.err.eachLine { line -> logger.error(line) }
+        processObject.waitFor()
+        assert !processObject.exitValue()
+
+        // install target libraries with RTI installer
+        commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-${rtiTarget}.rtipkg"
+        processObject = commandLine.execute()
+        processObject.in.eachLine { line -> logger.info(line) }
+        processObject.err.eachLine { line -> logger.error(line) }
+        processObject.waitFor()
+        assert !processObject.exitValue()
+
+        // install patch(es) with RTI installer (if applicable)
+        if (parsedVersion.patch > 0) {
+            // install host patch
+            commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch - 1}-pro-host-x64Linux.rtipkg"
+            processObject = commandLine.execute()
+            processObject.in.eachLine { line -> logger.info(line) }
+            processObject.err.eachLine { line -> logger.error(line) }
+            processObject.waitFor()
+            assert !processObject.exitValue()
+
+            // install host patch
+            commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-x64Linux.rtipkg"
+            processObject = commandLine.execute()
+            processObject.in.eachLine { line -> logger.info(line) }
+            processObject.err.eachLine { line -> logger.error(line) }
+            processObject.waitFor()
+            assert !processObject.exitValue()
+
+            // install target patch
+            commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
+            processObject = commandLine.execute()
+            processObject.in.eachLine { line -> logger.info(line) }
+            processObject.err.eachLine { line -> logger.error(line) }
+            processObject.waitFor()
+            assert !processObject.exitValue()
+        }
+
+        // remove local launcher file
+        delete file ("${System.properties['user.home']}/.local/share/applications/rtilauncher.desktop")
+    }
+}
