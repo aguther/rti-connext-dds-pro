@@ -12,7 +12,7 @@ task prepareRtiPackageTarget {
     def processObject
 
     // install target libraries with RTI installer
-    commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-${rtiTarget}.rtipkg"
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-${rtiTarget}.rtipkg"
     processObject = commandLine.execute()
     processObject.in.eachLine { line -> logger.info(line) }
     processObject.err.eachLine { line -> logger.error(line) }
@@ -34,7 +34,7 @@ task prepareRtiPackageTargetPatch {
     def processObject
 
     // install target libraries with RTI installer
-    commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
     processObject = commandLine.execute()
     processObject.in.eachLine { line -> logger.info(line) }
     processObject.err.eachLine { line -> logger.error(line) }

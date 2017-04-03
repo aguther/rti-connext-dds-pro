@@ -1,9 +1,22 @@
+import org.apache.tools.ant.taskdefs.condition.Os
+
 ext.parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
 ext.extractionDirectory = "$buildDir/extracted"
 ext.extractionDirectoryResult = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
 
+ext.rtipkginstall = ""
+if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+  rtipkginstall = "$extractionDirectoryResult/bin/rtipkginstall.bat"
+} else {
+  rtipkginstall = "$extractionDirectoryResult/bin/rtipkginstall"
+}
+
 task prepareRtiPackageHost {
-  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run"
+  if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-${rtiPlatform}.exe"
+  } else {
+    inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-${rtiPlatform}.run"
+  }
   outputs.dir extractionDirectory
 
   doLast {
@@ -12,7 +25,11 @@ task prepareRtiPackageHost {
     def processObject
 
     // install SDK into extraction directory (with prefix)
-    commandLine = "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-x64Linux.run --mode unattended --prefix $extractionDirectory"
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+      commandLine = "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-${rtiPlatform}.exe --mode unattended --unattendedmodeui minimalWithDialogs --prefix $extractionDirectory"
+    } else {
+      commandLine = "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-${rtiPlatform}.run --mode unattended --prefix $extractionDirectory"
+    }
     processObject = commandLine.execute()
     processObject.in.eachLine { line -> logger.info(line) }
     processObject.err.eachLine { line -> logger.error(line) }
@@ -20,14 +37,19 @@ task prepareRtiPackageHost {
     assert !processObject.exitValue()
 
     // remove local launcher file
-    delete file ("${System.properties['user.home']}/.local/share/applications/rtilauncher.desktop")
+    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+      delete file ("${System.env['ProgramData']}/Microsoft/Windows/Start Menu/Programs/RTI Connext DDS ${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}")
+      delete file ("${System.properties['user.home']}/Documents/rti_workspace")
+    } else {
+      delete file ("${System.properties['user.home']}/.local/share/applications/rtilauncher.desktop")
+    }
   }
 }
 
 task prepareRtiPackageHostPrePatch {
   dependsOn prepareRtiPackageHost
 
-  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch - 1}-pro-host-x64Linux.rtipkg"
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch - 1}-pro-host-${rtiPlatform}.rtipkg"
   outputs.dir extractionDirectory
 
   doLast {
@@ -36,7 +58,7 @@ task prepareRtiPackageHostPrePatch {
     def processObject
 
     // install host patch
-    commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch - 1}-pro-host-x64Linux.rtipkg"
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch - 1}-pro-host-${rtiPlatform}.rtipkg"
     processObject = commandLine.execute()
     processObject.in.eachLine { line -> logger.info(line) }
     processObject.err.eachLine { line -> logger.error(line) }
@@ -48,7 +70,7 @@ task prepareRtiPackageHostPrePatch {
 task prepareRtiPackageHostPatch {
   dependsOn prepareRtiPackageHostPrePatch
 
-  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-x64Linux.rtipkg"
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-${rtiPlatform}.rtipkg"
   outputs.dir extractionDirectory
 
   doLast {
@@ -57,7 +79,7 @@ task prepareRtiPackageHostPatch {
     def processObject
 
     // install host patch
-    commandLine = "$extractionDirectoryResult/bin/rtipkginstall -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-x64Linux.rtipkg"
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-${rtiPlatform}.rtipkg"
     processObject = commandLine.execute()
     processObject.in.eachLine { line -> logger.info(line) }
     processObject.err.eachLine { line -> logger.error(line) }
