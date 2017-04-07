@@ -17,7 +17,7 @@ task prepareRtiPackageHost {
   } else {
     inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-${rtiPlatform}.run"
   }
-  outputs.dir extractionDirectory
+  outputs.file new File("$buildDir/$name")
 
   doLast {
     // variables
@@ -43,6 +43,10 @@ task prepareRtiPackageHost {
     } else {
       delete file ("${System.properties['user.home']}/.local/share/applications/rtilauncher.desktop")
     }
+
+    // write file to tell this task has been done successfully
+    def outputFile = new File("$buildDir/$name")
+    outputFile.text = processObject.exitValue()
   }
 }
 
@@ -50,7 +54,7 @@ task prepareRtiPackageHostPrePatch {
   dependsOn prepareRtiPackageHost
 
   inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch - 1}-pro-host-${rtiPlatform}.rtipkg"
-  outputs.dir extractionDirectory
+  outputs.file new File("$buildDir/$name")
 
   doLast {
     // variables
@@ -64,6 +68,10 @@ task prepareRtiPackageHostPrePatch {
     processObject.err.eachLine { line -> logger.error(line) }
     processObject.waitFor()
     assert !processObject.exitValue()
+
+    // write file to tell this task has been done successfully
+    def outputFile = new File("$buildDir/$name")
+    outputFile.text = processObject.exitValue()
   }
 }
 
@@ -71,7 +79,7 @@ task prepareRtiPackageHostPatch {
   dependsOn prepareRtiPackageHostPrePatch
 
   inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-${rtiPlatform}.rtipkg"
-  outputs.dir extractionDirectory
+  outputs.file new File("$buildDir/$name")
 
   doLast {
     // variables
@@ -85,6 +93,10 @@ task prepareRtiPackageHostPatch {
     processObject.err.eachLine { line -> logger.error(line) }
     processObject.waitFor()
     assert !processObject.exitValue()
+
+    // write file to tell this task has been done successfully
+    def outputFile = new File("$buildDir/$name")
+    outputFile.text = processObject.exitValue()
   }
 }
 

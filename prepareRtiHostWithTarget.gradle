@@ -4,7 +4,7 @@ task prepareRtiPackageTarget {
   dependsOn prepareRtiPackageHost
 
   inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}-pro-target-${rtiTarget}.rtipkg"
-  outputs.dir extractionDirectory
+  outputs.file new File("$buildDir/$name")
 
   doLast {
     // variables
@@ -18,6 +18,10 @@ task prepareRtiPackageTarget {
     processObject.err.eachLine { line -> logger.error(line) }
     processObject.waitFor()
     assert !processObject.exitValue()
+
+    // write file to tell this task has been done successfully
+    def outputFile = new File("$buildDir/$name")
+    outputFile.text = processObject.exitValue()
   }
 }
 
@@ -26,7 +30,7 @@ task prepareRtiPackageTargetPatch {
   dependsOn prepareRtiPackageHostPatch
 
   inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
-  outputs.dir extractionDirectory
+  outputs.file new File("$buildDir/$name")
 
   doLast {
     // variables
@@ -40,6 +44,10 @@ task prepareRtiPackageTargetPatch {
     processObject.err.eachLine { line -> logger.error(line) }
     processObject.waitFor()
     assert !processObject.exitValue()
+
+    // write file to tell this task has been done successfully
+    def outputFile = new File("$buildDir/$name")
+    outputFile.text = processObject.exitValue()
   }
 }
 
