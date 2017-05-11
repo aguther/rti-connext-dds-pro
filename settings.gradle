@@ -32,3 +32,6 @@ project(":rti-connext-dds-sdk-pro-x64Linux2.6gcc4.4.5").name = "rti-connext-dds-
 
 include 'rti-connext-dds-sdk-pro-x64Linux3gcc4.8.2'
 project(":rti-connext-dds-sdk-pro-x64Linux3gcc4.8.2").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-sdk-pro-x64Linux3gcc4.8.2"
+
+include 'rti-connext-dds-tools'
+project(":rti-connext-dds-tools").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-tools"

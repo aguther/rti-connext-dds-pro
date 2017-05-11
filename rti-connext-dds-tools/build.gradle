@@ -1,0 +1,92 @@
+apply from: "../prepareRtiHost.gradle"
+
+// --------------------------------------------------------------------------------------------------------------------
+def targetDirectory = "/opt/rti/connext-dds/tools"
+
+ospackage {
+    summary = "RTI Tools"
+    description = ""
+
+    packageGroup = "Applications/Communications"
+
+    into "$targetDirectory"
+
+    // runtime dependencies
+    requires("libc.so.6()(64bit)")
+    requires("libdl.so.2()(64bit)")
+    requires("libm.so.6()(64bit)")
+    requires("libnsl.so.1()(64bit)")
+    requires("libpthread.so.0()(64bit)")
+    requires("librt.so.1()(64bit)")
+
+    // requires to base packages
+    requires("chkconfig")
+
+    // we provide the replay service
+    provides("rti-connext-dds-tools", "${project.version}", EQUAL)
+
+    // add routing service
+    from("$extractionDirectoryResult") {
+        include "bin/rtiddsping"
+        include "bin/rtiddsspy"
+        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtiddsping"
+        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtiddsspy"
+        include "resource/scripts/*"
+        exclude "resource/scripts/rticommon_config.sh"
+        include "resource/xml/RTIDDSPING_QOS_PROFILES.example.xml"
+        include "resource/xml/RTIDDSSPY_QOS_PROFILES.example.xml"
+        into ""
+    }
+    from("$extractionDirectoryResult") {
+        include "resource/scripts/rticommon_config.sh"
+        filter { String line ->
+            line.replace("# copy_examples=false", "copy_examples=false\ncopy_workspace=false")
+        }
+        into ""
+    }
+    // add scripts
+    from("src/main/resources/scripts") {
+        into ""
+    }
+}
+
+buildRpm {
+    dependsOn prepareRtiHost
+
+    // define local installation path for links
+    def applicationLinkPath        = "/usr/bin"
+    def applicationLauncherPath    = "$targetDirectory/launcher"
+    def alternativesPriorityApp    = 10
+
+    // this will be called after installation phase
+    postInstall """
+        # command line tools
+        alternatives --install '$applicationLinkPath/rtiddsping' 'rtiddsping' '$applicationLauncherPath' $alternativesPriorityApp
+        alternatives --install '$applicationLinkPath/rtiddsspy'  'rtiddsspy'  '$applicationLauncherPath' $alternativesPriorityApp
+
+        # enable auto configuration
+        alternatives --auto 'rtiddsping'
+        alternatives --auto 'rtireplay'
+
+        # update ld configuration
+        ldconfig
+    """
+
+    postUninstall """
+        # check if uninstall is due to an upgrade
+        if [ \"\$1\" = \"1\" ]; then
+            # we are in an upgrade process >> nothing to do
+            exit 0
+        fi
+
+        # command line tools
+        alternatives --remove 'rtiddsping' '$applicationLauncherPath'
+        alternatives --remove 'rtiddsspy'  '$applicationLauncherPath'
+
+        # update ld configuration
+        ldconfig
+    """
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+defaultTasks 'buildRpm'
