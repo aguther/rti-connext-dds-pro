@@ -91,7 +91,7 @@ buildRpm {
 
     // this will be called after installation phase
     postInstall """
-        # applications
+        # admin-console
         alternatives --install '$applicationLinkPath/rtiadminconsole'                'rtiadminconsole'         '$applicationLauncherPath'                                                      $alternativesPriority \\
                      --slave   '$applicationDesktopLinkPath/rtiadminconsole.desktop' 'rtiadminconsole.desktop' '$targetDirectory/rtiadminconsole.desktop'                                                            \\
                      --slave   '$applicationIconLinkPath/rtiadminconsole.xpm'        'rtiadminconsole.xpm'     '$targetDirectory/resource/app/app_support/admin_console/x64Linux/icon.xpm'

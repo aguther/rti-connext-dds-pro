@@ -34,8 +34,10 @@ ospackage {
     // we need a license to work
     requires("rti-connext-dds-license")
 
-    // we provide the admin console
+    // we provide the admin console, monitor and tools
     provides("rti-connext-dds-admin-console", "${project.version}", EQUAL)
+    provides("rti-connext-dds-monitor", "${project.version}", EQUAL)
+    provides("rti-connext-dds-tools", "${project.version}", EQUAL)
 
     // ensure we only install one package of SDK
     provides("rti-connext-dds-sdk-pro", "${project.version}", EQUAL)
@@ -50,6 +52,8 @@ ospackage {
     provides("rti-connext-dds-runtime-messaging", "${project.version}", EQUAL)
     provides("rti-connext-dds-routing-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-persistence-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-recording-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-replay-service", "${project.version}", EQUAL)
 
     // add SDK content
     from("$extractionDirectoryResult") {
@@ -133,6 +137,20 @@ buildRpm {
                      --slave   '$applicationDesktopLinkPath/rtiadminconsole.desktop' 'rtiadminconsole.desktop'    '$targetDirectory/rtiadminconsole.desktop'                                                            \\
                      --slave   '$applicationIconLinkPath/rtiadminconsole.xpm'        'rtiadminconsole.xpm'        '$targetDirectory/resource/app/app_support/admin_console/x64Linux/icon.xpm'
 
+        # monitor
+        alternatives --install '$applicationLinkPath/rtimonitor'                     'rtimonitor'                 '$applicationLauncherPath'                                                      $alternativesPriority \\
+                     --slave   '$applicationDesktopLinkPath/rtimonitor.desktop'      'rtimonitor.desktop'         '$targetDirectory/rtimonitor.desktop'                                                                 \\
+                     --slave   '$applicationIconLinkPath/rtimonitor.png'             'rtimonitor.png'             '$targetDirectory/resource/app/app_support/launcher/icons/Monitor3_90.png'
+
+        # replay service
+        alternatives --install '$applicationLinkPath/rtireplay'                      'rtireplay'                  '$applicationLauncherPath'                                                      $alternativesPriority \\
+                     --slave   '$applicationLinkPath/rtireplaysh'                    'rtireplaysh'                '$applicationLauncherPath'
+
+        # recording service
+        alternatives --install '$applicationLinkPath/rtirecord'                      'rtirecord'                  '$applicationLauncherPath'                                                      $alternativesPriority \\
+                     --slave   '$applicationLinkPath/rtirecconv'                     'rtirecconv'                 '$applicationLauncherPath'                                                                            \\
+                     --slave   '$applicationLinkPath/rtirecsh'                       'rtirecsh'                   '$applicationLauncherPath'
+
         # routing service
         alternatives --install '$applicationLinkPath/rtiroutingservice'              'rtiroutingservice'          '$applicationLauncherPath'                                                      $alternativesPriority \\
                      --slave   '$applicationLinkPath/rtirssh'                        'rtirssh'                    '$applicationLauncherPath'                                                                            \\
@@ -147,6 +165,10 @@ buildRpm {
         # persistence service
         alternatives --install '$applicationLinkPath/rtipersistenceservice'          'rtipersistenceservice'      '$applicationLauncherPath'                                                      $alternativesPriority \\
                      --slave   '$applicationLinkPath/rtipssh'                        'rtipssh'                    '$applicationLauncherPath'                                                                            \\
+
+        # command line tools
+        alternatives --install '$applicationLinkPath/rtiddsping'                     'rtiddsping'                 '$applicationLauncherPath'                                                      $alternativesPriority
+        alternatives --install '$applicationLinkPath/rtiddsspy'                      'rtiddsspy'                  '$applicationLauncherPath'                                                      $alternativesPriority
 
         # libraries
         alternatives --install '$libraryLinkPath/libnddscore.so'                     'libnddscore.so'             '$libraryInstallPath/libnddscore.so'                                            $alternativesPriority \\
@@ -184,8 +206,13 @@ buildRpm {
 
         # enable auto configuration
         alternatives --auto 'rtiadminconsole'
+        alternatives --auto 'rtimonitor'
+        alternatives --auto 'rtireplay'
+        alternatives --auto 'rtirecord'
         alternatives --auto 'rtiroutingservice'
         alternatives --auto 'rtipersistenceservice'
+        alternatives --auto 'rtiddsping'
+        alternatives --auto 'rtiddsspy'
         alternatives --auto 'libnddscore.so'
 
         # update ld configuration
@@ -201,10 +228,15 @@ buildRpm {
         fi
 
         # applications
-        alternatives --remove 'rtiadminconsole'        '$applicationLauncherPath'
-        alternatives --remove 'rtiroutingservice'      '$applicationLauncherPath'
-        alternatives --remove 'rtipersistenceservice'  '$applicationLauncherPath'
-        alternatives --remove 'libnddscore.so'         '$libraryInstallPath/libnddscore.so'
+        alternatives --remove 'rtiadminconsole'       '$applicationLauncherPath'
+        alternatives --remove 'rtimonitor'            '$applicationLauncherPath'
+        alternatives --remove 'rtireplay'             '$applicationLauncherPath'
+        alternatives --remove 'rtirecord'             '$applicationLauncherPath'
+        alternatives --remove 'rtiroutingservice'     '$applicationLauncherPath'
+        alternatives --remove 'rtipersistenceservice' '$applicationLauncherPath'
+        alternatives --remove 'rtiddsping'            '$applicationLauncherPath'
+        alternatives --remove 'rtiddsspy'             '$applicationLauncherPath'
+        alternatives --remove 'libnddscore.so'        '$libraryInstallPath/libnddscore.so'
     """
 }
 

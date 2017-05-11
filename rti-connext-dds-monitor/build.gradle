@@ -95,7 +95,7 @@ buildRpm {
 
     // this will be called after installation phase
     postInstall """
-        # applications
+        # monitor
         alternatives --install '$applicationLinkPath/rtimonitor'                'rtimonitor'         '$applicationLauncherPath'                                                    $alternativesPriority \\
                      --slave   '$applicationDesktopLinkPath/rtimonitor.desktop' 'rtimonitor.desktop' '$targetDirectory/rtimonitor.desktop'                                                               \\
                      --slave   '$applicationIconLinkPath/rtimonitor.png'        'rtimonitor.png'     '$targetDirectory/resource/app/app_support/launcher/icons/Monitor3_90.png'
