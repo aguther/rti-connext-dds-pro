@@ -54,6 +54,7 @@ ospackage {
     provides("rti-connext-dds-persistence-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-recording-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-replay-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-cloud-discovery-service", "${project.version}", EQUAL)
 
     // add SDK content
     from("$extractionDirectoryResult") {
@@ -159,6 +160,9 @@ buildRpm {
         alternatives --install '$applicationLinkPath/rtipersistenceservice'          'rtipersistenceservice'      '$applicationLauncherPath'                                                      $alternativesPriority \\
                      --slave   '$applicationLinkPath/rtipssh'                        'rtipssh'                    '$applicationLauncherPath'                                                                            \\
 
+        # cloud discovery service
+        alternatives --install '$applicationLinkPath/rticlouddiscoveryservice'       'rticlouddiscoveryservice'   '$applicationLauncherPath'                                                      $alternativesPriority
+
         # command line tools
         alternatives --install '$applicationLinkPath/rtiddsping'                     'rtiddsping'                 '$applicationLauncherPath'                                                      $alternativesPriority
         alternatives --install '$applicationLinkPath/rtiddsspy'                      'rtiddsspy'                  '$applicationLauncherPath'                                                      $alternativesPriority
@@ -202,6 +206,7 @@ buildRpm {
         alternatives --auto 'rtirecord'
         alternatives --auto 'rtiroutingservice'
         alternatives --auto 'rtipersistenceservice'
+        alternatives --auto 'rticlouddiscoveryservice'
         alternatives --auto 'rtiddsping'
         alternatives --auto 'rtiddsspy'
         alternatives --auto 'libnddscore.so'
@@ -225,6 +230,7 @@ buildRpm {
         alternatives --remove 'rtirecord'                     '$applicationLauncherPath'
         alternatives --remove 'rtiroutingservice'             '$applicationLauncherPath'
         alternatives --remove 'rtipersistenceservice'         '$applicationLauncherPath'
+        alternatives --remove 'rticlouddiscoveryservice'      '$applicationLauncherPath'
         alternatives --remove 'rtiddsping'                    '$applicationLauncherPath'
         alternatives --remove 'rtiddsspy'                     '$applicationLauncherPath'
         alternatives --remove 'libnddscore.so'                '$libraryInstallPath/libnddscore.so'

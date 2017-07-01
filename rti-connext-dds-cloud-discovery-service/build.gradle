@@ -1,0 +1,94 @@
+apply from: "../prepareRtiHost.gradle"
+
+// --------------------------------------------------------------------------------------------------------------------
+def targetDirectory = "/opt/rti/connext-dds/cloud-discovery-service"
+
+ospackage {
+    summary = "RTI Cloud Discovery Service"
+    description = ""
+
+    packageGroup = "Applications/Communications"
+
+    into "$targetDirectory"
+
+    // runtime dependencies
+    requires("libc.so.6()(64bit)")
+    requires("libdl.so.2()(64bit)")
+    requires("libm.so.6()(64bit)")
+    requires("libnsl.so.1()(64bit)")
+    requires("libpthread.so.0()(64bit)")
+    requires("librt.so.1()(64bit)")
+
+    // requires to base packages
+    requires("chkconfig")
+
+    // we provide the recording service
+    provides("rti-connext-dds-cloud-discovery-service", "${project.version}", EQUAL)
+
+    // add routing service
+    from("$extractionDirectoryResult") {
+        include "bin/rticlouddiscoveryservice"
+        include "doc/manuals/cloud_discovery_service/*"
+        include "resource/app/bin/x64Linux2.6gcc4.1.1/rticlouddiscoveryservice"
+        include "resource/app/lib/*/libndds*.so"
+        include "resource/app/lib/*/librticonnextmsgc.so"
+        include "resource/app/lib/*/librtidlc.so"
+        include "resource/app/lib/*/librtirouting*.so"
+        include "resource/app/lib/*/librtirs*.so"
+        include "resource/app/lib/*/librtixml2.so"
+        include "resource/schema/rti_cloud_discovery_service.*"
+        include "resource/scripts/*"
+        exclude "resource/scripts/rticommon_config.sh"
+        include "resource/xml/RTI_CLOUD_DISCOVERY_SERVICE.xml"
+        into ""
+    }
+    from("$extractionDirectoryResult") {
+        include "resource/scripts/rticommon_config.sh"
+        filter { String line ->
+            line.replace("# copy_examples=false", "copy_examples=false\ncopy_workspace=false")
+        }
+        into ""
+    }
+    // add scripts
+    from("src/main/resources/scripts") {
+        into ""
+    }
+}
+
+buildRpm {
+    dependsOn prepareRtiHost
+
+    // define local installation path for links
+    def applicationLinkPath        = "/usr/bin"
+    def applicationLauncherPath    = "$targetDirectory/launcher"
+    def alternativesPriorityApp    = 10
+
+    // this will be called after installation phase
+    postInstall """
+        # recording service
+        alternatives --install '$applicationLinkPath/rticlouddiscoveryservice'  'rticlouddiscoveryservice'  '$applicationLauncherPath' $alternativesPriorityApp
+
+        # enable auto configuration
+        alternatives --auto 'rticlouddiscoveryservice'
+
+        # update ld configuration
+        ldconfig
+    """
+
+    postUninstall """
+        # check if uninstall is due to an upgrade
+        if [ \"\$1\" = \"1\" ]; then
+            # we are in an upgrade process >> nothing to do
+            exit 0
+        fi
+
+        # libraries
+        alternatives --remove 'rticlouddiscoveryservice' '$applicationLauncherPath'
+
+        # update ld configuration
+        ldconfig
+    """
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+defaultTasks 'buildRpm'
