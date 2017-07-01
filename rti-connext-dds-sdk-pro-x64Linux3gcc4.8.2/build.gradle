@@ -155,6 +155,7 @@ buildRpm {
         alternatives --install '$applicationLinkPath/rtiroutingservice'              'rtiroutingservice'          '$applicationLauncherPath'                                                      $alternativesPriority \\
                      --slave   '$applicationLinkPath/rtirssh'                        'rtirssh'                    '$applicationLauncherPath'                                                                            \\
                      --slave   '$javaLinkPath/rtirsadapter.jar'                      'rtirsadapter.jar'           '$javaInstallPath/rtirsadapter.jar'                                                                   \\
+                     --slave   '$javaLinkPath/rtiroutingservice.jar'                 'rtiroutingservice.jar'      '$javaInstallPath/rtiroutingservice.jar'                                                              \\
                      --slave   '$libraryLinkPath/librtiroutingservice.so'            'librtiroutingservice.so'    '$libraryInstallPath/librtiroutingservice.so'                                                         \\
                      --slave   '$libraryLinkPath/librtiroutingserviced.so'           'librtiroutingserviced.so'   '$libraryInstallPath/librtiroutingserviced.so'                                                        \\
                      --slave   '$libraryLinkPath/librtirsassigntransf.so'            'librtirsassigntransf.so'    '$libraryInstallPath/librtirsassigntransf.so'                                                         \\

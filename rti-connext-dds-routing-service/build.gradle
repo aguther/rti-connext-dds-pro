@@ -40,6 +40,7 @@ ospackage {
         include "resource/app/lib/*/librtirouting*.so"
         include "resource/app/lib/*/librtirs*.so"
         include "resource/app/lib/*/rtirsadapter.jar"
+        include "resource/app/lib/*/rtiroutingservice.jar"
         include "resource/schema/rti_routing_service.*"
         include "resource/scripts/*"
         exclude "resource/scripts/rticommon_config.sh"
@@ -78,6 +79,7 @@ buildRpm {
         alternatives --install '$applicationLinkPath/rtiroutingservice'     'rtiroutingservice'         '$applicationLauncherPath'                      $alternativesPriorityApp \\
                      --slave   '$applicationLinkPath/rtirssh'               'rtirssh'                   '$applicationLauncherPath'                                               \\
                      --slave   '$javaLinkPath/rtirsadapter.jar'             'rtirsadapter.jar'          '$javaInstallPath/rtirsadapter.jar'                                      \\
+                     --slave   '$javaLinkPath/rtiroutingservice.jar'        'rtiroutingservice.jar'     '$javaInstallPath/rtiroutingservice.jar'                                 \\
                      --slave   '$libraryLinkPath/librtiroutingservice.so'   'librtiroutingservice.so'   '$libraryInstallPath/librtiroutingservice.so'                            \\
                      --slave   '$libraryLinkPath/librtirsassigntransf.so'   'librtirsassigntransf.so'   '$libraryInstallPath/librtirsassigntransf.so'                            \\
                      --slave   '$libraryLinkPath/librtirsinfrastructure.so' 'librtirsinfrastructure.so' '$libraryInstallPath/librtirsinfrastructure.so'                          \\
