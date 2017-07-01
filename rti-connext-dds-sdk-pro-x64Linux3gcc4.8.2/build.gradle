@@ -128,6 +128,7 @@ buildRpm {
     link("$applicationLinkPath/rtireplay",              "$applicationLauncherPath")
     link("$applicationLinkPath/rtireplaysh",            "$applicationLauncherPath")
     link("$applicationLinkPath/rtishapesdemo",          "$applicationLauncherPath")
+    link("$applicationLinkPath/rtiwanserver",           "$applicationLauncherPath")
 
     // this will be called after install phase
     postInstall """
