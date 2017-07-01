@@ -115,18 +115,10 @@ buildRpm {
     // links for applications without any alternative
     link("$applicationLinkPath/rtiddsgen",              "$applicationLauncherPath")
     link("$applicationLinkPath/rtiddsgen_server",       "$applicationLauncherPath")
-    link("$applicationLinkPath/rtiddsping",             "$applicationLauncherPath")
     link("$applicationLinkPath/rtiddsprototyper",       "$applicationLauncherPath")
-    link("$applicationLinkPath/rtiddsspy",              "$applicationLauncherPath")
     link("$applicationLinkPath/rtilauncher",            "$applicationLauncherPath")
-    link("$applicationLinkPath/rtimonitor",             "$applicationLauncherPath")
     link("$applicationLinkPath/rtipkginstall",          "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirecconv",             "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirecord",              "$applicationLauncherPath")
     link("$applicationLinkPath/rtirecordingconsole",    "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirecsh",               "$applicationLauncherPath")
-    link("$applicationLinkPath/rtireplay",              "$applicationLauncherPath")
-    link("$applicationLinkPath/rtireplaysh",            "$applicationLauncherPath")
     link("$applicationLinkPath/rtishapesdemo",          "$applicationLauncherPath")
     link("$applicationLinkPath/rtiwanserver",           "$applicationLauncherPath")
 
