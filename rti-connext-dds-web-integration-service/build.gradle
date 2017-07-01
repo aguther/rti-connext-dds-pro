@@ -1,0 +1,92 @@
+apply from: "../prepareRtiHost.gradle"
+
+// --------------------------------------------------------------------------------------------------------------------
+def targetDirectory = "/opt/rti/connext-dds/web-integration-service"
+
+ospackage {
+    summary = "RTI Web Integration Service"
+    description = ""
+
+    packageGroup = "Applications/Communications"
+
+    into "$targetDirectory"
+
+    // runtime dependencies
+    requires("libc.so.6()(64bit)")
+    requires("libdl.so.2()(64bit)")
+    requires("libm.so.6()(64bit)")
+    requires("libnsl.so.1()(64bit)")
+    requires("libpthread.so.0()(64bit)")
+    requires("librt.so.1()(64bit)")
+
+    // requires to base packages
+    requires("chkconfig")
+
+    // we provide the recording service
+    provides("rti-connext-dds-web-integration-service", "${project.version}", EQUAL)
+
+    // add routing service
+    from("$extractionDirectoryResult") {
+        include "bin/rtiwebintegrationservice"
+        include "doc/manuals/web_integration_service/*"
+        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtiwebintegrationservice"
+        include "resource/app/lib/*/libcrypto*.so*"
+        include "resource/app/lib/*/libndds*.so"
+        include "resource/app/lib/*/librtidlc.so"
+        include "resource/app/lib/*/libssl.so*"
+        include "resource/schema/rti_web_integration_service.*"
+        include "resource/scripts/*"
+        exclude "resource/scripts/rticommon_config.sh"
+        include "resource/xml/RTI_WEB_INTEGRATION_SERVICE.xml"
+        into ""
+    }
+    from("$extractionDirectoryResult") {
+        include "resource/scripts/rticommon_config.sh"
+        filter { String line ->
+            line.replace("# copy_examples=false", "copy_examples=false\ncopy_workspace=false")
+        }
+        into ""
+    }
+    // add scripts
+    from("src/main/resources/scripts") {
+        into ""
+    }
+}
+
+buildRpm {
+    dependsOn prepareRtiHost
+
+    // define local installation path for links
+    def applicationLinkPath        = "/usr/bin"
+    def applicationLauncherPath    = "$targetDirectory/launcher"
+    def alternativesPriorityApp    = 10
+
+    // this will be called after installation phase
+    postInstall """
+        # web integration service
+        alternatives --install '$applicationLinkPath/rtiwebintegrationservice'  'rtiwebintegrationservice'  '$applicationLauncherPath' $alternativesPriorityApp
+
+        # enable auto configuration
+        alternatives --auto 'rtiwebintegrationservice'
+
+        # update ld configuration
+        ldconfig
+    """
+
+    postUninstall """
+        # check if uninstall is due to an upgrade
+        if [ \"\$1\" = \"1\" ]; then
+            # we are in an upgrade process >> nothing to do
+            exit 0
+        fi
+
+        # libraries
+        alternatives --remove 'rtiwebintegrationservice' '$applicationLauncherPath'
+
+        # update ld configuration
+        ldconfig
+    """
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+defaultTasks 'buildRpm'

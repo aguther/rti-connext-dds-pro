@@ -6,6 +6,9 @@ project(":rti-connext-dds-admin-console").name = "rti-connext-dds-${parsedVersio
 include 'rti-connext-dds-cloud-discovery-service'
 project(":rti-connext-dds-cloud-discovery-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-cloud-discovery-service"
 
+include 'rti-connext-dds-database-integration-service'
+project(":rti-connext-dds-database-integration-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-database-integration-service"
+
 include 'rti-connext-dds-license'
 project(":rti-connext-dds-license").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-license"
 
@@ -38,3 +41,6 @@ project(":rti-connext-dds-sdk-pro-x64Linux3gcc4.8.2").name = "rti-connext-dds-${
 
 include 'rti-connext-dds-tools'
 project(":rti-connext-dds-tools").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-tools"
+
+include 'rti-connext-dds-web-integration-service'
+project(":rti-connext-dds-web-integration-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-web-integration-service"

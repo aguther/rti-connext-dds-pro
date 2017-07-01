@@ -55,6 +55,8 @@ ospackage {
     provides("rti-connext-dds-recording-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-replay-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-cloud-discovery-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-database-integration-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-web-integration-service", "${project.version}", EQUAL)
 
     // add SDK content
     from("$extractionDirectoryResult") {
@@ -163,6 +165,15 @@ buildRpm {
         # cloud discovery service
         alternatives --install '$applicationLinkPath/rticlouddiscoveryservice'       'rticlouddiscoveryservice'   '$applicationLauncherPath'                                                      $alternativesPriority
 
+        # database integration service
+        alternatives --install '$applicationLinkPath/rtirtc_mysql'                   'rtirtc_mysql'               '$applicationLauncherPath'                                                      $alternativesPriority \\
+                     --slave   '$applicationLinkPath/rtirtc_oracle'                  'rtirtc_oracle'              '$applicationLauncherPath'                                                                            \\
+                     --slave   '$applicationLinkPath/rtirtc_postgresql'              'rtirtc_postgresql'          '$applicationLauncherPath'                                                                            \\
+                     --slave   '$applicationLinkPath/rtirtc_timesten'                'rtirtc_timesten'            '$applicationLauncherPath'
+
+        # web integration service
+        alternatives --install '$applicationLinkPath/rtiwebintegrationservice'       'rtiwebintegrationservice'  '$applicationLauncherPath'                                                       $alternativesPriority
+
         # command line tools
         alternatives --install '$applicationLinkPath/rtiddsping'                     'rtiddsping'                 '$applicationLauncherPath'                                                      $alternativesPriority
         alternatives --install '$applicationLinkPath/rtiddsspy'                      'rtiddsspy'                  '$applicationLauncherPath'                                                      $alternativesPriority
@@ -207,6 +218,8 @@ buildRpm {
         alternatives --auto 'rtiroutingservice'
         alternatives --auto 'rtipersistenceservice'
         alternatives --auto 'rticlouddiscoveryservice'
+        alternatives --auto 'rtidatabaseintegrationservice'
+        alternatives --auto 'rtiwebintegrationservice'
         alternatives --auto 'rtiddsping'
         alternatives --auto 'rtiddsspy'
         alternatives --auto 'libnddscore.so'
@@ -231,6 +244,8 @@ buildRpm {
         alternatives --remove 'rtiroutingservice'             '$applicationLauncherPath'
         alternatives --remove 'rtipersistenceservice'         '$applicationLauncherPath'
         alternatives --remove 'rticlouddiscoveryservice'      '$applicationLauncherPath'
+        alternatives --remove 'rtidatabaseintegrationservice' '$applicationLauncherPath'
+        alternatives --remove 'rtiwebintegrationservice'      '$applicationLauncherPath'
         alternatives --remove 'rtiddsping'                    '$applicationLauncherPath'
         alternatives --remove 'rtiddsspy'                     '$applicationLauncherPath'
         alternatives --remove 'libnddscore.so'                '$libraryInstallPath/libnddscore.so'
