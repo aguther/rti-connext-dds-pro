@@ -11,7 +11,18 @@ if (Os.isFamily(Os.FAMILY_WINDOWS)) {
   rtipkginstall = "$extractionDirectoryResult/bin/rtipkginstall"
 }
 
+task prepareRtiHostSources {
+  doLast {
+    copy {
+      from zipTree("$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-src.zip")
+      into "$extractionDirectory"
+    }
+  }
+}
+
 task prepareRtiPackageHost {
+  dependsOn prepareRtiHostSources
+
   if (Os.isFamily(Os.FAMILY_WINDOWS)) {
     inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-host-${rtiPlatform}.exe"
   } else {
