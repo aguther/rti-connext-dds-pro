@@ -18,6 +18,7 @@ ospackage {
 
     from("../packages/rti_license.dat") {
         into ""
+        fileMode 0644
     }
 }
 
