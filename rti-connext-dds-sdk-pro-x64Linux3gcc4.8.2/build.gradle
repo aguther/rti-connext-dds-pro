@@ -227,15 +227,15 @@ buildRpm {
         fi
 
         # applications
-        alternatives --remove 'rtiadminconsole'       '$applicationLauncherPath'
-        alternatives --remove 'rtimonitor'            '$applicationLauncherPath'
-        alternatives --remove 'rtireplay'             '$applicationLauncherPath'
-        alternatives --remove 'rtirecord'             '$applicationLauncherPath'
-        alternatives --remove 'rtiroutingservice'     '$applicationLauncherPath'
-        alternatives --remove 'rtipersistenceservice' '$applicationLauncherPath'
-        alternatives --remove 'rtiddsping'            '$applicationLauncherPath'
-        alternatives --remove 'rtiddsspy'             '$applicationLauncherPath'
-        alternatives --remove 'libnddscore.so'        '$libraryInstallPath/libnddscore.so'
+        alternatives --remove 'rtiadminconsole'               '$applicationLauncherPath'
+        alternatives --remove 'rtimonitor'                    '$applicationLauncherPath'
+        alternatives --remove 'rtireplay'                     '$applicationLauncherPath'
+        alternatives --remove 'rtirecord'                     '$applicationLauncherPath'
+        alternatives --remove 'rtiroutingservice'             '$applicationLauncherPath'
+        alternatives --remove 'rtipersistenceservice'         '$applicationLauncherPath'
+        alternatives --remove 'rtiddsping'                    '$applicationLauncherPath'
+        alternatives --remove 'rtiddsspy'                     '$applicationLauncherPath'
+        alternatives --remove 'libnddscore.so'                '$libraryInstallPath/libnddscore.so'
     """
 }
 
