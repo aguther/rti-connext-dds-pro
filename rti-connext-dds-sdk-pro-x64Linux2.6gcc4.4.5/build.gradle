@@ -113,7 +113,6 @@ buildRpm {
     link("$applicationDesktopLinkPath/rtilauncher.desktop", "$targetDirectory/rtilauncher.desktop")
 
     // links for applications without any alternative
-    link("$applicationLinkPath/jms2dds",                "$applicationLauncherPath")
     link("$applicationLinkPath/rtiddsgen",              "$applicationLauncherPath")
     link("$applicationLinkPath/rtiddsgen_server",       "$applicationLauncherPath")
     link("$applicationLinkPath/rtiddsprototyper",       "$applicationLauncherPath")
@@ -193,9 +192,7 @@ buildRpm {
                      --slave   '$javaLinkPath/nddsjava.jar'                          'nddsjava.jar'               '$javaInstallPath/nddsjava.jar'                                                                       \\
                      --slave   '$javaLinkPath/nddsjavad.jar'                         'nddsjavad.jar'              '$javaInstallPath/nddsjavad.jar'                                                                      \\
                      --slave   '$javaLinkPath/rticonnextmsg.jar'                     'rticonnextmsg.jar'          '$javaInstallPath/rticonnextmsg.jar'                                                                  \\
-                     --slave   '$javaLinkPath/rticonnextmsgd.jar'                    'rticonnextmsgd.jar'         '$javaInstallPath/rticonnextmsgd.jar'                                                                 \\
-                     --slave   '$javaLinkPath/rtijms.jar'                            'rtijms.jar'                 '$javaInstallPath/rtijms.jar'                                                                         \\
-                     --slave   '$javaLinkPath/rtijmsd.jar'                           'rtijmsd.jar'                '$javaInstallPath/rtijmsd.jar'
+                     --slave   '$javaLinkPath/rticonnextmsgd.jar'                    'rticonnextmsgd.jar'         '$javaInstallPath/rticonnextmsgd.jar'
 
         # enable auto configuration
         alternatives --auto 'rtiadminconsole'

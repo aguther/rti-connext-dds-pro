@@ -48,7 +48,6 @@ ospackage {
         include "**/distlog*.jar"
         include "**/nddsjava.jar"
         include "**/rticonnextmsg.jar"
-        include "**/rtijms.jar"
         into "java"
     }
     // add native runtime libraries
@@ -90,7 +89,6 @@ buildRpm {
                      --slave   '$javaLinkPath/distlogdatamodel.jar'           'distlogdatamodel.jar'       '$javaInstallPath/distlogdatamodel.jar'                                \\
                      --slave   '$javaLinkPath/nddsjava.jar'                   'nddsjava.jar'               '$javaInstallPath/nddsjava.jar'                                        \\
                      --slave   '$javaLinkPath/rticonnextmsg.jar'              'rticonnextmsg.jar'          '$javaInstallPath/rticonnextmsg.jar'                                   \\
-                     --slave   '$javaLinkPath/rtijms.jar'                     'rtijms.jar'                 '$javaInstallPath/rtijms.jar'                                          \\
 
         # enable auto configuration
         alternatives --auto 'libnddscore.so'
