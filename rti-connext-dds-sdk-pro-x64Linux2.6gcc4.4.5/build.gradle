@@ -158,7 +158,7 @@ buildRpm {
 
         # persistence service
         alternatives --install '$applicationLinkPath/rtipersistenceservice'          'rtipersistenceservice'      '$applicationLauncherPath'                                                      $alternativesPriority \\
-                     --slave   '$applicationLinkPath/rtipssh'                        'rtipssh'                    '$applicationLauncherPath'                                                                            \\
+                     --slave   '$applicationLinkPath/rtipssh'                        'rtipssh'                    '$applicationLauncherPath'
 
         # cloud discovery service
         alternatives --install '$applicationLinkPath/rticlouddiscoveryservice'       'rticlouddiscoveryservice'   '$applicationLauncherPath'                                                      $alternativesPriority
