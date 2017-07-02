@@ -38,6 +38,9 @@ ospackage {
     // we provide the admin console
     provides("rti-connext-dds-admin-console", "${project.version}", EQUAL)
 
+    // update old major versions
+    obsoletes("rti-connext-dds-52-admin-console")
+
     // add admin console
     from("$extractionDirectoryResult") {
         include "bin/rtiadminconsole"

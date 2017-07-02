@@ -34,6 +34,9 @@ ospackage {
     // we provide the monitor
     provides("rti-connext-dds-monitor", "${project.version}", EQUAL)
 
+    // update old major versions
+    obsoletes("rti-connext-dds-52-monitor")
+
     // add monitor
     from("$extractionDirectoryResult") {
         include "bin/rtimonitor"

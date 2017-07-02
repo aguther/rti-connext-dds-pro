@@ -41,6 +41,9 @@ ospackage {
     provides("rti-connext-dds-runtime-pro", "${project.version}", EQUAL)
     conflicts("rti-connext-dds-runtime-core")
 
+    // update old major versions
+    obsoletes("rti-connext-dds-52-runtime-pro-x64Linux3gcc4.8.2")
+
     // add java libraries
     from("$extractionDirectoryResult/lib/java") {
         exclude "**/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"

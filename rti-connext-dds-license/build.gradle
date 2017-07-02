@@ -14,6 +14,8 @@ ospackage {
 
     provides("rti-connext-dds-license", "${project.version}", EQUAL)
 
+    obsoletes("rti-connext-dds-52-license")
+
     into "$targetDirectory"
 
     from("../packages/rti_license.dat") {
