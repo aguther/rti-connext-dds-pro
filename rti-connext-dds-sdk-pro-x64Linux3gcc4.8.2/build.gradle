@@ -43,6 +43,9 @@ ospackage {
     provides("rti-connext-dds-sdk-pro", "${project.version}", EQUAL)
     conflicts("rti-connext-dds-sdk-core")
 
+    // update old major versions
+    obsoletes("rti-connext-dds-52-sdk-pro")
+
     // the following provides tell us what abi and languages we can serve
     provides("rti-connext-dds(abi)", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-c", "${project.version}", EQUAL)

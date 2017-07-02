@@ -30,6 +30,9 @@ ospackage {
     // we provide the persistence service
     provides("rti-connext-dds-persistence-service", "${project.version}", EQUAL)
 
+    // update old major versions
+    obsoletes("rti-connext-dds-52-persistence-service")
+
     from("$extractionDirectoryResult") {
         include "bin/rtipersistenceservice"
         include "bin/rtipssh"

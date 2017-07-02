@@ -27,6 +27,9 @@ ospackage {
     // we provide the routing service
     provides("rti-connext-dds-routing-service", "${project.version}", EQUAL)
 
+    // update old major versions
+    obsoletes("rti-connext-dds-52-routing-service")
+
     // add routing service
     from("$extractionDirectoryResult") {
         include "bin/rtiroutingservice"
