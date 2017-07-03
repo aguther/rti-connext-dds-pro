@@ -30,6 +30,7 @@ ospackage {
     requires("javapackages-tools")
 
     // the following provides tell us what abi and languages we can serve
+    provides("rti-connext-dds-runtime-pro", "${project.version}", EQUAL)
     provides("rti-connext-dds(abi)", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-c", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-cpp", "${project.version}", EQUAL)
@@ -37,9 +38,8 @@ ospackage {
     provides("rti-connext-dds-runtime-distlog", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-messaging", "${project.version}", EQUAL)
 
-    // ensure we only install one package of runtime
-    provides("rti-connext-dds-runtime-pro", "${project.version}", EQUAL)
-    conflicts("rti-connext-dds-runtime-core")
+    // conflicts with the SDK
+    conflicts("rti-connext-dds-sdk-pro")
 
     // add java libraries
     from("$extractionDirectoryResult/lib/java") {
@@ -70,46 +70,33 @@ buildRpm {
     def javaInstallPath      = "$targetDirectory/java"
     def libraryLinkPath      = "/usr/lib64"
     def libraryInstallPath   = "$targetDirectory/lib"
-    def alternativesPriority = 10
+
+    // libraries
+    link("$libraryLinkPath/libnddscore.so", "$libraryInstallPath/libnddscore.so")
+    link("$libraryLinkPath/libnddsc.so", "$libraryInstallPath/libnddsc.so")
+    link("$libraryLinkPath/libnddscpp.so", "$libraryInstallPath/libnddscpp.so")
+    link("$libraryLinkPath/libnddscpp2.so", "$libraryInstallPath/libnddscpp2.so")
+    link("$libraryLinkPath/libnddsjava.so", "$libraryInstallPath/libnddsjava.so")
+    link("$libraryLinkPath/libnddstransporttcp.so", "$libraryInstallPath/libnddstransporttcp.so")
+    link("$libraryLinkPath/librticonnextmsgc.so", "$libraryInstallPath/librticonnextmsgc.so")
+    link("$libraryLinkPath/librticonnextmsgcpp.so", "$libraryInstallPath/librticonnextmsgcpp.so")
+    link("$libraryLinkPath/librtidlc.so", "$libraryInstallPath/librtidlc.so")
+    link("$libraryLinkPath/librtidlcpp.so", "$libraryInstallPath/librtidlcpp.so")
+    link("$libraryLinkPath/librtimonitoring.so", "$libraryInstallPath/librtimonitoring.so")
+    link("$javaLinkPath/distlog.jar", "$javaInstallPath/distlog.jar")
+    link("$javaLinkPath/distlogdatamodel.jar", "$javaInstallPath/distlogdatamodel.jar")
+    link("$javaLinkPath/nddsjava.jar", "$javaInstallPath/nddsjava.jar")
+    link("$javaLinkPath/rticonnextmsg.jar", "$javaInstallPath/rticonnextmsg.jar")
+    link("$javaLinkPath/rtijms.jar", "$javaInstallPath/rtijms.jar")
 
     // this will be called after installation phase
     postInstall """
-        # libraries
-        alternatives --install '$libraryLinkPath/libnddscore.so'              'libnddscore.so'             '$libraryInstallPath/libnddscore.so'             $alternativesPriority \\
-                     --slave   '$libraryLinkPath/libnddsc.so'                 'libnddsc.so'                '$libraryInstallPath/libnddsc.so'                                      \\
-                     --slave   '$libraryLinkPath/libnddscpp.so'               'libnddscpp.so'              '$libraryInstallPath/libnddscpp.so'                                    \\
-                     --slave   '$libraryLinkPath/libnddscpp2.so'              'libnddscpp2.so'             '$libraryInstallPath/libnddscpp2.so'                                   \\
-                     --slave   '$libraryLinkPath/libnddsjava.so'              'libnddsjava.so'             '$libraryInstallPath/libnddsjava.so'                                   \\
-                     --slave   '$libraryLinkPath/libnddstransporttcp.so'      'libnddstransporttcp.so'     '$libraryInstallPath/libnddstransporttcp.so'                           \\
-                     --slave   '$libraryLinkPath/librticonnextmsgc.so'        'librticonnextmsgc.so'       '$libraryInstallPath/librticonnextmsgc.so'                             \\
-                     --slave   '$libraryLinkPath/librticonnextmsgcpp.so'      'librticonnextmsgcpp.so'     '$libraryInstallPath/librticonnextmsgcpp.so'                           \\
-                     --slave   '$libraryLinkPath/librtidlc.so'                'librtidlc.so'               '$libraryInstallPath/librtidlc.so'                                     \\
-                     --slave   '$libraryLinkPath/librtidlcpp.so'              'librtidlcpp.so'             '$libraryInstallPath/librtidlcpp.so'                                   \\
-                     --slave   '$libraryLinkPath/librtimonitoring.so'         'librtimonitoring.so'        '$libraryInstallPath/librtimonitoring.so'                              \\
-                     --slave   '$javaLinkPath/distlog.jar'                    'distlog.jar'                '$javaInstallPath/distlog.jar'                                         \\
-                     --slave   '$javaLinkPath/distlogdatamodel.jar'           'distlogdatamodel.jar'       '$javaInstallPath/distlogdatamodel.jar'                                \\
-                     --slave   '$javaLinkPath/nddsjava.jar'                   'nddsjava.jar'               '$javaInstallPath/nddsjava.jar'                                        \\
-                     --slave   '$javaLinkPath/rticonnextmsg.jar'              'rticonnextmsg.jar'          '$javaInstallPath/rticonnextmsg.jar'                                   \\
-                     --slave   '$javaLinkPath/rtijms.jar'                     'rtijms.jar'                 '$javaInstallPath/rtijms.jar'                                          \\
-
-        # enable auto configuration
-        alternatives --auto 'libnddscore.so'
-
         # update ld configuration
         ldconfig
     """
 
     // this will be called after uninstallation phase
     postUninstall """
-        # check if uninstall is due to an upgrade
-        if [ \"\$1\" = \"1\" ]; then
-            # we are in an upgrade process >> nothing to do
-            exit 0
-        fi
-
-        # libraries
-        alternatives --remove 'libnddscore.so' '$libraryInstallPath/libnddscore.so'
-
         # update ld configuration
         ldconfig
     """

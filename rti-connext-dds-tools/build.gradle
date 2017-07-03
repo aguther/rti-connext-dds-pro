@@ -25,7 +25,10 @@ ospackage {
     // we provide the replay service
     provides("rti-connext-dds-tools", "${project.version}", EQUAL)
 
-    // add routing service
+    // conflicts with the SDK
+    conflicts("rti-connext-dds-sdk-pro")
+
+    // add tools
     from("$extractionDirectoryResult") {
         include "bin/rtiddsping"
         include "bin/rtiddsspy"
@@ -56,36 +59,10 @@ buildRpm {
     // define local installation path for links
     def applicationLinkPath        = "/usr/bin"
     def applicationLauncherPath    = "$targetDirectory/launcher"
-    def alternativesPriorityApp    = 10
 
-    // this will be called after installation phase
-    postInstall """
-        # command line tools
-        alternatives --install '$applicationLinkPath/rtiddsping' 'rtiddsping' '$applicationLauncherPath' $alternativesPriorityApp
-        alternatives --install '$applicationLinkPath/rtiddsspy'  'rtiddsspy'  '$applicationLauncherPath' $alternativesPriorityApp
-
-        # enable auto configuration
-        alternatives --auto 'rtiddsping'
-        alternatives --auto 'rtireplay'
-
-        # update ld configuration
-        ldconfig
-    """
-
-    postUninstall """
-        # check if uninstall is due to an upgrade
-        if [ \"\$1\" = \"1\" ]; then
-            # we are in an upgrade process >> nothing to do
-            exit 0
-        fi
-
-        # command line tools
-        alternatives --remove 'rtiddsping' '$applicationLauncherPath'
-        alternatives --remove 'rtiddsspy'  '$applicationLauncherPath'
-
-        # update ld configuration
-        ldconfig
-    """
+    // command line tools
+    link("$applicationLinkPath/rtiddsping", "$applicationLauncherPath")
+    link("$applicationLinkPath/rtiddsspy", "$applicationLauncherPath")
 }
 
 // --------------------------------------------------------------------------------------------------------------------
