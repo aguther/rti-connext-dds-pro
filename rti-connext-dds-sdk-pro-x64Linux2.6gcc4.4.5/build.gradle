@@ -51,12 +51,12 @@ ospackage {
     provides("rti-connext-dds-tools", "${project.version}", EQUAL)
 
     // we provide the services
-    provides("rti-connext-dds-routing-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-cloud-discovery-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-database-integration-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-persistence-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-recording-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-replay-service", "${project.version}", EQUAL)
-    provides("rti-connext-dds-cloud-discovery-service", "${project.version}", EQUAL)
-    provides("rti-connext-dds-database-integration-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-routing-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-web-integration-service", "${project.version}", EQUAL)
 
     // update old major versions

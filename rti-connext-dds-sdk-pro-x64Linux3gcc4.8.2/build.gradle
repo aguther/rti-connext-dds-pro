@@ -34,32 +34,33 @@ ospackage {
     // we need a license to work
     requires("rti-connext-dds-license")
 
-    // we provide the admin console, monitor and tools
-    provides("rti-connext-dds-admin-console", "${project.version}", EQUAL)
-    provides("rti-connext-dds-monitor", "${project.version}", EQUAL)
-    provides("rti-connext-dds-tools", "${project.version}", EQUAL)
-
-    // ensure we only install one package of SDK
+    // we provide the sdk ensure we only install one package of SDK
     provides("rti-connext-dds-sdk-pro", "${project.version}", EQUAL)
-    conflicts("rti-connext-dds-sdk-core")
 
-    // update old major versions
-    obsoletes("rti-connext-dds-52-sdk-pro-x64Linux3gcc4.8.2")
-
-    // the following provides tell us what abi and languages we can serve
+    // we provide the runtime
     provides("rti-connext-dds(abi)", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-c", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-cpp", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-java", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-distlog", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-messaging", "${project.version}", EQUAL)
-    provides("rti-connext-dds-routing-service", "${project.version}", EQUAL)
+
+    // we provide the tools
+    provides("rti-connext-dds-admin-console", "${project.version}", EQUAL)
+    provides("rti-connext-dds-monitor", "${project.version}", EQUAL)
+    provides("rti-connext-dds-tools", "${project.version}", EQUAL)
+
+    // we provide the services
+    provides("rti-connext-dds-cloud-discovery-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-database-integration-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-persistence-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-recording-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-replay-service", "${project.version}", EQUAL)
-    provides("rti-connext-dds-cloud-discovery-service", "${project.version}", EQUAL)
-    provides("rti-connext-dds-database-integration-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-routing-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-web-integration-service", "${project.version}", EQUAL)
+
+    // update old major versions
+    obsoletes("rti-connext-dds-52-sdk-pro-x64Linux3gcc4.8.2")
 
     // add SDK content
     from("$extractionDirectoryResult") {
