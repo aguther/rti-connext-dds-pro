@@ -25,6 +25,9 @@ ospackage {
     // we provide the recording service
     provides("rti-connext-dds-web-integration-service", "${project.version}", EQUAL)
 
+    // conflicts with SDK
+    conflicts("rti-connext-dds-sdk-pro")
+
     // add routing service
     from("$extractionDirectoryResult") {
         include "bin/rtiwebintegrationservice"
@@ -59,33 +62,9 @@ buildRpm {
     // define local installation path for links
     def applicationLinkPath        = "/usr/bin"
     def applicationLauncherPath    = "$targetDirectory/launcher"
-    def alternativesPriorityApp    = 10
 
-    // this will be called after installation phase
-    postInstall """
-        # web integration service
-        alternatives --install '$applicationLinkPath/rtiwebintegrationservice'  'rtiwebintegrationservice'  '$applicationLauncherPath' $alternativesPriorityApp
-
-        # enable auto configuration
-        alternatives --auto 'rtiwebintegrationservice'
-
-        # update ld configuration
-        ldconfig
-    """
-
-    postUninstall """
-        # check if uninstall is due to an upgrade
-        if [ \"\$1\" = \"1\" ]; then
-            # we are in an upgrade process >> nothing to do
-            exit 0
-        fi
-
-        # libraries
-        alternatives --remove 'rtiwebintegrationservice' '$applicationLauncherPath'
-
-        # update ld configuration
-        ldconfig
-    """
+    // web integration service
+    link("$applicationLinkPath/rtiwebintegrationservice", "$applicationLauncherPath")
 }
 
 // --------------------------------------------------------------------------------------------------------------------

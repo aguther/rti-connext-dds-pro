@@ -34,25 +34,23 @@ ospackage {
     // we need a license to work
     requires("rti-connext-dds-license")
 
-    // we provide the admin console
-    provides("rti-connext-dds-admin-console", "${project.version}", EQUAL)
-    provides("rti-connext-dds-monitor", "${project.version}", EQUAL)
-    provides("rti-connext-dds-tools", "${project.version}", EQUAL)
-
-    // ensure we only install one package of SDK
+    // we provide the sdk ensure we only install one package of SDK
     provides("rti-connext-dds-sdk-pro", "${project.version}", EQUAL)
-    conflicts("rti-connext-dds-sdk-core")
 
-    // update old major versions
-    obsoletes("rti-connext-dds-52-sdk-pro-x64Linux2.6gcc4.4.5")
-
-    // the following provides tell us what abi and languages we can serve
+    // we provide the runtime
     provides("rti-connext-dds(abi)", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-c", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-cpp", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-java", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-distlog", "${project.version}", EQUAL)
     provides("rti-connext-dds-runtime-messaging", "${project.version}", EQUAL)
+
+    // we provide the tools
+    provides("rti-connext-dds-admin-console", "${project.version}", EQUAL)
+    provides("rti-connext-dds-monitor", "${project.version}", EQUAL)
+    provides("rti-connext-dds-tools", "${project.version}", EQUAL)
+
+    // we provide the services
     provides("rti-connext-dds-routing-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-persistence-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-recording-service", "${project.version}", EQUAL)
@@ -60,6 +58,9 @@ ospackage {
     provides("rti-connext-dds-cloud-discovery-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-database-integration-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-web-integration-service", "${project.version}", EQUAL)
+
+    // update old major versions
+    obsoletes("rti-connext-dds-52-sdk-pro-x64Linux2.6gcc4.4.5")
 
     // add SDK content
     from("$extractionDirectoryResult") {
@@ -110,7 +111,6 @@ buildRpm {
     def javaInstallPath            = "$targetDirectory/lib/java"
     def libraryLinkPath            = "/usr/lib64"
     def libraryInstallPath         = "$targetDirectory/lib/${rtiTarget}"
-    def alternativesPriority       = 1
 
     // create link to license file
     link("$targetDirectory/rti_license.dat", "/opt/rti/connext-dds/license/rti_license.dat")
@@ -119,139 +119,108 @@ buildRpm {
     link("$applicationDesktopLinkPath/rtilauncher.desktop", "$targetDirectory/rtilauncher.desktop")
 
     // links for applications without any alternative
-    link("$applicationLinkPath/rtiddsgen",              "$applicationLauncherPath")
-    link("$applicationLinkPath/rtiddsgen_server",       "$applicationLauncherPath")
-    link("$applicationLinkPath/rtiddsprototyper",       "$applicationLauncherPath")
-    link("$applicationLinkPath/rtilauncher",            "$applicationLauncherPath")
-    link("$applicationLinkPath/rtipkginstall",          "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirecordingconsole",    "$applicationLauncherPath")
-    link("$applicationLinkPath/rtishapesdemo",          "$applicationLauncherPath")
-    link("$applicationLinkPath/rtiwanserver",           "$applicationLauncherPath")
+    link("$applicationLinkPath/rtiddsgen",           "$applicationLauncherPath")
+    link("$applicationLinkPath/rtiddsgen_server",    "$applicationLauncherPath")
+    link("$applicationLinkPath/rtiddsprototyper",    "$applicationLauncherPath")
+    link("$applicationLinkPath/rtilauncher",         "$applicationLauncherPath")
+    link("$applicationLinkPath/rtipkginstall",       "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirecordingconsole", "$applicationLauncherPath")
+    link("$applicationLinkPath/rtishapesdemo",       "$applicationLauncherPath")
+    link("$applicationLinkPath/rtiwanserver",        "$applicationLauncherPath")
+
+    // admin-console
+    link("$applicationLinkPath/rtiadminconsole",                "$applicationLauncherPath")
+    link("$applicationDesktopLinkPath/rtiadminconsole.desktop", "$targetDirectory/rtiadminconsole.desktop")
+    link("$applicationIconLinkPath/rtiadminconsole.xpm",        "$targetDirectory/resource/app/app_support/admin_console/x64Linux/icon.xpm")
+
+    // monitor
+    link("$applicationLinkPath/rtimonitor",                "$applicationLauncherPath")
+    link("$applicationDesktopLinkPath/rtimonitor.desktop", "$targetDirectory/rtimonitor.desktop")
+    link("$applicationIconLinkPath/rtimonitor.png",        "$targetDirectory/resource/app/app_support/launcher/icons/Monitor3_90.png")
+
+    // replay service
+    link("$applicationLinkPath/rtireplay",   "$applicationLauncherPath")
+    link("$applicationLinkPath/rtireplaysh", "$applicationLauncherPath")
+
+    // recording service
+    link("$applicationLinkPath/rtirecord",  "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirecconv", "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirecsh",   "$applicationLauncherPath")
+
+    // routing service
+    link("$applicationLinkPath/rtiroutingservice",      "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirssh",                "$applicationLauncherPath")
+    link("$javaLinkPath/rtirsadapter.jar",              "$javaInstallPath/rtirsadapter.jar")
+    link("$javaLinkPath/rtiroutingservice.jar",         "$javaInstallPath/rtiroutingservice.jar")
+    link("$libraryLinkPath/librtiroutingservice.so",    "$libraryInstallPath/librtiroutingservice.so")
+    link("$libraryLinkPath/librtiroutingserviced.so",   "$libraryInstallPath/librtiroutingserviced.so")
+    link("$libraryLinkPath/librtirsassigntransf.so",    "$libraryInstallPath/librtirsassigntransf.so")
+    link("$libraryLinkPath/librtirsinfrastructure.so",  "$libraryInstallPath/librtirsinfrastructure.so")
+    link("$libraryLinkPath/librtirsinfrastructured.so", "$libraryInstallPath/librtirsinfrastructured.so")
+    link("$libraryLinkPath/librtirsjniadapter.so",      "$libraryInstallPath/librtirsjniadapter.so")
+
+    // persistence service
+    link("$applicationLinkPath/rtipersistenceservice", "$applicationLauncherPath")
+    link("$applicationLinkPath/rtipssh",               "$applicationLauncherPath")
+
+    // cloud discovery service
+    link("$applicationLinkPath/rticlouddiscoveryservice", "$applicationLauncherPath")
+
+    // database integration service
+    link("$applicationLinkPath/rtirtc_mysql",      "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirtc_oracle",     "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirtc_postgresql", "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirtc_timesten",   "$applicationLauncherPath")
+
+    // web integration service
+    link("$applicationLinkPath/rtiwebintegrationservice", "$applicationLauncherPath")
+
+    // command line tools
+    link("$applicationLinkPath/rtiddsping", "$applicationLauncherPath")
+    link("$applicationLinkPath/rtiddsspy",  "$applicationLauncherPath")
+
+    // libraries
+    link("$libraryLinkPath/libnddscore.so",          "$libraryInstallPath/libnddscore.so")
+    link("$libraryLinkPath/libnddscored.so",         "$libraryInstallPath/libnddscored.so")
+    link("$libraryLinkPath/libnddsc.so",             "$libraryInstallPath/libnddsc.so")
+    link("$libraryLinkPath/libnddscd.so",            "$libraryInstallPath/libnddscd.so")
+    link("$libraryLinkPath/libnddscpp.so",           "$libraryInstallPath/libnddscpp.so")
+    link("$libraryLinkPath/libnddscpp2.so",          "$libraryInstallPath/libnddscpp2.so")
+    link("$libraryLinkPath/libnddscpp2d.so",         "$libraryInstallPath/libnddscpp2d.so")
+    link("$libraryLinkPath/libnddscppd.so",          "$libraryInstallPath/libnddscppd.so")
+    link("$libraryLinkPath/libnddsjava.so",          "$libraryInstallPath/libnddsjava.so")
+    link("$libraryLinkPath/libnddsjavad.so",         "$libraryInstallPath/libnddsjavad.so")
+    link("$libraryLinkPath/libnddstransporttcp.so",  "$libraryInstallPath/libnddstransporttcp.so")
+    link("$libraryLinkPath/libnddstransporttcpd.so", "$libraryInstallPath/libnddstransporttcpd.so")
+    link("$libraryLinkPath/librticonnextmsgc.so",    "$libraryInstallPath/librticonnextmsgc.so")
+    link("$libraryLinkPath/librticonnextmsgcd.so",   "$libraryInstallPath/librticonnextmsgcd.so")
+    link("$libraryLinkPath/librticonnextmsgcpp.so",  "$libraryInstallPath/librticonnextmsgcpp.so")
+    link("$libraryLinkPath/librticonnextmsgcppd.so", "$libraryInstallPath/librticonnextmsgcppd.so")
+    link("$libraryLinkPath/librtidlc.so",            "$libraryInstallPath/librtidlc.so")
+    link("$libraryLinkPath/librtidlcd.so",           "$libraryInstallPath/librtidlcd.so")
+    link("$libraryLinkPath/librtidlcpp.so",          "$libraryInstallPath/librtidlcpp.so")
+    link("$libraryLinkPath/librtidlcppd.so",         "$libraryInstallPath/librtidlcppd.so")
+    link("$libraryLinkPath/librtimonitoring.so",     "$libraryInstallPath/librtimonitoring.so")
+    link("$libraryLinkPath/librtimonitoringd.so",    "$libraryInstallPath/librtimonitoringd.so")
+    link("$javaLinkPath/distlog.jar",                "$javaInstallPath/distlog.jar")
+    link("$javaLinkPath/distlogd.jar",               "$javaInstallPath/distlogd.jar")
+    link("$javaLinkPath/distlogdatamodel.jar",       "$javaInstallPath/distlogdatamodel.jar")
+    link("$javaLinkPath/distlogdatamodeld.jar",      "$javaInstallPath/distlogdatamodeld.jar")
+    link("$javaLinkPath/nddsjava.jar",               "$javaInstallPath/nddsjava.jar")
+    link("$javaLinkPath/nddsjavad.jar",              "$javaInstallPath/nddsjavad.jar")
+    link("$javaLinkPath/rticonnextmsg.jar",          "$javaInstallPath/rticonnextmsg.jar")
+    link("$javaLinkPath/rticonnextmsgd.jar",         "$javaInstallPath/rticonnextmsgd.jar")
 
     // this will be called after install phase
     postInstall """
-        # admin-console
-        alternatives --install '$applicationLinkPath/rtiadminconsole'                'rtiadminconsole'            '$applicationLauncherPath'                                                      $alternativesPriority \\
-                     --slave   '$applicationDesktopLinkPath/rtiadminconsole.desktop' 'rtiadminconsole.desktop'    '$targetDirectory/rtiadminconsole.desktop'                                                            \\
-                     --slave   '$applicationIconLinkPath/rtiadminconsole.xpm'        'rtiadminconsole.xpm'        '$targetDirectory/resource/app/app_support/admin_console/x64Linux/icon.xpm'
-
-        # monitor
-        alternatives --install '$applicationLinkPath/rtimonitor'                     'rtimonitor'                 '$applicationLauncherPath'                                                      $alternativesPriority \\
-                     --slave   '$applicationDesktopLinkPath/rtimonitor.desktop'      'rtimonitor.desktop'         '$targetDirectory/rtimonitor.desktop'                                                                 \\
-                     --slave   '$applicationIconLinkPath/rtimonitor.png'             'rtimonitor.png'             '$targetDirectory/resource/app/app_support/launcher/icons/Monitor3_90.png'
-
-        # replay service
-        alternatives --install '$applicationLinkPath/rtireplay'                      'rtireplay'                  '$applicationLauncherPath'                                                      $alternativesPriority \\
-                     --slave   '$applicationLinkPath/rtireplaysh'                    'rtireplaysh'                '$applicationLauncherPath'
-
-        # recording service
-        alternatives --install '$applicationLinkPath/rtirecord'                      'rtirecord'                  '$applicationLauncherPath'                                                      $alternativesPriority \\
-                     --slave   '$applicationLinkPath/rtirecconv'                     'rtirecconv'                 '$applicationLauncherPath'                                                                            \\
-                     --slave   '$applicationLinkPath/rtirecsh'                       'rtirecsh'                   '$applicationLauncherPath'
-
-        # routing service
-        alternatives --install '$applicationLinkPath/rtiroutingservice'              'rtiroutingservice'          '$applicationLauncherPath'                                                      $alternativesPriority \\
-                     --slave   '$applicationLinkPath/rtirssh'                        'rtirssh'                    '$applicationLauncherPath'                                                                            \\
-                     --slave   '$javaLinkPath/rtirsadapter.jar'                      'rtirsadapter.jar'           '$javaInstallPath/rtirsadapter.jar'                                                                   \\
-                     --slave   '$javaLinkPath/rtiroutingservice.jar'                 'rtiroutingservice.jar'      '$javaInstallPath/rtiroutingservice.jar'                                                              \\
-                     --slave   '$libraryLinkPath/librtiroutingservice.so'            'librtiroutingservice.so'    '$libraryInstallPath/librtiroutingservice.so'                                                         \\
-                     --slave   '$libraryLinkPath/librtiroutingserviced.so'           'librtiroutingserviced.so'   '$libraryInstallPath/librtiroutingserviced.so'                                                        \\
-                     --slave   '$libraryLinkPath/librtirsassigntransf.so'            'librtirsassigntransf.so'    '$libraryInstallPath/librtirsassigntransf.so'                                                         \\
-                     --slave   '$libraryLinkPath/librtirsinfrastructure.so'          'librtirsinfrastructure.so'  '$libraryInstallPath/librtirsinfrastructure.so'                                                       \\
-                     --slave   '$libraryLinkPath/librtirsinfrastructured.so'         'librtirsinfrastructured.so' '$libraryInstallPath/librtirsinfrastructured.so'                                                      \\
-                     --slave   '$libraryLinkPath/librtirsjniadapter.so'              'librtirsjniadapter.so'      '$libraryInstallPath/librtirsjniadapter.so'
-
-        # persistence service
-        alternatives --install '$applicationLinkPath/rtipersistenceservice'          'rtipersistenceservice'      '$applicationLauncherPath'                                                      $alternativesPriority \\
-                     --slave   '$applicationLinkPath/rtipssh'                        'rtipssh'                    '$applicationLauncherPath'
-
-        # cloud discovery service
-        alternatives --install '$applicationLinkPath/rticlouddiscoveryservice'       'rticlouddiscoveryservice'   '$applicationLauncherPath'                                                      $alternativesPriority
-
-        # database integration service
-        alternatives --install '$applicationLinkPath/rtirtc_mysql'                   'rtirtc_mysql'               '$applicationLauncherPath'                                                      $alternativesPriority \\
-                     --slave   '$applicationLinkPath/rtirtc_oracle'                  'rtirtc_oracle'              '$applicationLauncherPath'                                                                            \\
-                     --slave   '$applicationLinkPath/rtirtc_postgresql'              'rtirtc_postgresql'          '$applicationLauncherPath'                                                                            \\
-                     --slave   '$applicationLinkPath/rtirtc_timesten'                'rtirtc_timesten'            '$applicationLauncherPath'
-
-        # web integration service
-        alternatives --install '$applicationLinkPath/rtiwebintegrationservice'       'rtiwebintegrationservice'  '$applicationLauncherPath'                                                       $alternativesPriority
-
-        # command line tools
-        alternatives --install '$applicationLinkPath/rtiddsping'                     'rtiddsping'                 '$applicationLauncherPath'                                                      $alternativesPriority
-        alternatives --install '$applicationLinkPath/rtiddsspy'                      'rtiddsspy'                  '$applicationLauncherPath'                                                      $alternativesPriority
-
-        # libraries
-        alternatives --install '$libraryLinkPath/libnddscore.so'                     'libnddscore.so'             '$libraryInstallPath/libnddscore.so'                                            $alternativesPriority \\
-                     --slave   '$libraryLinkPath/libnddscored.so'                    'libnddscored.so'            '$libraryInstallPath/libnddscored.so'                                                                 \\
-                     --slave   '$libraryLinkPath/libnddsc.so'                        'libnddsc.so'                '$libraryInstallPath/libnddsc.so'                                                                     \\
-                     --slave   '$libraryLinkPath/libnddscd.so'                       'libnddscd.so'               '$libraryInstallPath/libnddscd.so'                                                                    \\
-                     --slave   '$libraryLinkPath/libnddscpp.so'                      'libnddscpp.so'              '$libraryInstallPath/libnddscpp.so'                                                                   \\
-                     --slave   '$libraryLinkPath/libnddscpp2.so'                     'libnddscpp2.so'             '$libraryInstallPath/libnddscpp2.so'                                                                  \\
-                     --slave   '$libraryLinkPath/libnddscpp2d.so'                    'libnddscpp2d.so'            '$libraryInstallPath/libnddscpp2d.so'                                                                 \\
-                     --slave   '$libraryLinkPath/libnddscppd.so'                     'libnddscppd.so'             '$libraryInstallPath/libnddscppd.so'                                                                  \\
-                     --slave   '$libraryLinkPath/libnddsjava.so'                     'libnddsjava.so'             '$libraryInstallPath/libnddsjava.so'                                                                  \\
-                     --slave   '$libraryLinkPath/libnddsjavad.so'                    'libnddsjavad.so'            '$libraryInstallPath/libnddsjavad.so'                                                                 \\
-                     --slave   '$libraryLinkPath/libnddstransporttcp.so'             'libnddstransporttcp.so'     '$libraryInstallPath/libnddstransporttcp.so'                                                          \\
-                     --slave   '$libraryLinkPath/libnddstransporttcpd.so'            'libnddstransporttcpd.so'    '$libraryInstallPath/libnddstransporttcpd.so'                                                         \\
-                     --slave   '$libraryLinkPath/librticonnextmsgc.so'               'librticonnextmsgc.so'       '$libraryInstallPath/librticonnextmsgc.so'                                                            \\
-                     --slave   '$libraryLinkPath/librticonnextmsgcd.so'              'librticonnextmsgcd.so'      '$libraryInstallPath/librticonnextmsgcd.so'                                                           \\
-                     --slave   '$libraryLinkPath/librticonnextmsgcpp.so'             'librticonnextmsgcpp.so'     '$libraryInstallPath/librticonnextmsgcpp.so'                                                          \\
-                     --slave   '$libraryLinkPath/librticonnextmsgcppd.so'            'librticonnextmsgcppd.so'    '$libraryInstallPath/librticonnextmsgcppd.so'                                                         \\
-                     --slave   '$libraryLinkPath/librtidlc.so'                       'librtidlc.so'               '$libraryInstallPath/librtidlc.so'                                                                    \\
-                     --slave   '$libraryLinkPath/librtidlcd.so'                      'librtidlcd.so'              '$libraryInstallPath/librtidlcd.so'                                                                   \\
-                     --slave   '$libraryLinkPath/librtidlcpp.so'                     'librtidlcpp.so'             '$libraryInstallPath/librtidlcpp.so'                                                                  \\
-                     --slave   '$libraryLinkPath/librtidlcppd.so'                    'librtidlcppd.so'            '$libraryInstallPath/librtidlcppd.so'                                                                 \\
-                     --slave   '$libraryLinkPath/librtimonitoring.so'                'librtimonitoring.so'        '$libraryInstallPath/librtimonitoring.so'                                                             \\
-                     --slave   '$libraryLinkPath/librtimonitoringd.so'               'librtimonitoringd.so'       '$libraryInstallPath/librtimonitoringd.so'                                                            \\
-                     --slave   '$javaLinkPath/distlog.jar'                           'distlog.jar'                '$javaInstallPath/distlog.jar'                                                                        \\
-                     --slave   '$javaLinkPath/distlogd.jar'                          'distlogd.jar'               '$javaInstallPath/distlogd.jar'                                                                       \\
-                     --slave   '$javaLinkPath/distlogdatamodel.jar'                  'distlogdatamodel.jar'       '$javaInstallPath/distlogdatamodel.jar'                                                               \\
-                     --slave   '$javaLinkPath/distlogdatamodeld.jar'                 'distlogdatamodeld.jar'      '$javaInstallPath/distlogdatamodeld.jar'                                                              \\
-                     --slave   '$javaLinkPath/nddsjava.jar'                          'nddsjava.jar'               '$javaInstallPath/nddsjava.jar'                                                                       \\
-                     --slave   '$javaLinkPath/nddsjavad.jar'                         'nddsjavad.jar'              '$javaInstallPath/nddsjavad.jar'                                                                      \\
-                     --slave   '$javaLinkPath/rticonnextmsg.jar'                     'rticonnextmsg.jar'          '$javaInstallPath/rticonnextmsg.jar'                                                                  \\
-                     --slave   '$javaLinkPath/rticonnextmsgd.jar'                    'rticonnextmsgd.jar'         '$javaInstallPath/rticonnextmsgd.jar'
-
-        # enable auto configuration
-        alternatives --auto 'rtiadminconsole'
-        alternatives --auto 'rtimonitor'
-        alternatives --auto 'rtireplay'
-        alternatives --auto 'rtirecord'
-        alternatives --auto 'rtiroutingservice'
-        alternatives --auto 'rtipersistenceservice'
-        alternatives --auto 'rticlouddiscoveryservice'
-        alternatives --auto 'rtidatabaseintegrationservice'
-        alternatives --auto 'rtiwebintegrationservice'
-        alternatives --auto 'rtiddsping'
-        alternatives --auto 'rtiddsspy'
-        alternatives --auto 'libnddscore.so'
-
         # update ld configuration
         ldconfig
     """
 
     // this will be called after uninstall phase
     postUninstall """
-        # check if uninstall is due to an upgrade
-        if [ \"\$1\" = \"1\" ]; then
-            # we are in an upgrade process >> nothing to do
-            exit 0
-        fi
-
-        # applications
-        alternatives --remove 'rtiadminconsole'               '$applicationLauncherPath'
-        alternatives --remove 'rtimonitor'                    '$applicationLauncherPath'
-        alternatives --remove 'rtireplay'                     '$applicationLauncherPath'
-        alternatives --remove 'rtirecord'                     '$applicationLauncherPath'
-        alternatives --remove 'rtiroutingservice'             '$applicationLauncherPath'
-        alternatives --remove 'rtipersistenceservice'         '$applicationLauncherPath'
-        alternatives --remove 'rticlouddiscoveryservice'      '$applicationLauncherPath'
-        alternatives --remove 'rtidatabaseintegrationservice' '$applicationLauncherPath'
-        alternatives --remove 'rtiwebintegrationservice'      '$applicationLauncherPath'
-        alternatives --remove 'rtiddsping'                    '$applicationLauncherPath'
-        alternatives --remove 'rtiddsspy'                     '$applicationLauncherPath'
-        alternatives --remove 'libnddscore.so'                '$libraryInstallPath/libnddscore.so'
+        # update ld configuration
+        ldconfig
     """
 }
 
