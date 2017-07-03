@@ -95,9 +95,6 @@ buildRpm {
     // create link to license file
     link("$targetDirectory/rti_license.dat", "/opt/rti/connext-dds/license/rti_license.dat")
 
-    // create desktop link to RTI launcher
-    link("$applicationDesktopLinkPath/rtimonitor.desktop", "$targetDirectory/rtimonitor.desktop")
-
     // monitor
     link("$applicationLinkPath/rtimonitor",                "$applicationLauncherPath")
     link("$applicationDesktopLinkPath/rtimonitor.desktop", "$targetDirectory/rtimonitor.desktop")
