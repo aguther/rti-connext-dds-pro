@@ -25,7 +25,7 @@ ospackage {
     // we provide the replay service
     provides("rti-connext-dds-replay-service", "${project.version}", EQUAL)
 
-    // add routing service
+    // add replay service
     from("$extractionDirectoryResult") {
         include "bin/rtireplay"
         include "bin/rtireplaysh"

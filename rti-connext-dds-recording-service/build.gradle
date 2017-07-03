@@ -25,7 +25,7 @@ ospackage {
     // we provide the recording service
     provides("rti-connext-dds-recording-service", "${project.version}", EQUAL)
 
-    // add routing service
+    // add recording service
     from("$extractionDirectoryResult") {
         include "bin/rtirecconv"
         include "bin/rtirecord"
