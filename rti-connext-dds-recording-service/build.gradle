@@ -31,7 +31,7 @@ ospackage {
     // update old major versions
     obsoletes("rti-connext-dds-52-recording-service")
 
-    // add routing service
+    // add recording service
     from("$extractionDirectoryResult") {
         include "bin/rtirecconv"
         include "bin/rtirecord"

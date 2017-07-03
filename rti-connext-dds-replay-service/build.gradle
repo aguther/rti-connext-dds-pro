@@ -31,7 +31,7 @@ ospackage {
     // update old major versions
     obsoletes("rti-connext-dds-52-replay-service")
 
-    // add routing service
+    // add replay service
     from("$extractionDirectoryResult") {
         include "bin/rtireplay"
         include "bin/rtireplaysh"
