@@ -72,7 +72,7 @@ task prepareRtiPackageHost {
 task prepareRtiPackageHostPatch {
   dependsOn prepareRtiPackageHost
 
-  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-${rtiPlatform}.rtipkg"
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-patch-${rtiPlatform}.rtipkg"
   outputs.file new File("$buildDir/$name")
 
   doLast {
@@ -81,7 +81,7 @@ task prepareRtiPackageHostPatch {
     def processObject
 
     // install host patch
-    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-${rtiPlatform}.rtipkg"
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-patch-${rtiPlatform}.rtipkg"
     processObject = commandLine.execute()
     processObject.in.eachLine { line -> logger.info(line) }
     processObject.err.eachLine { line -> logger.error(line) }
