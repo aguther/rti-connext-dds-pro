@@ -196,7 +196,7 @@ task prepareRtiWebIntegrationServicePatch {
 
 task prepareRtiHost {
   if (parsedVersion.patch > 0) {
-    dependsOn prepareRtiPackageHostPatch, prepareRtiDatabaseIntegrationServicePatch, prepareRtiWebIntegrationServicePatch
+    dependsOn prepareRtiPackageHostPatch
   } else {
     dependsOn prepareRtiPackageHost, prepareRtiDatabaseIntegrationService, prepareRtiWebIntegrationService
   }
