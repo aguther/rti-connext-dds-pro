@@ -25,8 +25,34 @@ task prepareRtiPackageTarget {
   }
 }
 
-task prepareRtiPackageTargetPatch {
+task prepareRtiPackageTargetInterPatch {
   dependsOn prepareRtiPackageTarget
+  dependsOn prepareRtiPackageHostPatch
+
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersionInterPatch.major}.${parsedVersionInterPatch.minor}.${parsedVersionInterPatch.micro}.${parsedVersionInterPatch.patch}-pro-target-${rtiTarget}.rtipkg"
+  outputs.file new File("$buildDir/$name")
+
+  doLast {
+    // variables
+    def commandLine
+    def processObject
+
+    // install target libraries with RTI installer
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersionInterPatch.major}.${parsedVersionInterPatch.minor}.${parsedVersionInterPatch.micro}.${parsedVersionInterPatch.patch}-pro-target-${rtiTarget}.rtipkg"
+    processObject = commandLine.execute()
+    processObject.in.eachLine { line -> logger.info(line) }
+    processObject.err.eachLine { line -> logger.error(line) }
+    processObject.waitFor()
+    assert !processObject.exitValue()
+
+    // write file to tell this task has been done successfully
+    def outputFile = new File("$buildDir/$name")
+    outputFile.text = processObject.exitValue()
+  }
+}
+
+task prepareRtiPackageTargetPatch {
+  dependsOn prepareRtiPackageTargetInterPatch
   dependsOn prepareRtiPackageHostPatch
 
   inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"

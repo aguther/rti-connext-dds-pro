@@ -2,6 +2,7 @@ import org.apache.tools.ant.taskdefs.condition.Os
 
 ext.parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
 ext.parsedVersionPrepatch = VersionNumber.withPatchNumber().parse(project.versionPrePatch)
+ext.parsedVersionInterPatch = VersionNumber.withPatchNumber().parse(project.versionInterPatch)
 ext.extractionDirectory = "$buildDir/extracted"
 ext.extractionDirectoryResult = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
 
@@ -95,8 +96,33 @@ task prepareRtiPackageHostPrePatch {
   }
 }
 
-task prepareRtiPackageHostPatch {
+task prepareRtiPackageHostInterPatch {
   dependsOn prepareRtiPackageHostPrePatch
+
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersionInterPatch.major}.${parsedVersionInterPatch.minor}.${parsedVersionInterPatch.micro}.${parsedVersionInterPatch.patch}-pro-host-${rtiPlatform}.rtipkg"
+  outputs.file new File("$buildDir/$name")
+
+  doLast {
+    // variables
+    def commandLine
+    def processObject
+
+    // install host patch
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersionInterPatch.major}.${parsedVersionInterPatch.minor}.${parsedVersionInterPatch.micro}.${parsedVersionInterPatch.patch}-pro-host-${rtiPlatform}.rtipkg"
+    processObject = commandLine.execute()
+    processObject.in.eachLine { line -> logger.info(line) }
+    processObject.err.eachLine { line -> logger.error(line) }
+    processObject.waitFor()
+    assert !processObject.exitValue()
+
+    // write file to tell this task has been done successfully
+    def outputFile = new File("$buildDir/$name")
+    outputFile.text = processObject.exitValue()
+  }
+}
+
+task prepareRtiPackageHostPatch {
+  dependsOn prepareRtiPackageHostInterPatch
 
   inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-${rtiPlatform}.rtipkg"
   outputs.file new File("$buildDir/$name")
