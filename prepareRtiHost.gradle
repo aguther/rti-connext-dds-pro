@@ -1,6 +1,7 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
 ext.parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
+ext.parsedVersionPrepatch = VersionNumber.withPatchNumber().parse(project.versionPrePatch)
 ext.extractionDirectory = "$buildDir/extracted"
 ext.extractionDirectoryResult = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
 
@@ -72,7 +73,7 @@ task prepareRtiPackageHost {
 task prepareRtiPackageHostPrePatch {
   dependsOn prepareRtiPackageHost
 
-  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch - 1}-pro-host-${rtiPlatform}.rtipkg"
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersionPrepatch.major}.${parsedVersionPrepatch.minor}.${parsedVersionPrepatch.micro}.${parsedVersionPrepatch.patch}-pro-host-${rtiPlatform}.rtipkg"
   outputs.file new File("$buildDir/$name")
 
   doLast {
@@ -81,7 +82,7 @@ task prepareRtiPackageHostPrePatch {
     def processObject
 
     // install host patch
-    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch - 1}-pro-host-${rtiPlatform}.rtipkg"
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersionPrepatch.major}.${parsedVersionPrepatch.minor}.${parsedVersionPrepatch.micro}.${parsedVersionPrepatch.patch}-pro-host-${rtiPlatform}.rtipkg"
     processObject = commandLine.execute()
     processObject.in.eachLine { line -> logger.info(line) }
     processObject.err.eachLine { line -> logger.error(line) }
