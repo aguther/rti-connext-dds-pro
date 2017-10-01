@@ -43,7 +43,7 @@ ospackage {
 
     // add java libraries
     from("$extractionDirectoryResult/lib/java") {
-        exclude "**/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
+        exclude "**/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}*"
         exclude "**/*d.*"
         include "**/distlog*.jar"
         include "**/nddsjava.jar"
@@ -53,7 +53,7 @@ ospackage {
     }
     // add native runtime libraries
     from("$extractionDirectoryResult/lib/${rtiTarget}") {
-        exclude "**/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
+        exclude "**/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}*"
         exclude "**/librtiroutingservice.so"
         exclude "**/librtirs*.so"
         exclude "**/*d.*"
