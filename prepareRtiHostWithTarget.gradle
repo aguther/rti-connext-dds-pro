@@ -25,11 +25,11 @@ task prepareRtiPackageTarget {
   }
 }
 
-task prepareRtiPackageTargetInterPatch {
+task prepareRtiPackageTargetPatch22 {
   dependsOn prepareRtiPackageTarget
-  dependsOn prepareRtiPackageHostPatch
+  dependsOn prepareRtiPackageHostPatch22
 
-  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersionInterPatch.major}.${parsedVersionInterPatch.minor}.${parsedVersionInterPatch.micro}.${parsedVersionInterPatch.patch}-pro-target-${rtiTarget}.rtipkg"
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion22.major}.${parsedVersion22.minor}.${parsedVersion22.micro}.${parsedVersion22.patch}-pro-target-${rtiTarget}.rtipkg"
   outputs.file new File("$buildDir/$name")
 
   doLast {
@@ -38,7 +38,7 @@ task prepareRtiPackageTargetInterPatch {
     def processObject
 
     // install target libraries with RTI installer
-    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersionInterPatch.major}.${parsedVersionInterPatch.minor}.${parsedVersionInterPatch.micro}.${parsedVersionInterPatch.patch}-pro-target-${rtiTarget}.rtipkg"
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersion22.major}.${parsedVersion22.minor}.${parsedVersion22.micro}.${parsedVersion22.patch}-pro-target-${rtiTarget}.rtipkg"
     processObject = commandLine.execute()
     processObject.in.eachLine { line -> logger.info(line) }
     processObject.err.eachLine { line -> logger.error(line) }
@@ -51,9 +51,9 @@ task prepareRtiPackageTargetInterPatch {
   }
 }
 
-task prepareRtiPackageTargetPatch {
-  dependsOn prepareRtiPackageTargetInterPatch
-  dependsOn prepareRtiPackageHostPatch
+task prepareRtiPackageTargetPatch24 {
+  dependsOn prepareRtiPackageTargetPatch22
+  dependsOn prepareRtiPackageHostPatch24
 
   inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-target-${rtiTarget}.rtipkg"
   outputs.file new File("$buildDir/$name")
@@ -79,8 +79,15 @@ task prepareRtiPackageTargetPatch {
 
 task prepareRtiHostWithTarget {
   if (parsedVersion.patch > 0) {
-    dependsOn prepareRtiPackageTargetPatch
-    prepareRtiPackageHostPatch.mustRunAfter prepareRtiPackageTarget
+    dependsOn prepareRtiPackageTargetPatch24
+    // targets must run after host packages
+    prepareRtiPackageTarget.mustRunAfter prepareRtiPackageHost
+    prepareRtiPackageTargetPatch22.mustRunAfter prepareRtiPackageHostPatch22
+    prepareRtiPackageTargetPatch24.mustRunAfter prepareRtiPackageHostPatch24
+    // host patches must run in right order
+    prepareRtiPackageHostPatch16.mustRunAfter prepareRtiPackageTarget
+    prepareRtiPackageHostPatch22.mustRunAfter prepareRtiPackageHostPatch16
+    prepareRtiPackageHostPatch24.mustRunAfter prepareRtiPackageTargetPatch22
   } else {
     dependsOn prepareRtiPackageTarget
   }

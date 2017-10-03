@@ -1,8 +1,8 @@
 import org.apache.tools.ant.taskdefs.condition.Os
 
 ext.parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
-ext.parsedVersionPrepatch = VersionNumber.withPatchNumber().parse(project.versionPrePatch)
-ext.parsedVersionInterPatch = VersionNumber.withPatchNumber().parse(project.versionInterPatch)
+ext.parsedVersion16 = VersionNumber.withPatchNumber().parse("5.2.3.16")
+ext.parsedVersion22 = VersionNumber.withPatchNumber().parse("5.2.3.22")
 ext.extractionDirectory = "$buildDir/extracted"
 ext.extractionDirectoryResult = "$extractionDirectory/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}"
 
@@ -71,10 +71,10 @@ task prepareRtiPackageHost {
   }
 }
 
-task prepareRtiPackageHostPrePatch {
+task prepareRtiPackageHostPatch16 {
   dependsOn prepareRtiPackageHost
 
-  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersionPrepatch.major}.${parsedVersionPrepatch.minor}.${parsedVersionPrepatch.micro}.${parsedVersionPrepatch.patch}-pro-host-${rtiPlatform}.rtipkg"
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion16.major}.${parsedVersion16.minor}.${parsedVersion16.micro}.${parsedVersion16.patch}-pro-host-${rtiPlatform}.rtipkg"
   outputs.file new File("$buildDir/$name")
 
   doLast {
@@ -83,7 +83,7 @@ task prepareRtiPackageHostPrePatch {
     def processObject
 
     // install host patch
-    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersionPrepatch.major}.${parsedVersionPrepatch.minor}.${parsedVersionPrepatch.micro}.${parsedVersionPrepatch.patch}-pro-host-${rtiPlatform}.rtipkg"
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersion16.major}.${parsedVersion16.minor}.${parsedVersion16.micro}.${parsedVersion16.patch}-pro-host-${rtiPlatform}.rtipkg"
     processObject = commandLine.execute()
     processObject.in.eachLine { line -> logger.info(line) }
     processObject.err.eachLine { line -> logger.error(line) }
@@ -96,10 +96,10 @@ task prepareRtiPackageHostPrePatch {
   }
 }
 
-task prepareRtiPackageHostInterPatch {
-  dependsOn prepareRtiPackageHostPrePatch
+task prepareRtiPackageHostPatch22 {
+  dependsOn prepareRtiPackageHostPatch16
 
-  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersionInterPatch.major}.${parsedVersionInterPatch.minor}.${parsedVersionInterPatch.micro}.${parsedVersionInterPatch.patch}-pro-host-${rtiPlatform}.rtipkg"
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion22.major}.${parsedVersion22.minor}.${parsedVersion22.micro}.${parsedVersion22.patch}-pro-host-${rtiPlatform}.rtipkg"
   outputs.file new File("$buildDir/$name")
 
   doLast {
@@ -108,7 +108,7 @@ task prepareRtiPackageHostInterPatch {
     def processObject
 
     // install host patch
-    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersionInterPatch.major}.${parsedVersionInterPatch.minor}.${parsedVersionInterPatch.micro}.${parsedVersionInterPatch.patch}-pro-host-${rtiPlatform}.rtipkg"
+    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_connext_dds-${parsedVersion22.major}.${parsedVersion22.minor}.${parsedVersion22.micro}.${parsedVersion22.patch}-pro-host-${rtiPlatform}.rtipkg"
     processObject = commandLine.execute()
     processObject.in.eachLine { line -> logger.info(line) }
     processObject.err.eachLine { line -> logger.error(line) }
@@ -121,8 +121,8 @@ task prepareRtiPackageHostInterPatch {
   }
 }
 
-task prepareRtiPackageHostPatch {
-  dependsOn prepareRtiPackageHostInterPatch
+task prepareRtiPackageHostPatch24 {
+  dependsOn prepareRtiPackageHostPatch22
 
   inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}.${parsedVersion.patch}-pro-host-${rtiPlatform}.rtipkg"
   outputs.file new File("$buildDir/$name")
@@ -148,7 +148,7 @@ task prepareRtiPackageHostPatch {
 
 task prepareRtiHost {
   if (parsedVersion.patch > 0) {
-    dependsOn prepareRtiPackageHostPatch
+    dependsOn prepareRtiPackageHostPatch24
   } else {
     dependsOn prepareRtiPackageHost
   }
