@@ -22,7 +22,7 @@ ospackage {
     // requires to base packages
     requires("chkconfig")
 
-    // we provide the replay service
+    // we provide the tools
     provides("rti-connext-dds-tools", "${project.version}", EQUAL)
 
     // conflicts with SDK
@@ -31,7 +31,7 @@ ospackage {
     // update old major versions
     obsoletes("rti-connext-dds-52-tools")
 
-    // add routing service
+    // add tools
     from("$extractionDirectoryResult") {
         include "bin/rtiddsping"
         include "bin/rtiddsspy"

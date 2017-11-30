@@ -36,6 +36,7 @@ ospackage {
     // update old major versions
     obsoletes("rti-connext-dds-52-persistence-service")
 
+    // add persistence service
     from("$extractionDirectoryResult") {
         include "bin/rtipersistenceservice"
         include "bin/rtipssh"

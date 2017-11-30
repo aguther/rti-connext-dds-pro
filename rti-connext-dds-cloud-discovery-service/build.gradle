@@ -22,13 +22,13 @@ ospackage {
     // requires to base packages
     requires("chkconfig")
 
-    // we provide the recording service
+    // we provide the cloud discovery service
     provides("rti-connext-dds-cloud-discovery-service", "${project.version}", EQUAL)
 
     // conflicts with SDK
     conflicts("rti-connext-dds-sdk-pro")
 
-    // add routing service
+    // add cloud discovery service
     from("$extractionDirectoryResult") {
         include "bin/rticlouddiscoveryservice"
         include "doc/manuals/cloud_discovery_service/*"
