@@ -51,7 +51,6 @@ ospackage {
         include "**/distlog*.jar"
         include "**/nddsjava.jar"
         include "**/rticonnextmsg.jar"
-        include "**/rtijms.jar"
         into "java"
     }
     // add native runtime libraries
