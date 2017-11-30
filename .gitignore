@@ -17,5 +17,5 @@ gradle-app.setting
 .gradletasknamecache
 
 # Ignore packages directory
-packages/
-rpms/
+packages
+rpms
