@@ -56,8 +56,8 @@ ospackage {
     // add native runtime libraries
     from("$extractionDirectoryResult/lib/${rtiTarget}") {
         exclude "**/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}*"
+        exclude "**/librti*routing*.so"
         exclude "**/librtirs*.so"
-        exclude "**/librtiroutingservice.so"
         exclude "**/*d.*"
         include "**/*.so"
         into "lib"
