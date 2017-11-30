@@ -53,7 +53,7 @@ task prepareRtiPackageTargetPatch {
 
 task prepareRtiHostWithTarget {
   if (parsedVersion.patch > 0) {
-    dependsOn prepareRtiPackageTargetPatch, prepareRtiDatabaseIntegrationServicePatch, prepareRtiWebIntegrationServicePatch
+    dependsOn prepareRtiPackageTargetPatch, prepareRtiDatabaseIntegrationService, prepareRtiWebIntegrationService
     prepareRtiPackageHostPatch.mustRunAfter prepareRtiPackageTarget
   } else {
     dependsOn prepareRtiPackageTarget, prepareRtiDatabaseIntegrationService, prepareRtiWebIntegrationService
