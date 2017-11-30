@@ -46,8 +46,10 @@ ospackage {
         include "resource/app/lib/*/libndds*.so"
         include "resource/app/lib/*/librticonnextmsgc.so"
         include "resource/app/lib/*/librtidlc.so"
-        include "resource/app/lib/*/librtirouting*.so"
-        include "resource/app/lib/*/librtirs*.so"
+        include "resource/app/lib/*/librtijniroutingservice.so"
+        include "resource/app/lib/*/librtiroutingservice.so"
+        include "resource/app/lib/*/librtirsassigntransf.so"
+        include "resource/app/lib/*/librtirsinfrastructure.so"
         include "lib/*/rtirsadapter.jar"
         include "lib/*/rtiroutingservice.jar"
         include "resource/schema/rti_routing_service.*"
@@ -85,6 +87,7 @@ buildRpm {
     link("$applicationLinkPath/rtirssh",                "$applicationLauncherPath")
     link("$javaLinkPath/rtirsadapter.jar",              "$javaInstallPath/rtirsadapter.jar")
     link("$javaLinkPath/rtiroutingservice.jar",         "$javaInstallPath/rtiroutingservice.jar")
+    link("$libraryLinkPath/librtijniroutingservice.so", "$libraryInstallPath/librtijniroutingservice.so")
     link("$libraryLinkPath/librtiroutingservice.so",    "$libraryInstallPath/librtiroutingservice.so")
     link("$libraryLinkPath/librtirsassigntransf.so",    "$libraryInstallPath/librtirsassigntransf.so")
     link("$libraryLinkPath/librtirsinfrastructure.so",  "$libraryInstallPath/librtirsinfrastructure.so")

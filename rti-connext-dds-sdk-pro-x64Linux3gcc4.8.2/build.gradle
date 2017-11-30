@@ -148,16 +148,18 @@ buildRpm {
     link("$applicationLinkPath/rtirecsh",   "$applicationLauncherPath")
 
     // routing service
-    link("$applicationLinkPath/rtiroutingservice",      "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirssh",                "$applicationLauncherPath")
-    link("$javaLinkPath/rtirsadapter.jar",              "$javaInstallPath/rtirsadapter.jar")
-    link("$javaLinkPath/rtiroutingservice.jar",         "$javaInstallPath/rtiroutingservice.jar")
-    link("$libraryLinkPath/librtiroutingservice.so",    "$libraryInstallPath/librtiroutingservice.so")
-    link("$libraryLinkPath/librtiroutingserviced.so",   "$libraryInstallPath/librtiroutingserviced.so")
-    link("$libraryLinkPath/librtirsassigntransf.so",    "$libraryInstallPath/librtirsassigntransf.so")
-    link("$libraryLinkPath/librtirsinfrastructure.so",  "$libraryInstallPath/librtirsinfrastructure.so")
-    link("$libraryLinkPath/librtirsinfrastructured.so", "$libraryInstallPath/librtirsinfrastructured.so")
-    link("$libraryLinkPath/librtirsjniadapter.so",      "$libraryInstallPath/librtirsjniadapter.so")
+    link("$applicationLinkPath/rtiroutingservice",       "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirssh",                 "$applicationLauncherPath")
+    link("$javaLinkPath/rtirsadapter.jar",               "$javaInstallPath/rtirsadapter.jar")
+    link("$javaLinkPath/rtiroutingservice.jar",          "$javaInstallPath/rtiroutingservice.jar")
+    link("$libraryLinkPath/librtijniroutingservice.so",  "$libraryInstallPath/librtijniroutingservice.so")
+    link("$libraryLinkPath/librtijniroutingserviced.so", "$libraryInstallPath/librtijniroutingserviced.so")
+    link("$libraryLinkPath/librtiroutingservice.so",     "$libraryInstallPath/librtiroutingservice.so")
+    link("$libraryLinkPath/librtiroutingserviced.so",    "$libraryInstallPath/librtiroutingserviced.so")
+    link("$libraryLinkPath/librtirsassigntransf.so",     "$libraryInstallPath/librtirsassigntransf.so")
+    link("$libraryLinkPath/librtirsinfrastructure.so",   "$libraryInstallPath/librtirsinfrastructure.so")
+    link("$libraryLinkPath/librtirsinfrastructured.so",  "$libraryInstallPath/librtirsinfrastructured.so")
+    link("$libraryLinkPath/librtirsjniadapter.so",       "$libraryInstallPath/librtirsjniadapter.so")
 
     // persistence service
     link("$applicationLinkPath/rtipersistenceservice", "$applicationLauncherPath")
