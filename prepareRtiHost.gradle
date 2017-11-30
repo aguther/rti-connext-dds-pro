@@ -1,3 +1,4 @@
+import org.gradle.util.VersionNumber
 import org.apache.tools.ant.taskdefs.condition.Os
 
 ext.parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
