@@ -25,9 +25,11 @@ ospackage {
 }
 
 buildRpm {
-    // check if license fail exists and fail build if not found
-    if(!project.file("../packages/rti_license.dat").exists()){
-        throw new GradleException("License file not found!") 
+    doLast {
+        // check if license fail exists and fail build if not found
+        if (!project.file("../packages/rti_license.dat").exists()) {
+            throw new GradleException("License file not found!")
+        }
     }
 }
 
