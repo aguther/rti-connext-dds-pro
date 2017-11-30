@@ -3,7 +3,7 @@ apply from: "../prepareRtiHost.gradle"
 task prepareRtiPackageTarget {
   dependsOn prepareRtiPackageHost
 
-  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}-pro-target-${rtiTarget}.rtipkg"
+  inputs.file "$projectDir/../packages/rti_connext_dds-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-pro-target-${rtiTarget}.rtipkg"
   outputs.file new File("$buildDir/$name")
 
   doLast {
