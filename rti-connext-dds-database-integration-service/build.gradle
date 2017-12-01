@@ -18,7 +18,7 @@ ospackage {
     requires("libnsl.so.1()(64bit)")
     requires("libpthread.so.0()(64bit)")
     requires("librt.so.1()(64bit)")
-//    requires("libodbc.so.1()(64bit)")
+    //requires("libodbc.so.1()(64bit)")
 
     // requires to base packages
     requires("chkconfig")
