@@ -76,7 +76,7 @@ ospackage {
 }
 
 buildRpm {
-    dependsOn prepareRtiHost
+    dependsOn prepareRtiHostWithTarget
 
     // define local installation path for links
     def applicationLinkPath        = "/usr/bin"
