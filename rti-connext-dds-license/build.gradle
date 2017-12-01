@@ -7,11 +7,6 @@ ospackage {
 
     packageGroup = "Development/Tools"
 
-    arch = X86_64
-    os = LINUX
-
-    user = "root"
-
     provides("rti-connext-dds-license", "${project.version}", EQUAL)
 
     obsoletes("rti-connext-dds-52-license")

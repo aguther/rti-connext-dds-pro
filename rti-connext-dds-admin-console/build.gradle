@@ -13,11 +13,6 @@ ospackage {
 
     packageGroup = "Development/Tools"
 
-    arch = X86_64
-    os = LINUX
-
-    user = "root"
-
     into "$targetDirectory"
 
     // runtime dependencies
