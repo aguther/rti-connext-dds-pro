@@ -1,4 +1,4 @@
-apply from: "../prepareRtiHost.gradle"
+apply from: "../prepareRtiHostWithTarget.gradle"
 
 // --------------------------------------------------------------------------------------------------------------------
 def targetDirectory = "/opt/rti/connext-dds/routing-service"
@@ -50,6 +50,10 @@ ospackage {
         include "resource/app/lib/*/librtiroutingservice.so"
         include "resource/app/lib/*/librtirsassigntransf.so"
         include "resource/app/lib/*/librtirsinfrastructure.so"
+        include "lib/*/librtijniroutingservice.so"
+        include "lib/*/librtiroutingservice.so"
+        include "lib/*/librtirsassigntransf.so"
+        include "lib/*/librtirsinfrastructure.so"
         include "lib/*/rtirsadapter.jar"
         include "lib/*/rtiroutingservice.jar"
         include "resource/schema/rti_routing_service.*"
@@ -80,7 +84,7 @@ buildRpm {
     def javaLinkPath               = "/usr/lib/java"
     def javaInstallPath            = "$targetDirectory/lib/java"
     def libraryLinkPath            = "/usr/lib64"
-    def libraryInstallPath         = "$targetDirectory/resource/app/lib/x64Linux2.6gcc4.1.1"
+    def libraryInstallPath         = "$targetDirectory/lib/x64Linux2.6gcc4.4.5"
 
     // routing service
     link("$applicationLinkPath/rtiroutingservice",      "$applicationLauncherPath")
