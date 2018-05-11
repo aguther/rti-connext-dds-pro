@@ -106,6 +106,7 @@ buildRpm {
     def javaInstallPath            = "$targetDirectory/lib/java"
     def libraryLinkPath            = "/usr/lib64"
     def libraryInstallPath         = "$targetDirectory/lib/${rtiTarget}"
+    def includeLinkPath            = "/usr/include"
 
     // create link to license file
     link("$targetDirectory/rti_license.dat", "/opt/rti/connext-dds/license/rti_license.dat")
@@ -239,6 +240,43 @@ buildRpm {
     link("$libraryLinkPath/librtimonitoring.so",      "$libraryInstallPath/librtimonitoring.so")
     link("$libraryLinkPath/librtimonitoringz.a",      "$libraryInstallPath/librtimonitoringz.a")
     link("$libraryLinkPath/librtimonitoringzd.a",     "$libraryInstallPath/librtimonitoringzd.a")
+
+    // includes
+    link("$includeLinkPath/ndds",                     "$targetDirectory/include/ndds")
+    link("$includeLinkPath/persistence",              "$targetDirectory/include/persistence")
+    link("$includeLinkPath/recordingservice",         "$targetDirectory/include/recordingservice")
+    link("$includeLinkPath/routingservice",           "$targetDirectory/include/routingservice")
+    link("$includeLinkPath/rti_dl",                   "$targetDirectory/include/rti_dl")
+    link("$includeLinkPath/advlog",                   "$targetDirectory/include/ndds/advlog")
+    link("$includeLinkPath/cdr",                      "$targetDirectory/include/ndds/cdr")
+    link("$includeLinkPath/clock",                    "$targetDirectory/include/ndds/clock")
+    link("$includeLinkPath/commend",                  "$targetDirectory/include/ndds/commend")
+    link("$includeLinkPath/connext_c",                "$targetDirectory/include/ndds/connext_c")
+    link("$includeLinkPath/connext_cpp",              "$targetDirectory/include/ndds/connext_cpp")
+    link("$includeLinkPath/core_version",             "$targetDirectory/include/ndds/core_version")
+    link("$includeLinkPath/dds_c",                    "$targetDirectory/include/ndds/dds_c")
+    link("$includeLinkPath/dds_cpp",                  "$targetDirectory/include/ndds/dds_cpp")
+    link("$includeLinkPath/disc",                     "$targetDirectory/include/ndds/disc")
+    link("$includeLinkPath/dl_driver",                "$targetDirectory/include/ndds/dl_driver")
+    link("$includeLinkPath/event",                    "$targetDirectory/include/ndds/event")
+    link("$includeLinkPath/hpp",                      "$targetDirectory/include/ndds/hpp")
+    link("$includeLinkPath/log",                      "$targetDirectory/include/ndds/log")
+    link("$includeLinkPath/mig",                      "$targetDirectory/include/ndds/mig")
+    link("$includeLinkPath/monitor",                  "$targetDirectory/include/ndds/monitor")
+    link("$includeLinkPath/netio",                    "$targetDirectory/include/ndds/netio")
+    link("$includeLinkPath/osapi",                    "$targetDirectory/include/ndds/osapi")
+    link("$includeLinkPath/pres",                     "$targetDirectory/include/ndds/pres")
+    link("$includeLinkPath/reda",                     "$targetDirectory/include/ndds/reda")
+    link("$includeLinkPath/rtitls",                   "$targetDirectory/include/ndds/rtitls")
+    link("$includeLinkPath/rtixml",                   "$targetDirectory/include/ndds/rtixml")
+    link("$includeLinkPath/transport",                "$targetDirectory/include/ndds/transport")
+    link("$includeLinkPath/transport_tcp",            "$targetDirectory/include/ndds/transport_tcp")
+    link("$includeLinkPath/transport_tls",            "$targetDirectory/include/ndds/transport_tls")
+    link("$includeLinkPath/transport_wan",            "$targetDirectory/include/ndds/transport_wan")
+    link("$includeLinkPath/writer_history",           "$targetDirectory/include/ndds/writer_history")
+    link("$includeLinkPath/dds",                      "$targetDirectory/include/ndds/hpp/dds")
+    link("$includeLinkPath/rti",                      "$targetDirectory/include/ndds/hpp/rti")
+    link("$includeLinkPath/rtiboost",                 "$targetDirectory/include/ndds/hpp/rtiboost")
 
     // this will be called after install phase
     postInstall """
