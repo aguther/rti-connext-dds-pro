@@ -20,9 +20,6 @@ ospackage {
     requires("librt.so.1()(64bit)")
     requires("libstdc++.so.6()(64bit)")
 
-    // requires to base packages
-    requires("chkconfig")
-
     // monitor requires a license to work
     requires("rti-connext-dds-license")
 

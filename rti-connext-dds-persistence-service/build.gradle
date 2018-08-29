@@ -19,9 +19,6 @@ ospackage {
     requires("libpthread.so.0()(64bit)")
     requires("librt.so.1()(64bit)")
 
-    // requires to base packages
-    requires("chkconfig")
-
     // we provide the persistence service
     provides("rti-connext-dds-persistence-service", "${project.version}", EQUAL)
 

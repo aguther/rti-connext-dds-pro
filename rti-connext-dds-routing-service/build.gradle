@@ -21,7 +21,6 @@ ospackage {
     requires("librt.so.1()(64bit)")
 
     // requires to base packages
-    requires("chkconfig")
     requires("jpackage-utils")
 
     // requires runtime

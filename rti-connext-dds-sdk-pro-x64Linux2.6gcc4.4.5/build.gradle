@@ -23,7 +23,6 @@ ospackage {
     requires("libstdc++.so.6()(64bit)")
 
     // requires to base packages
-    requires("chkconfig")
     requires("jpackage-utils")
 
     // we need a license to work

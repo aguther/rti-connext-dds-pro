@@ -20,9 +20,6 @@ ospackage {
     requires("librt.so.1()(64bit)")
     //requires("libodbc.so.1()(64bit)")
 
-    // requires to base packages
-    requires("chkconfig")
-
     // we provide the database integration service
     provides("rti-connext-dds-database-integration-service", "${project.version}", EQUAL)
 
