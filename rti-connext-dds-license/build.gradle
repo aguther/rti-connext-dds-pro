@@ -1,3 +1,5 @@
+import org.gradle.util.VersionNumber
+
 def parsedVersion = VersionNumber.withPatchNumber().parse(project.version)
 def targetDirectory = "/opt/rti/connext-dds/license"
 
