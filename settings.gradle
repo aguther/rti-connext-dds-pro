@@ -20,11 +20,8 @@ project(":rti-connext-dds-monitor").name = "rti-connext-dds-${parsedVersion.majo
 include 'rti-connext-dds-persistence-service'
 project(":rti-connext-dds-persistence-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-persistence-service"
 
-include 'rti-connext-dds-recording-service'
-project(":rti-connext-dds-recording-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-recording-service"
-
-include 'rti-connext-dds-replay-service'
-project(":rti-connext-dds-replay-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-replay-service"
+include 'rti-connext-dds-recording-replay-service'
+project(":rti-connext-dds-recording-replay-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-recording-replay-service"
 
 include 'rti-connext-dds-routing-service'
 project(":rti-connext-dds-routing-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-routing-service"

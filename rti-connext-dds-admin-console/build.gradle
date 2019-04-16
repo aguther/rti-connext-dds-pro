@@ -35,6 +35,7 @@ ospackage {
 
     // update old major versions
     obsoletes("rti-connext-dds-52-admin-console")
+    obsoletes("rti-connext-dds-53-admin-console")
 
     // add admin console
     from("$extractionDirectoryResult") {
@@ -45,7 +46,7 @@ ospackage {
         include "resource/app/app_support/launcher/icons/Admin90.gif"
         include "resource/app/app_support/launcher/icons/AdminConsole2_32x32.png"
         include "resource/app/app_support/launcher/icons/AdminConsole2_90.png"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/RTI_AdminConsole"
+        include "resource/app/bin/x64Linux2.6gcc4.4.5/RTI_AdminConsole"
         include "resource/app/eclipse/**"
         include "resource/app/jre/**"
         include "resource/app/lib/**"

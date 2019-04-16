@@ -34,30 +34,18 @@ ospackage {
 
     // update old major versions
     obsoletes("rti-connext-dds-52-routing-service")
+    obsoletes("rti-connext-dds-53-routing-service")
 
     // add routing service
     from("$extractionDirectoryResult") {
         include "bin/rtiroutingservice"
         include "bin/rtirssh"
         include "doc/manuals/routing_service/*"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtiroutingservice"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtirssh"
-        include "resource/app/lib/*/libndds*.so"
-        include "resource/app/lib/*/librticonnextmsgc.so"
-        include "resource/app/lib/*/librtidlc.so"
-        include "resource/app/lib/*/librtijniroutingservice.so"
-        include "resource/app/lib/*/librtiroutingservice.so"
-        include "resource/app/lib/*/librtirsassigntransf.so"
-        include "resource/app/lib/*/librtirsinfrastructure.so"
-        include "resource/app/lib/*/librtirsjniadapter.so"
-        include "lib/*/librtijniroutingservice.so"
-        include "lib/*/librtiroutingservice.so"
-        include "lib/*/librtirsassigntransf.so"
-        include "lib/*/librtirsinfrastructure.so"
-        include "lib/*/librtirsjniadapter.so"
-        include "lib/*/rtirsadapter.jar"
-        include "lib/*/rtiroutingservice.jar"
-        include "resource/schema/rti_routing_service.*"
+        include "resource/app/bin/x64Linux2.6gcc4.4.5/rtiroutingservice"
+        include "resource/app/bin/x64Linux2.6gcc4.4.5/rtirssh"
+        include "resource/app/lib/**"
+        include "resource/schema/rti_routing_service*"
+        include "resource/schema/definitions/rti_service_common_definitions.xsd"
         include "resource/scripts/*"
         exclude "resource/scripts/rticommon_config.sh"
         include "resource/xml/RTI_ROUTING_SERVICE.xml"
@@ -82,32 +70,10 @@ buildRpm {
     // define local installation path for links
     def applicationLinkPath        = "/usr/bin"
     def applicationLauncherPath    = "$targetDirectory/launcher"
-    def javaLinkPath               = "/usr/lib/java"
-    def javaInstallPath            = "$targetDirectory/lib/java"
-    def libraryLinkPath            = "/usr/lib64"
-    def libraryInstallPath         = "$targetDirectory/lib/x64Linux2.6gcc4.4.5"
 
     // routing service
     link("$applicationLinkPath/rtiroutingservice",      "$applicationLauncherPath")
     link("$applicationLinkPath/rtirssh",                "$applicationLauncherPath")
-    link("$javaLinkPath/rtirsadapter.jar",              "$javaInstallPath/rtirsadapter.jar")
-    link("$javaLinkPath/rtiroutingservice.jar",         "$javaInstallPath/rtiroutingservice.jar")
-    link("$libraryLinkPath/librtijniroutingservice.so", "$libraryInstallPath/librtijniroutingservice.so")
-    link("$libraryLinkPath/librtiroutingservice.so",    "$libraryInstallPath/librtiroutingservice.so")
-    link("$libraryLinkPath/librtirsassigntransf.so",    "$libraryInstallPath/librtirsassigntransf.so")
-    link("$libraryLinkPath/librtirsinfrastructure.so",  "$libraryInstallPath/librtirsinfrastructure.so")
-    link("$libraryLinkPath/librtirsjniadapter.so",      "$libraryInstallPath/librtirsjniadapter.so")
-
-    // this will be called after installation phase
-    postInstall """
-        # update ld configuration
-        ldconfig
-    """
-
-    postUninstall """
-        # update ld configuration
-        ldconfig
-    """
 }
 
 // --------------------------------------------------------------------------------------------------------------------

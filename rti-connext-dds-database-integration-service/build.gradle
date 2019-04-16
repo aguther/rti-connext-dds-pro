@@ -18,7 +18,7 @@ ospackage {
     requires("libnsl.so.1()(64bit)")
     requires("libpthread.so.0()(64bit)")
     requires("librt.so.1()(64bit)")
-    //requires("libodbc.so.1()(64bit)")
+    requires("libodbc.so.2()(64bit)")
 
     // we provide the database integration service
     provides("rti-connext-dds-database-integration-service", "${project.version}", EQUAL)
@@ -29,17 +29,14 @@ ospackage {
     // add database integration service
     from("$extractionDirectoryResult") {
         include "bin/rtirtc_mysql"
-        include "bin/rtirtc_oracle"
         include "bin/rtirtc_postgresql"
-        include "bin/rtirtc_timesten"
         include "doc/manuals/database_integration_service/*"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtirtc_mysql"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtirtc_oracle"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtirtc_postgresql"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtirtc_timesten"
-        include "resource/app/lib/*/libndds*.so"
-        include "resource/app/lib/*/librti*.so"
+        include "resource/app/bin/x64Linux2.6gcc4.4.5/rtirtc_mysql"
+        include "resource/app/bin/x64Linux2.6gcc4.4.5/rtirtc_postgresql"
+        include "resource/app/lib/**"
         include "resource/schema/rti_real_time_connect.*"
+        include "resource/schema/definitions/rti_dds_profiles_definitions.xsd"
+        include "resource/schema/definitions/rti_dist_logger_definitions.xsd"
         include "resource/scripts/*"
         exclude "resource/scripts/rticommon_config.sh"
         include "resource/xml/RTI_REAL_TIME_CONNECT.xml"
@@ -67,9 +64,7 @@ buildRpm {
 
     // database integration service
     link("$applicationLinkPath/rtirtc_mysql",      "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirtc_oracle",     "$applicationLauncherPath")
     link("$applicationLinkPath/rtirtc_postgresql", "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirtc_timesten",   "$applicationLauncherPath")
 }
 
 // --------------------------------------------------------------------------------------------------------------------

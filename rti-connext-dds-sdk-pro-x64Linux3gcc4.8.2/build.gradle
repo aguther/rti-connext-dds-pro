@@ -55,6 +55,7 @@ ospackage {
 
     // update old major versions
     obsoletes("rti-connext-dds-52-sdk-pro-x64Linux3gcc4.8.2")
+    obsoletes("rti-connext-dds-53-sdk-pro-x64Linux3gcc4.8.2")
 
     // add SDK content
     from("$extractionDirectoryResult") {
@@ -91,6 +92,15 @@ ospackage {
         fileMode 0644
         into "src"
     }
+
+    // add environment script file
+    from("src/main/resources/environment") {
+        include "**/rti-connext-dds-sdk-pro.sh"
+        filter { String line ->
+            line.replace("/opt/rti/connext-dds/sdk", "$targetDirectory")
+        }
+        into "/etc/profile.d"
+    }
 }
 
 buildRpm {
@@ -106,6 +116,8 @@ buildRpm {
     def libraryLinkPath            = "/usr/lib64"
     def libraryInstallPath         = "$targetDirectory/lib/${rtiTarget}"
     def includeLinkPath            = "/usr/include"
+    def cmakeLinkPath              = "/usr/share/cmake/Modules"
+    def cmakeInstallPath           = "$targetDirectory/resource/cmake"
 
     // create link to license file
     link("$targetDirectory/rti_license.dat", "/opt/rti/connext-dds/license/rti_license.dat")
@@ -119,7 +131,6 @@ buildRpm {
     link("$applicationLinkPath/rtiddsprototyper",    "$applicationLauncherPath")
     link("$applicationLinkPath/rtilauncher",         "$applicationLauncherPath")
     link("$applicationLinkPath/rtipkginstall",       "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirecordingconsole", "$applicationLauncherPath")
     link("$applicationLinkPath/rtishapesdemo",       "$applicationLauncherPath")
     link("$applicationLinkPath/rtiwanserver",        "$applicationLauncherPath")
 
@@ -134,13 +145,17 @@ buildRpm {
     link("$applicationIconLinkPath/rtimonitor.png",        "$targetDirectory/resource/app/app_support/launcher/icons/Monitor3_90.png")
 
     // replay service
-    link("$applicationLinkPath/rtireplay",   "$applicationLauncherPath")
-    link("$applicationLinkPath/rtireplaysh", "$applicationLauncherPath")
-
+    link("$applicationLinkPath/rtireplayservice", "$applicationLauncherPath")
+ 
     // recording service
-    link("$applicationLinkPath/rtirecord",  "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirecconv", "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirecsh",   "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirecordingservice",            "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirecordingservice_list_tags",  "$applicationLauncherPath")
+    link("$applicationLinkPath/rticonverter",                   "$applicationLauncherPath")
+    link("$applicationLinkPath/rtixmlconverter",                "$applicationLauncherPath")
+    link("$libraryLinkPath/librtirecordingservice.so",          "$libraryInstallPath/librtirecordingservice.so")
+    link("$libraryLinkPath/librtirecordingserviced.so",         "$libraryInstallPath/librtirecordingserviced.so")
+    link("$libraryLinkPath/librtirecordingservicez.a",          "$libraryInstallPath/librtirecordingservicez.a")
+    link("$libraryLinkPath/librtirecordingservicezd.a",         "$libraryInstallPath/librtirecordingservicezd.a")
 
     // routing service
     link("$applicationLinkPath/rtiroutingservice",       "$applicationLauncherPath")
@@ -165,17 +180,15 @@ buildRpm {
     link("$libraryLinkPath/librtirsjniadapter.so",       "$libraryInstallPath/librtirsjniadapter.so")
 
     // persistence service
-    link("$applicationLinkPath/rtipersistenceservice", "$applicationLauncherPath")
-    link("$applicationLinkPath/rtipssh",               "$applicationLauncherPath")
+    link("$applicationLinkPath/rtipersistenceservice",   "$applicationLauncherPath")
+    link("$applicationLinkPath/rtipssh",                 "$applicationLauncherPath")
 
     // cloud discovery service
     link("$applicationLinkPath/rticlouddiscoveryservice", "$applicationLauncherPath")
 
     // database integration service
     link("$applicationLinkPath/rtirtc_mysql",      "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirtc_oracle",     "$applicationLauncherPath")
     link("$applicationLinkPath/rtirtc_postgresql", "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirtc_timesten",   "$applicationLauncherPath")
 
     // web integration service
     link("$applicationLinkPath/rtiwebintegrationservice", "$applicationLauncherPath")
@@ -193,89 +206,74 @@ buildRpm {
     link("$javaLinkPath/nddsjava.jar",                "$javaInstallPath/nddsjava.jar")
     link("$javaLinkPath/rticonnextmsgd.jar",          "$javaInstallPath/rticonnextmsgd.jar")
     link("$javaLinkPath/rticonnextmsg.jar",           "$javaInstallPath/rticonnextmsg.jar")
+    link("$libraryLinkPath/liblua.so",                "$libraryInstallPath/liblua.so")
+    link("$libraryLinkPath/libnddsc.so",              "$libraryInstallPath/libnddsc.so")
     link("$libraryLinkPath/libnddscd.so",             "$libraryInstallPath/libnddscd.so")
-    link("$libraryLinkPath/libnddscored.so",          "$libraryInstallPath/libnddscored.so")
     link("$libraryLinkPath/libnddscore.so",           "$libraryInstallPath/libnddscore.so")
+    link("$libraryLinkPath/libnddscored.so",          "$libraryInstallPath/libnddscored.so")
     link("$libraryLinkPath/libnddscorez.a",           "$libraryInstallPath/libnddscorez.a")
     link("$libraryLinkPath/libnddscorezd.a",          "$libraryInstallPath/libnddscorezd.a")
-    link("$libraryLinkPath/libnddscpp2d.so",          "$libraryInstallPath/libnddscpp2d.so")
+    link("$libraryLinkPath/libnddscpp.so",            "$libraryInstallPath/libnddscpp.so")
     link("$libraryLinkPath/libnddscpp2.so",           "$libraryInstallPath/libnddscpp2.so")
+    link("$libraryLinkPath/libnddscpp2d.so",          "$libraryInstallPath/libnddscpp2d.so")
     link("$libraryLinkPath/libnddscpp2z.a",           "$libraryInstallPath/libnddscpp2z.a")
     link("$libraryLinkPath/libnddscpp2zd.a",          "$libraryInstallPath/libnddscpp2zd.a")
     link("$libraryLinkPath/libnddscppd.so",           "$libraryInstallPath/libnddscppd.so")
-    link("$libraryLinkPath/libnddscpp.so",            "$libraryInstallPath/libnddscpp.so")
     link("$libraryLinkPath/libnddscppz.a",            "$libraryInstallPath/libnddscppz.a")
     link("$libraryLinkPath/libnddscppzd.a",           "$libraryInstallPath/libnddscppzd.a")
-    link("$libraryLinkPath/libnddsc.so",              "$libraryInstallPath/libnddsc.so")
     link("$libraryLinkPath/libnddscz.a",              "$libraryInstallPath/libnddscz.a")
     link("$libraryLinkPath/libnddsczd.a",             "$libraryInstallPath/libnddsczd.a")
-    link("$libraryLinkPath/libnddsjavad.so",          "$libraryInstallPath/libnddsjavad.so")
     link("$libraryLinkPath/libnddsjava.so",           "$libraryInstallPath/libnddsjava.so")
-    link("$libraryLinkPath/libnddstransporttcpd.so",  "$libraryInstallPath/libnddstransporttcpd.so")
+    link("$libraryLinkPath/libnddsjavad.so",          "$libraryInstallPath/libnddsjavad.so")
+    link("$libraryLinkPath/libnddsmetp.so",           "$libraryInstallPath/libnddsmetp.so")
+    link("$libraryLinkPath/libnddsmetpd.so",          "$libraryInstallPath/libnddsmetpd.so")
+    link("$libraryLinkPath/libnddsmetpz.a",           "$libraryInstallPath/libnddsmetpz.a")
+    link("$libraryLinkPath/libnddsmetpzd.a",          "$libraryInstallPath/libnddsmetpzd.a")
     link("$libraryLinkPath/libnddstransporttcp.so",   "$libraryInstallPath/libnddstransporttcp.so")
+    link("$libraryLinkPath/libnddstransporttcpd.so",  "$libraryInstallPath/libnddstransporttcpd.so")
     link("$libraryLinkPath/libnddstransporttcpz.a",   "$libraryInstallPath/libnddstransporttcpz.a")
     link("$libraryLinkPath/libnddstransporttcpzd.a",  "$libraryInstallPath/libnddstransporttcpzd.a")
+    link("$libraryLinkPath/librticonnextmsgc.so",     "$libraryInstallPath/librticonnextmsgc.so")
     link("$libraryLinkPath/librticonnextmsgcd.so",    "$libraryInstallPath/librticonnextmsgcd.so")
-    link("$libraryLinkPath/librticonnextmsgcpp2d.so", "$libraryInstallPath/librticonnextmsgcpp2d.so")
+    link("$libraryLinkPath/librticonnextmsgcpp.so",   "$libraryInstallPath/librticonnextmsgcpp.so")
     link("$libraryLinkPath/librticonnextmsgcpp2.so",  "$libraryInstallPath/librticonnextmsgcpp2.so")
+    link("$libraryLinkPath/librticonnextmsgcpp2d.so", "$libraryInstallPath/librticonnextmsgcpp2d.so")
     link("$libraryLinkPath/librticonnextmsgcpp2z.a",  "$libraryInstallPath/librticonnextmsgcpp2z.a")
     link("$libraryLinkPath/librticonnextmsgcpp2zd.a", "$libraryInstallPath/librticonnextmsgcpp2zd.a")
     link("$libraryLinkPath/librticonnextmsgcppd.so",  "$libraryInstallPath/librticonnextmsgcppd.so")
-    link("$libraryLinkPath/librticonnextmsgcpp.so",   "$libraryInstallPath/librticonnextmsgcpp.so")
     link("$libraryLinkPath/librticonnextmsgcppz.a",   "$libraryInstallPath/librticonnextmsgcppz.a")
     link("$libraryLinkPath/librticonnextmsgcppzd.a",  "$libraryInstallPath/librticonnextmsgcppzd.a")
-    link("$libraryLinkPath/librticonnextmsgc.so",     "$libraryInstallPath/librticonnextmsgc.so")
     link("$libraryLinkPath/librticonnextmsgcz.a",     "$libraryInstallPath/librticonnextmsgcz.a")
     link("$libraryLinkPath/librticonnextmsgczd.a",    "$libraryInstallPath/librticonnextmsgczd.a")
+    link("$libraryLinkPath/librtiddsconnectorlua.so", "$libraryInstallPath/librtiddsconnectorlua.so")
+    link("$libraryLinkPath/librtidlc.so",             "$libraryInstallPath/librtidlc.so")
     link("$libraryLinkPath/librtidlcd.so",            "$libraryInstallPath/librtidlcd.so")
-    link("$libraryLinkPath/librtidlcppd.so",          "$libraryInstallPath/librtidlcppd.so")
     link("$libraryLinkPath/librtidlcpp.so",           "$libraryInstallPath/librtidlcpp.so")
+    link("$libraryLinkPath/librtidlcppd.so",          "$libraryInstallPath/librtidlcppd.so")
     link("$libraryLinkPath/librtidlcppz.a",           "$libraryInstallPath/librtidlcppz.a")
     link("$libraryLinkPath/librtidlcppzd.a",          "$libraryInstallPath/librtidlcppzd.a")
-    link("$libraryLinkPath/librtidlc.so",             "$libraryInstallPath/librtidlc.so")
     link("$libraryLinkPath/librtidlcz.a",             "$libraryInstallPath/librtidlcz.a")
     link("$libraryLinkPath/librtidlczd.a",            "$libraryInstallPath/librtidlczd.a")
-    link("$libraryLinkPath/librtimonitoringd.so",     "$libraryInstallPath/librtimonitoringd.so")
     link("$libraryLinkPath/librtimonitoring.so",      "$libraryInstallPath/librtimonitoring.so")
+    link("$libraryLinkPath/librtimonitoringd.so",     "$libraryInstallPath/librtimonitoringd.so")
     link("$libraryLinkPath/librtimonitoringz.a",      "$libraryInstallPath/librtimonitoringz.a")
     link("$libraryLinkPath/librtimonitoringzd.a",     "$libraryInstallPath/librtimonitoringzd.a")
+    link("$libraryLinkPath/librtixml2.so",            "$libraryInstallPath/librtixml2.so")
+    link("$libraryLinkPath/librtixml2d.so",           "$libraryInstallPath/librtixml2d.so")
+    link("$libraryLinkPath/librtixml2z.a",            "$libraryInstallPath/librtixml2z.a")
+    link("$libraryLinkPath/librtixml2zd.a",           "$libraryInstallPath/librtixml2zd.a")
 
     // includes
     link("$includeLinkPath/ndds",                     "$targetDirectory/include/ndds")
     link("$includeLinkPath/persistence",              "$targetDirectory/include/persistence")
     link("$includeLinkPath/recordingservice",         "$targetDirectory/include/recordingservice")
     link("$includeLinkPath/routingservice",           "$targetDirectory/include/routingservice")
+    link("$includeLinkPath/rti",                      "$targetDirectory/include/rti")
     link("$includeLinkPath/rti_dl",                   "$targetDirectory/include/rti_dl")
-    link("$includeLinkPath/advlog",                   "$targetDirectory/include/ndds/advlog")
-    link("$includeLinkPath/cdr",                      "$targetDirectory/include/ndds/cdr")
-    link("$includeLinkPath/clock",                    "$targetDirectory/include/ndds/clock")
-    link("$includeLinkPath/commend",                  "$targetDirectory/include/ndds/commend")
-    link("$includeLinkPath/connext_c",                "$targetDirectory/include/ndds/connext_c")
-    link("$includeLinkPath/connext_cpp",              "$targetDirectory/include/ndds/connext_cpp")
-    link("$includeLinkPath/core_version",             "$targetDirectory/include/ndds/core_version")
-    link("$includeLinkPath/dds_c",                    "$targetDirectory/include/ndds/dds_c")
-    link("$includeLinkPath/dds_cpp",                  "$targetDirectory/include/ndds/dds_cpp")
-    link("$includeLinkPath/disc",                     "$targetDirectory/include/ndds/disc")
-    link("$includeLinkPath/dl_driver",                "$targetDirectory/include/ndds/dl_driver")
-    link("$includeLinkPath/event",                    "$targetDirectory/include/ndds/event")
-    link("$includeLinkPath/hpp",                      "$targetDirectory/include/ndds/hpp")
-    link("$includeLinkPath/log",                      "$targetDirectory/include/ndds/log")
-    link("$includeLinkPath/mig",                      "$targetDirectory/include/ndds/mig")
-    link("$includeLinkPath/monitor",                  "$targetDirectory/include/ndds/monitor")
-    link("$includeLinkPath/netio",                    "$targetDirectory/include/ndds/netio")
-    link("$includeLinkPath/osapi",                    "$targetDirectory/include/ndds/osapi")
-    link("$includeLinkPath/pres",                     "$targetDirectory/include/ndds/pres")
-    link("$includeLinkPath/reda",                     "$targetDirectory/include/ndds/reda")
-    link("$includeLinkPath/rtitls",                   "$targetDirectory/include/ndds/rtitls")
-    link("$includeLinkPath/rtixml",                   "$targetDirectory/include/ndds/rtixml")
-    link("$includeLinkPath/transport",                "$targetDirectory/include/ndds/transport")
-    link("$includeLinkPath/transport_tcp",            "$targetDirectory/include/ndds/transport_tcp")
-    link("$includeLinkPath/transport_tls",            "$targetDirectory/include/ndds/transport_tls")
-    link("$includeLinkPath/transport_wan",            "$targetDirectory/include/ndds/transport_wan")
-    link("$includeLinkPath/writer_history",           "$targetDirectory/include/ndds/writer_history")
-    link("$includeLinkPath/dds",                      "$targetDirectory/include/ndds/hpp/dds")
-    link("$includeLinkPath/rti",                      "$targetDirectory/include/ndds/hpp/rti")
-    link("$includeLinkPath/rtiboost",                 "$targetDirectory/include/ndds/hpp/rtiboost")
+
+    // cmake
+    link("$cmakeLinkPath/FindRTICodeGenerator.cmake", "$cmakeInstallPath/FindRTICodeGenerator.cmake")
+    link("$cmakeLinkPath/FindRTIConnextDDS.cmake",    "$cmakeInstallPath/FindRTIConnextDDS.cmake")
 
     // this will be called after install phase
     postInstall """

@@ -31,6 +31,7 @@ ospackage {
 
     // update old major versions
     obsoletes("rti-connext-dds-52-monitor")
+    obsoletes("rti-connext-dds-53-monitor")
 
     // add monitor
     from("$extractionDirectoryResult") {
@@ -41,7 +42,6 @@ ospackage {
         include "resource/app/app_support/launcher/icons/Monitor3_32x32.png"
         include "resource/app/app_support/launcher/icons/Monitor3_90.png"
         include "resource/app/app_support/launcher/icons/Monitor90.gif"
-        //include "resource/app/eclipse/**"
         include "resource/app/jre/**"
         include "resource/app/lib/**/distlogdatamodel.jar"
         include "resource/app/lib/**/jcommon*.jar"

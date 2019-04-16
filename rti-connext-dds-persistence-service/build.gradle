@@ -27,15 +27,19 @@ ospackage {
 
     // update old major versions
     obsoletes("rti-connext-dds-52-persistence-service")
+    obsoletes("rti-connext-dds-53-persistence-service")
 
     // add persistence service
     from("$extractionDirectoryResult") {
         include "bin/rtipersistenceservice"
         include "bin/rtipssh"
         include "doc/manuals/persistence_service/*"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtipersistenceservice"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtipssh"
+        include "resource/app/bin/x64Linux2.6gcc4.4.5/rtipersistenceservice"
+        include "resource/app/bin/x64Linux2.6gcc4.4.5/rtipssh"
+        include "resource/app/lib/**"
         include "resource/schema/rti_persistence_service.*"
+        include "resource/schema/definitions/rti_dds_qos_profiles_definitions.xsd"
+        include "resource/schema/definitions/rti_dist_logger_definitions.xsd"
         include "resource/scripts/*"
         exclude "resource/scripts/rticommon_config.sh"
         include "resource/xml/RTI_PERSISTENCE_SERVICE.xml"

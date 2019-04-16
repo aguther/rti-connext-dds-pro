@@ -1,10 +1,10 @@
 apply from: "../prepareRtiHost.gradle"
 
 // --------------------------------------------------------------------------------------------------------------------
-def targetDirectory = "/opt/rti/connext-dds/recording-service"
+def targetDirectory = "/opt/rti/connext-dds/recording-replay-service"
 
 ospackage {
-    summary = "RTI Recording Service"
+    summary = "RTI Recording/Replay Service"
     description = ""
 
     packageGroup = "Applications/Communications"
@@ -21,28 +21,35 @@ ospackage {
 
     // we provide the recording service
     provides("rti-connext-dds-recording-service", "${project.version}", EQUAL)
+    provides("rti-connext-dds-replay-service", "${project.version}", EQUAL)
 
     // conflicts with SDK
     conflicts("rti-connext-dds-sdk-pro")
 
     // update old major versions
     obsoletes("rti-connext-dds-52-recording-service")
+    obsoletes("rti-connext-dds-52-replay-service")
+    obsoletes("rti-connext-dds-53-recording-service")
+    obsoletes("rti-connext-dds-53-replay-service")
 
     // add recording service
     from("$extractionDirectoryResult") {
-        include "bin/rtirecconv"
-        include "bin/rtirecord"
-        include "bin/rtirecsh"
+        include "bin/rticonverter"
+        include "bin/rtirecordingservice_list_tags"
+        include "bin/rtirecordingservice"
+        include "bin/rtireplayservice"
+        include "bin/rtixmlconverter"
         include "doc/manuals/recording_service/*"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtirecconv"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtirecord"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtirecsh"
-        include "resource/app/lib/*/libndds*.so"
-        include "resource/app/lib/*/librtidlc.so"
+        include "resource/app/bin/x64Linux2.6gcc4.4.5/rtirecordingservice"
+        include "resource/app/bin/x64Linux2.6gcc4.4.5/rtireplayservice"
+        include "resource/app/lib/**"
         include "resource/schema/rti_record.*"
+        include "resource/schema/rti_replay.*"
+        include "resource/schema/definitions/rti_recorder_common_definitions.xsd"
         include "resource/scripts/*"
         exclude "resource/scripts/rticommon_config.sh"
         include "resource/xml/RTI_RECORDING_SERVICE.xml"
+        include "resource/xml/RTI_REPLAY_SERVICE.xml"
         into ""
     }
     from("$extractionDirectoryResult") {
@@ -66,9 +73,11 @@ buildRpm {
     def applicationLauncherPath    = "$targetDirectory/launcher"
 
     // recording service
-    link("$applicationLinkPath/rtirecord",  "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirecconv", "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirecsh",   "$applicationLauncherPath")
+    link("$applicationLinkPath/rticonverter",                   "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirecordingservice_list_tags",  "$applicationLauncherPath")
+    link("$applicationLinkPath/rtirecordingservice",            "$applicationLauncherPath")
+    link("$applicationLinkPath/rtireplayservice",               "$applicationLauncherPath")
+    link("$applicationLinkPath/rtixmlconverter",                "$applicationLauncherPath")
 }
 
 // --------------------------------------------------------------------------------------------------------------------

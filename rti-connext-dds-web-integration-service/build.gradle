@@ -25,16 +25,18 @@ ospackage {
     // conflicts with SDK
     conflicts("rti-connext-dds-sdk-pro")
 
+    // update old major versions
+    obsoletes("rti-connext-dds-52-web-integration-service")
+    obsoletes("rti-connext-dds-53-web-integration-service")
+
     // add web integration service
     from("$extractionDirectoryResult") {
         include "bin/rtiwebintegrationservice"
         include "doc/manuals/web_integration_service/*"
-        include "resource/app/bin/x64Linux2.6gcc4.1.1/rtiwebintegrationservice"
-        include "resource/app/lib/*/libcrypto*.so*"
-        include "resource/app/lib/*/libndds*.so"
-        include "resource/app/lib/*/librtidlc.so"
-        include "resource/app/lib/*/libssl.so*"
+        include "resource/app/bin/x64Linux2.6gcc4.4.5/rtiwebintegrationservice"
+        include "resource/app/lib/**"
         include "resource/schema/rti_web_integration_service.*"
+        include "resource/schema/definitions/rti_dds_profiles_definitions.xsd"
         include "resource/scripts/*"
         exclude "resource/scripts/rticommon_config.sh"
         include "resource/xml/RTI_WEB_INTEGRATION_SERVICE.xml"

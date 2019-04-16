@@ -37,21 +37,18 @@ ospackage {
 
     // update old major versions
     obsoletes("rti-connext-dds-52-runtime-pro-x64Linux3gcc4.8.2")
+    obsoletes("rti-connext-dds-53-runtime-pro-x64Linux3gcc4.8.2")
 
     // add java libraries
     from("$extractionDirectoryResult/lib/java") {
         exclude "**/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}*"
         exclude "**/*d.*"
-        include "**/distlog*.jar"
-        include "**/nddsjava.jar"
-        include "**/rticonnextmsg.jar"
+        include "**/*.jar"
         into "java"
     }
     // add native runtime libraries
     from("$extractionDirectoryResult/lib/${rtiTarget}") {
         exclude "**/${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}*"
-        exclude "**/librti*routing*.so"
-        exclude "**/librtirs*.so"
         exclude "**/*d.*"
         include "**/*.so"
         into "lib"
@@ -68,21 +65,34 @@ buildRpm {
     def libraryInstallPath   = "$targetDirectory/lib"
 
     // libraries
-    link("$libraryLinkPath/libnddscore.so",          "$libraryInstallPath/libnddscore.so")
-    link("$libraryLinkPath/libnddsc.so",             "$libraryInstallPath/libnddsc.so")
-    link("$libraryLinkPath/libnddscpp.so",           "$libraryInstallPath/libnddscpp.so")
-    link("$libraryLinkPath/libnddscpp2.so",          "$libraryInstallPath/libnddscpp2.so")
-    link("$libraryLinkPath/libnddsjava.so",          "$libraryInstallPath/libnddsjava.so")
-    link("$libraryLinkPath/libnddstransporttcp.so",  "$libraryInstallPath/libnddstransporttcp.so")
-    link("$libraryLinkPath/librticonnextmsgc.so",    "$libraryInstallPath/librticonnextmsgc.so")
-    link("$libraryLinkPath/librticonnextmsgcpp.so",  "$libraryInstallPath/librticonnextmsgcpp.so")
-    link("$libraryLinkPath/librtidlc.so",            "$libraryInstallPath/librtidlc.so")
-    link("$libraryLinkPath/librtidlcpp.so",          "$libraryInstallPath/librtidlcpp.so")
-    link("$libraryLinkPath/librtimonitoring.so",     "$libraryInstallPath/librtimonitoring.so")
-    link("$javaLinkPath/distlog.jar",                "$javaInstallPath/distlog.jar")
-    link("$javaLinkPath/distlogdatamodel.jar",       "$javaInstallPath/distlogdatamodel.jar")
-    link("$javaLinkPath/nddsjava.jar",               "$javaInstallPath/nddsjava.jar")
-    link("$javaLinkPath/rticonnextmsg.jar",          "$javaInstallPath/rticonnextmsg.jar")
+    link("$libraryLinkPath/liblua.so",                  "$libraryInstallPath/liblua.so")
+    link("$libraryLinkPath/libnddsc.so",                "$libraryInstallPath/libnddsc.so")
+    link("$libraryLinkPath/libnddscore.so",             "$libraryInstallPath/libnddscore.so")
+    link("$libraryLinkPath/libnddscpp.so",              "$libraryInstallPath/libnddscpp.so")
+    link("$libraryLinkPath/libnddscpp2.so",             "$libraryInstallPath/libnddscpp2.so")
+    link("$libraryLinkPath/libnddsjava.so",             "$libraryInstallPath/libnddsjava.so")
+    link("$libraryLinkPath/libnddsmetp.so",             "$libraryInstallPath/libnddsmetp.so")
+    link("$libraryLinkPath/libnddstransporttcp.so",     "$libraryInstallPath/libnddstransporttcp.so")
+    link("$libraryLinkPath/librticonnextmsgc.so",       "$libraryInstallPath/librticonnextmsgc.so")
+    link("$libraryLinkPath/librticonnextmsgcpp.so",     "$libraryInstallPath/librticonnextmsgcpp.so")
+    link("$libraryLinkPath/librticonnextmsgcpp2.so",    "$libraryInstallPath/librticonnextmsgcpp2.so")
+    link("$libraryLinkPath/librtiddsconnectorlua.so",   "$libraryInstallPath/librtiddsconnectorlua.so")
+    link("$libraryLinkPath/librtidlc.so",               "$libraryInstallPath/librtidlc.so")
+    link("$libraryLinkPath/librtidlcpp.so",             "$libraryInstallPath/librtidlcpp.so")
+    link("$libraryLinkPath/librtijniroutingservice.so", "$libraryInstallPath/librtijniroutingservice.so")
+    link("$libraryLinkPath/librtimonitoring.so",        "$libraryInstallPath/librtimonitoring.so")
+    link("$libraryLinkPath/librtirecordingservice.so",  "$libraryInstallPath/librtirecordingservice.so")
+    link("$libraryLinkPath/librtiroutingservice.so",    "$libraryInstallPath/librtiroutingservice.so")
+    link("$libraryLinkPath/librtirsassigntransf.so",    "$libraryInstallPath/librtirsassigntransf.so")
+    link("$libraryLinkPath/librtirsinfrastructure.so",  "$libraryInstallPath/librtirsinfrastructure.so")
+    link("$libraryLinkPath/librtirsjniadapter.so",      "$libraryInstallPath/librtirsjniadapter.so")
+    link("$libraryLinkPath/librtixml2.so",              "$libraryInstallPath/librtixml2.so")
+    link("$javaLinkPath/distlog.jar",                   "$javaInstallPath/distlog.jar")
+    link("$javaLinkPath/distlogdatamodel.jar",          "$javaInstallPath/distlogdatamodel.jar")
+    link("$javaLinkPath/nddsjava.jar",                  "$javaInstallPath/nddsjava.jar")
+    link("$javaLinkPath/rticonnextmsg.jar",             "$javaInstallPath/rticonnextmsg.jar")
+    link("$javaLinkPath/rtirsadapter.jar",              "$javaInstallPath/rtirsadapter.jar")
+    link("$javaLinkPath/rtiroutingservice.jar",         "$javaInstallPath/rtiroutingservice.jar")
 
     // this will be called after installation phase
     postInstall """
