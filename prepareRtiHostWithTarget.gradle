@@ -53,9 +53,9 @@ task prepareRtiPackageTargetPatch {
 
 task prepareRtiHostWithTarget {
   if (parsedVersion.patch > 0) {
-    dependsOn prepareRtiPackageTargetPatch, prepareRtiDatabaseIntegrationService, prepareRtiWebIntegrationService
+    dependsOn prepareRtiPackageTargetPatch, prepareRtiWebIntegrationService
     prepareRtiPackageHostPatch.mustRunAfter prepareRtiPackageTarget
   } else {
-    dependsOn prepareRtiPackageTarget, prepareRtiDatabaseIntegrationService, prepareRtiWebIntegrationService
+    dependsOn prepareRtiPackageTarget, prepareRtiWebIntegrationService
   }
 }

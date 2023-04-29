@@ -95,31 +95,6 @@ task prepareRtiPackageHostPatch {
   }
 }
 
-task prepareRtiDatabaseIntegrationService {
-  dependsOn prepareRtiPackageHost
-
-  inputs.file "$projectDir/../packages/rti_database_integration-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-${rtiPlatform}.rtipkg"
-  outputs.file new File("$buildDir/$name")
-
-  doLast {
-    // variables
-    def commandLine
-    def processObject
-
-    // install database integration service
-    commandLine = "${rtipkginstall} -u $projectDir/../packages/rti_database_integration-${parsedVersion.major}.${parsedVersion.minor}.${parsedVersion.micro}-${rtiPlatform}.rtipkg"
-    processObject = commandLine.execute()
-    processObject.in.eachLine { line -> logger.info(line) }
-    processObject.err.eachLine { line -> logger.error(line) }
-    processObject.waitFor()
-    assert !processObject.exitValue()
-
-    // write file to tell this task has been done successfully
-    def outputFile = new File("$buildDir/$name")
-    outputFile.text = processObject.exitValue()
-  }
-}
-
 task prepareRtiWebIntegrationService {
   dependsOn prepareRtiPackageHost
 
@@ -147,8 +122,9 @@ task prepareRtiWebIntegrationService {
 
 task prepareRtiHost {
   if (parsedVersion.patch > 0) {
-    dependsOn prepareRtiPackageHostPatch, prepareRtiDatabaseIntegrationService, prepareRtiWebIntegrationService
+    dependsOn prepareRtiPackageHostPatch
   } else {
-    dependsOn prepareRtiPackageHost, prepareRtiDatabaseIntegrationService, prepareRtiWebIntegrationService
+    dependsOn prepareRtiPackageHost
   }
+  dependsOn prepareRtiWebIntegrationService
 }

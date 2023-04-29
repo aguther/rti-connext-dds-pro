@@ -45,8 +45,6 @@ ospackage {
     provides("rti-connext-dds-tools", "${project.version}", EQUAL)
 
     // we provide the services
-    provides("rti-connext-dds-cloud-discovery-service", "${project.version}", EQUAL)
-    provides("rti-connext-dds-database-integration-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-persistence-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-recording-service", "${project.version}", EQUAL)
     provides("rti-connext-dds-replay-service", "${project.version}", EQUAL)
@@ -182,13 +180,6 @@ buildRpm {
     // persistence service
     link("$applicationLinkPath/rtipersistenceservice",   "$applicationLauncherPath")
     link("$applicationLinkPath/rtipssh",                 "$applicationLauncherPath")
-
-    // cloud discovery service
-    link("$applicationLinkPath/rticlouddiscoveryservice", "$applicationLauncherPath")
-
-    // database integration service
-    link("$applicationLinkPath/rtirtc_mysql",      "$applicationLauncherPath")
-    link("$applicationLinkPath/rtirtc_postgresql", "$applicationLauncherPath")
 
     // web integration service
     link("$applicationLinkPath/rtiwebintegrationservice", "$applicationLauncherPath")

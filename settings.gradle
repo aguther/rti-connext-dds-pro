@@ -5,12 +5,6 @@ def parsedVersion = VersionNumber.withPatchNumber().parse(version)
 include 'rti-connext-dds-admin-console'
 project(":rti-connext-dds-admin-console").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-admin-console"
 
-include 'rti-connext-dds-cloud-discovery-service'
-project(":rti-connext-dds-cloud-discovery-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-cloud-discovery-service"
-
-include 'rti-connext-dds-database-integration-service'
-project(":rti-connext-dds-database-integration-service").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-database-integration-service"
-
 include 'rti-connext-dds-license'
 project(":rti-connext-dds-license").name = "rti-connext-dds-${parsedVersion.major}${parsedVersion.minor}-license"
 
